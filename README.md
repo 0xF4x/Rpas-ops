@@ -1,4 +1,4 @@
-# RPAS Ops — Canadian Drone Companion (v12)
+# RPAS Ops — Canadian Drone Companion
 
 A 100% offline-ready, zero-dependency Progressive Web App (PWA) for Canadian RPAS pilots operating under Transport Canada CARs Part IX.
 
