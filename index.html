@@ -1,0 +1,2482 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#060913" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>RPAS Ops • Canadian Drone Companion</title>
+  <style>
+    :root {
+      --bg: #060913;
+      --bg-glow: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14, 165, 233, 0.16), transparent);
+      --surface: rgba(15, 23, 42, 0.84);
+      --surface-solid: #0f172a;
+      --surface-2: rgba(2, 6, 23, 0.68);
+      --border: rgba(148, 163, 184, 0.14);
+      --border-strong: rgba(148, 163, 184, 0.28);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-faint: #64748b;
+      --accent: #38bdf8;
+      --accent-solid: #0ea5e9;
+      --accent-text: #020617;
+      --accent-soft: rgba(56, 189, 248, 0.14);
+      --ok: #34d399;
+      --ok-soft: rgba(16, 185, 129, 0.14);
+      --ok-border: rgba(16, 185, 129, 0.38);
+      --warn: #fbbf24;
+      --warn-soft: rgba(245, 158, 11, 0.14);
+      --warn-border: rgba(245, 158, 11, 0.36);
+      --danger: #fb7185;
+      --danger-soft: rgba(244, 63, 94, 0.14);
+      --danger-border: rgba(244, 63, 94, 0.38);
+      --shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+    }
+
+    html[data-theme="light"] {
+      --bg: #f1f5f9;
+      --bg-glow: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(14, 165, 233, 0.14), transparent);
+      --surface: rgba(255, 255, 255, 0.94);
+      --surface-solid: #ffffff;
+      --surface-2: #f8fafc;
+      --border: rgba(15, 23, 42, 0.1);
+      --border-strong: rgba(15, 23, 42, 0.2);
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-faint: #64748b;
+      --accent: #0284c7;
+      --accent-solid: #0284c7;
+      --accent-text: #ffffff;
+      --accent-soft: rgba(2, 132, 199, 0.1);
+      --ok: #059669;
+      --ok-soft: rgba(5, 150, 105, 0.1);
+      --ok-border: rgba(5, 150, 105, 0.35);
+      --warn: #d97706;
+      --warn-soft: rgba(217, 119, 6, 0.1);
+      --warn-border: rgba(217, 119, 6, 0.35);
+      --danger: #e11d48;
+      --danger-soft: rgba(225, 29, 72, 0.1);
+      --danger-border: rgba(225, 29, 72, 0.35);
+      --shadow: 0 10px 28px -12px rgba(15, 23, 42, 0.14);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background-color: var(--bg);
+      background-image: var(--bg-glow);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .container { max-width: 740px; margin: 0 auto; padding: 26px 16px 48px; }
+    .hidden { display: none !important; }
+    .stack { display: flex; flex-direction: column; gap: 16px; }
+    .stack-sm { display: flex; flex-direction: column; gap: 10px; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .row-start { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 600px) {
+      .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .subcard {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 999px; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+    h1 { margin: 6px 0 4px; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+    h2 { margin: 0; font-size: 14px; font-weight: 600; }
+    .subtitle { margin: 0; font-size: 13.5px; color: var(--text-muted); }
+    .label-caps { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px; color: var(--accent); }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .pill-ok { background: var(--ok-soft); color: var(--ok); border-color: var(--ok-border); }
+    .pill-warn { background: var(--warn-soft); color: var(--warn); border-color: var(--warn-border); }
+    .pill-danger { background: var(--danger-soft); color: var(--danger); border-color: var(--danger-border); }
+
+    button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--text);
+      text-decoration: none;
+      transition: transform 0.1s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .btn:hover { border-color: var(--accent); }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-primary { background: var(--accent-solid); color: var(--accent-text); border-color: transparent; }
+    .btn-primary:hover { filter: brightness(1.08); }
+    .btn-ok { background: var(--ok-soft); color: var(--ok); border-color: var(--ok-border); }
+    .btn-danger { background: var(--danger-soft); color: var(--danger); border-color: var(--danger-border); }
+    .btn-emergency {
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: var(--danger-soft);
+      color: var(--danger);
+      border: 1px solid var(--danger-border);
+    }
+
+    .tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 13px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      margin-top: 12px;
+    }
+    .tab-btn {
+      padding: 8px 14px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: all 0.15s ease;
+    }
+    .tab-btn:hover { color: var(--text); }
+    .tab-btn.active { background: var(--accent-solid); color: var(--accent-text); box-shadow: 0 2px 10px rgba(14, 165, 233, 0.28); }
+
+    .seg-btn {
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text-muted);
+      transition: all 0.15s ease;
+    }
+    .seg-btn:hover { border-color: var(--border-strong); color: var(--text); }
+    .seg-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--text); }
+
+    .mode-pill {
+      padding: 6px 11px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text-muted);
+      transition: all 0.15s ease;
+    }
+    .mode-pill.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+
+    .progress-track { width: 100%; height: 9px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 999px; transition: width 0.25s ease, background-color 0.25s ease; background: var(--accent-solid); }
+    .progress-fill.ok { background: var(--ok); }
+    .progress-fill.warn { background: var(--warn); }
+    .progress-fill.danger { background: var(--danger); }
+
+    .check-item {
+      width: 100%;
+      text-align: left;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      transition: all 0.15s ease;
+    }
+    .check-item:hover { border-color: var(--border-strong); }
+    .check-item.checked { background: var(--ok-soft); border-color: var(--ok-border); }
+    .check-box {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border-strong);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s ease;
+    }
+    .check-item.checked .check-box { background: var(--ok); border-color: var(--ok); color: #020617; }
+    .check-title { display: block; font-size: 13.5px; font-weight: 600; color: var(--text); }
+    .check-item.checked .check-title { text-decoration: line-through; color: var(--ok); }
+    .check-detail { display: block; font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+    label.field-label { display: block; font-size: 11.5px; font-weight: 500; color: var(--text-muted); margin-bottom: 5px; }
+    input[type="text"], input[type="number"], input[type="date"], select, textarea {
+      width: 100%;
+      padding: 8px 11px;
+      border-radius: 9px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-2);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+    .checkbox-row { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: var(--text-muted); cursor: pointer; }
+    .checkbox-row input { width: 16px; height: 16px; accent-color: var(--accent-solid); }
+
+    .quiz-opt {
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 13.5px;
+      transition: all 0.15s ease;
+    }
+    .quiz-opt:hover:not(:disabled) { border-color: var(--accent); }
+    .quiz-opt.selected { background: var(--accent-soft); border-color: var(--accent); font-weight: 600; }
+    .quiz-opt.correct { background: var(--ok-soft); border-color: var(--ok-border); color: var(--ok); font-weight: 600; }
+    .quiz-opt.wrong { background: var(--danger-soft); border-color: var(--danger-border); color: var(--danger); }
+    .quiz-opt.dim { opacity: 0.5; }
+
+    .q-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 6px; }
+    .q-cell {
+      padding: 6px 0;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text-muted);
+      text-align: center;
+    }
+    .q-cell.answered { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+    .q-cell.flagged { background: var(--warn-soft); border-color: var(--warn-border); color: var(--warn); }
+    .q-cell.current { outline: 2px solid var(--text); outline-offset: 1px; color: var(--text); }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(2, 6, 23, 0.78);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-panel {
+      width: 100%;
+      max-width: 540px;
+      max-height: 86vh;
+      overflow-y: auto;
+      background: var(--surface-solid);
+      border: 1px solid var(--border-strong);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    footer {
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 11.5px;
+      color: var(--text-faint);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    footer a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+    /* Print / PDF CAR 901.27 Site Survey Sheet */
+    #print-sheet { display: none; }
+    @media print {
+      body { background: #ffffff !important; color: #0f172a !important; }
+      main.container, .modal-backdrop { display: none !important; }
+      #print-sheet { display: block !important; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #0f172a; }
+      #print-sheet h1 { font-size: 20px; margin: 0 0 4px; }
+      #print-sheet h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; margin: 16px 0 6px; border-bottom: 1px solid #cbd5e1; padding-bottom: 3px; }
+      #print-sheet table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+      #print-sheet td, #print-sheet th { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; }
+      #print-sheet th { background: #f1f5f9; width: 28%; }
+    }
+  </style>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+</head>
+<body>
+  <main class="container">
+    <!-- HEADER -->
+    <header style="margin-bottom: 20px;">
+      <div class="row" style="margin-bottom: 6px;">
+        <span class="eyebrow"><span class="dot"></span>CARs Part IX • RPAS Companion</span>
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+          <span id="status-badge" class="pill pill-warn">NO-GO • Checks Incomplete</span>
+          <button id="theme-toggle-btn" type="button" class="btn" style="padding: 5px 10px; border-radius: 999px; font-size: 11.5px;">
+            Day Mode
+          </button>
+          <button id="emergency-open-btn" type="button" class="btn-emergency">Emergency</button>
+        </div>
+      </div>
+
+      <h1>Advanced Drone Companion</h1>
+      <p class="subtitle">Weight-class pre-flight checklist, METAR &amp; site survey, airspace links, flight logbook, and TP 15263E exam prep.</p>
+
+      <!-- Active Aircraft & Recency Bar -->
+      <div class="card" style="margin-top: 14px; padding: 12px 14px;">
+        <div class="row">
+          <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:210px;">
+            <span class="label-caps" style="white-space:nowrap;">Aircraft</span>
+            <select id="active-aircraft-select"></select>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            <span id="recency-pill" class="pill pill-warn" style="padding:4px 9px; font-size:11px;">Recency: Set Date</span>
+            <button id="profiles-open-btn" type="button" class="btn">Fleet &amp; Recency</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Switcher: Checklist -> Site & Wind -> Logbook -> Exam Drill -->
+      <nav class="tabs" aria-label="Primary">
+        <button id="tab-checklist" type="button" data-tab="checklist" class="tab-btn active">Checklist</button>
+        <button id="tab-site" type="button" data-tab="site" class="tab-btn">Site &amp; Wind</button>
+        <button id="tab-logbook" type="button" data-tab="logbook" class="tab-btn">Logbook</button>
+        <button id="tab-quiz" type="button" data-tab="quiz" class="tab-btn">Exam Drill</button>
+      </nav>
+    </header>
+
+    <!-- VIEW 1: CHECKLIST -->
+    <div id="view-checklist" class="stack">
+      <section class="card">
+        <div class="row" style="margin-bottom: 12px;">
+          <span class="label-caps">Drone Weight Class</span>
+          <span id="weight-class-note" class="mono">250 g–25 kg</span>
+        </div>
+        <div id="weight-buttons" class="grid-3"></div>
+      </section>
+
+      <section id="operation-mode-section" class="card">
+        <div class="row" style="margin-bottom: 12px;">
+          <span class="label-caps">Operation Mode</span>
+          <span id="mode-standard" class="mono">RPAS Std 922.04</span>
+        </div>
+        <div id="mode-buttons" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;"></div>
+        <div id="mode-limits" class="grid-3" style="padding-top:12px; border-top:1px solid var(--border);"></div>
+      </section>
+
+      <!-- Flight Readiness + Live Flight Timer -->
+      <section class="card stack-sm">
+        <div class="row">
+          <div>
+            <span class="label-caps">Flight Readiness</span>
+            <div id="progress-text" style="font-size: 18px; font-weight: 700; margin-top: 2px;">0 / 6 Checks Complete</div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button id="print-survey-btn-1" type="button" class="print-survey-btn btn">Print / PDF Survey</button>
+            <button id="reset-btn" type="button" class="btn">Reset</button>
+          </div>
+        </div>
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-fill" style="width: 0%;"></div>
+        </div>
+
+        <!-- Live Flight Timer Bridge -->
+        <div class="subcard row" style="margin-top: 4px;">
+          <div>
+            <span class="label-caps" style="display:block;">Flight Timer</span>
+            <span id="flight-timer-display" class="mono" style="font-size: 18px; font-weight: 700;">00:00</span>
+          </div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button id="timer-toggle-btn" type="button" class="btn btn-primary">Start Flight</button>
+            <button id="timer-reset-btn" type="button" class="btn">Reset</button>
+            <button id="timer-log-btn" type="button" class="btn btn-ok">Log This Flight</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="checklist-container" class="stack"></div>
+    </div>
+
+    <!-- VIEW 2: SITE & WIND -->
+    <div id="view-site" class="hidden stack">
+      <section class="card">
+        <div class="row" style="margin-bottom: 8px;">
+          <span class="label-caps">Site &amp; Weather Verdict</span>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span id="site-verdict-badge" class="pill pill-ok">GO • Within Limits</span>
+            <button id="print-survey-btn-2" type="button" class="print-survey-btn btn">Print / PDF</button>
+          </div>
+        </div>
+        <p id="site-verdict-summary" style="margin:0; font-size:13.5px;">
+          Wind load is within aircraft limits and planned flight meets applicable Transport Canada rules.
+        </p>
+        <ul id="site-warnings" style="margin:10px 0 0; padding-left:18px; font-size:12px; display:flex; flex-direction:column; gap:4px;"></ul>
+      </section>
+
+      <!-- Official Canadian Airspace Map Launcher & GPS -->
+      <section class="card stack-sm">
+        <div class="row">
+          <h2>Canadian Airspace Tools &amp; Site GPS</h2>
+          <button id="gps-btn" type="button" class="btn">Get My GPS</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <label for="site-name-input" class="field-label">Site Name (for PDF Survey &amp; Log)</label>
+            <input id="site-name-input" type="text" placeholder="e.g., Richmond Oval — Riverfront" />
+          </div>
+          <div>
+            <label for="site-coords-input" class="field-label">Coordinates (Lat, Lng)</label>
+            <div style="display:flex; gap:6px;">
+              <input id="site-coords-input" type="text" placeholder="49.1747, -123.1516" />
+              <button id="copy-coords-btn" type="button" class="btn" style="white-space:nowrap;">Copy</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <a href="https://map.navdrone.ca/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Open NAV Drone Viewer</a>
+          <a href="https://portal.navdrone.ca/" target="_blank" rel="noopener noreferrer" class="btn">NAV Drone Auth Portal</a>
+          <a href="https://nrc.canada.ca/en/drone-tool/" target="_blank" rel="noopener noreferrer" class="btn">NRC Airspace Map</a>
+        </div>
+        <p id="gps-status" class="hidden" style="margin:0; font-size:11.5px; color:var(--text-muted);"></p>
+      </section>
+
+      <!-- Offline METAR Decoder -->
+      <section class="card stack-sm">
+        <div class="row">
+          <h2>METAR Decoder (Offline-Ready)</h2>
+          <div style="display:flex; gap:6px;">
+            <button id="metar-sample-cyvr" type="button" class="btn" style="padding:4px 9px; font-size:11px;">Sample CYVR</button>
+            <button id="metar-sample-cyyz" type="button" class="btn" style="padding:4px 9px; font-size:11px;">Sample CYYZ</button>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input
+            id="metar-input"
+            type="text"
+            style="flex:1; min-width:220px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px;"
+            placeholder="Paste raw METAR (e.g., METAR CYVR 201800Z 29012G20KT 15SM FEW035 09/05 A3004)"
+          />
+          <button id="metar-decode-btn" type="button" class="btn btn-primary">Decode &amp; Apply Wind</button>
+        </div>
+        <div id="metar-output" class="hidden grid-3" style="font-size:12px;"></div>
+      </section>
+
+      <section class="card stack-sm">
+        <div class="row">
+          <h2>Wind &amp; Weather Parameters</h2>
+          <span id="site-aircraft-tag" class="mono"></span>
+        </div>
+        <div class="grid-3">
+          <div>
+            <label for="calc-max-wind" class="field-label">Rated Max Wind (km/h)</label>
+            <input id="calc-max-wind" type="number" min="1" max="120" value="38" class="site-input" />
+          </div>
+          <div>
+            <label for="calc-steady-wind" class="field-label">Steady Wind (km/h)</label>
+            <input id="calc-steady-wind" type="number" min="0" max="120" value="14" class="site-input" />
+          </div>
+          <div>
+            <label for="calc-gust-wind" class="field-label">Wind Gusts (km/h)</label>
+            <input id="calc-gust-wind" type="number" min="0" max="150" value="22" class="site-input" />
+          </div>
+        </div>
+        <div>
+          <div class="row" style="font-size:12px; margin-bottom:6px;">
+            <span style="color:var(--text-muted);">Gust Wind Load vs. Rated Limit</span>
+            <span id="wind-load-text" class="mono">58% (22 / 38 km/h)</span>
+          </div>
+          <div class="progress-track">
+            <div id="wind-load-bar" class="progress-fill ok" style="width: 58%;"></div>
+          </div>
+        </div>
+        <label class="checkbox-row">
+          <input id="calc-icing" type="checkbox" class="site-input" />
+          <span>Icing or expected icing conditions present</span>
+        </label>
+      </section>
+
+      <section class="card stack-sm">
+        <h2>Altitude &amp; Aerodrome Proximity (CARs 901.25 &amp; 901.47)</h2>
+        <div class="grid-3">
+          <div>
+            <label for="calc-altitude" class="field-label">Planned Altitude (ft AGL)</label>
+            <input id="calc-altitude" type="number" min="0" max="2000" value="250" class="site-input" />
+          </div>
+          <div>
+            <label for="calc-airport-km" class="field-label">Nearest Airport (km)</label>
+            <input id="calc-airport-km" type="number" min="0" max="100" step="0.1" value="6.5" class="site-input" />
+          </div>
+          <div>
+            <label for="calc-heliport-km" class="field-label">Nearest Heliport (km)</label>
+            <input id="calc-heliport-km" type="number" min="0" max="100" step="0.1" value="2.5" class="site-input" />
+          </div>
+        </div>
+        <label class="checkbox-row">
+          <input id="calc-structure" type="checkbox" class="site-input" />
+          <span>Operating within 61 m (200 ft) horizontally of a structure (+100 ft / 30 m above structure)</span>
+        </label>
+        <label class="checkbox-row">
+          <input id="calc-military" type="checkbox" class="site-input" />
+          <span>Within 5.6 km (3 NM) of a military aerodrome (requires DND permission)</span>
+        </label>
+      </section>
+    </div>
+
+    <!-- VIEW 3: LOGBOOK -->
+    <div id="view-logbook" class="hidden stack">
+      <section class="card">
+        <h2 style="margin-bottom: 12px;">Log Completed Flight</h2>
+        <form id="log-form" class="stack-sm">
+          <div class="grid-2">
+            <div>
+              <label for="log-date" class="field-label">Date</label>
+              <input id="log-date" type="date" required />
+            </div>
+            <div>
+              <label for="log-duration" class="field-label">Duration (minutes)</label>
+              <input id="log-duration" type="number" min="1" max="600" required placeholder="25" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <label for="log-site" class="field-label">Location / Site</label>
+              <input id="log-site" type="text" required placeholder="e.g., Richmond Oval (Class C)" />
+            </div>
+            <div>
+              <label for="log-aircraft" class="field-label">Aircraft / Reg #</label>
+              <input id="log-aircraft" type="text" required placeholder="e.g., Mini 4K (Exempt)" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <label for="log-mode" class="field-label">Operation Mode</label>
+              <select id="log-mode"></select>
+            </div>
+            <div>
+              <label for="log-notes" class="field-label">Notes (Auth #, wind, etc.)</label>
+              <input id="log-notes" type="text" placeholder="Optional mission notes" />
+            </div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; padding-top:4px;">
+            <button type="submit" class="btn btn-primary">Add Flight to Logbook</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="row">
+          <div>
+            <span class="label-caps">Logged Experience</span>
+            <div id="log-summary" style="font-size:18px; font-weight:700; margin-top:2px;">0 Flights • 0 min</div>
+          </div>
+          <button id="export-csv-btn" type="button" class="btn">Export CSV</button>
+        </div>
+      </section>
+
+      <div id="log-list" class="stack-sm"></div>
+
+      <!-- Data Backup & Reset -->
+      <section class="card stack-sm">
+        <div class="row">
+          <div>
+            <h2>Backup &amp; Local Data</h2>
+            <p style="margin:2px 0 0; font-size:12px; color:var(--text-muted);">
+              Everything stays in your browser. Export a JSON backup before switching devices.
+            </p>
+          </div>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button id="export-json-btn" type="button" class="btn">Export JSON Backup</button>
+          <button id="import-json-btn" type="button" class="btn">Import JSON Backup</button>
+          <input id="import-json-input" type="file" accept=".json,application/json" class="hidden" />
+          <button id="clear-data-btn" type="button" class="btn btn-danger">Clear All Local Data</button>
+        </div>
+        <div id="clear-confirm-box" class="hidden subcard row" style="border-color: var(--danger-border);">
+          <span style="font-size:12px; color:var(--danger);">Erase all saved logs, profiles, and settings?</span>
+          <div style="display:flex; gap:6px;">
+            <button id="clear-confirm-yes" type="button" class="btn btn-danger">Yes, Erase</button>
+            <button id="clear-confirm-no" type="button" class="btn">Cancel</button>
+          </div>
+        </div>
+        <p id="backup-status" class="hidden" style="margin:0; font-size:12px; color:var(--ok);"></p>
+      </section>
+    </div>
+
+    <!-- VIEW 4: EXAM DRILL -->
+    <div id="view-quiz" class="hidden stack">
+      <section class="card">
+        <div class="row" style="margin-bottom: 12px;">
+          <span class="label-caps">Small Advanced Exam Prep (TP 15263E)</span>
+          <span class="mono">80% Pass Mark</span>
+        </div>
+        <div class="grid-2">
+          <button id="quiz-mode-quick" type="button" class="quiz-mode-btn seg-btn active">
+            <span style="display:block; font-size:12.5px; font-weight:600;">Quick 10</span>
+            <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">10 random questions • Instant feedback</span>
+          </button>
+          <button id="quiz-mode-exam" type="button" class="quiz-mode-btn seg-btn">
+            <span style="display:block; font-size:12.5px; font-weight:600;">Practice Exam (25 Qs)</span>
+            <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">30:00 timer • Navigator &amp; domain report</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="card stack-sm">
+        <div class="row">
+          <div>
+            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <span id="quiz-status-label" class="label-caps">Quick 10 • Instant Feedback</span>
+              <span id="quiz-mode-pill" class="hidden pill pill-warn" style="padding:2px 8px; font-size:11px;">Reviewing Missed</span>
+            </div>
+            <div id="quiz-score" style="font-size:18px; font-weight:700; margin-top:2px;">Score: 0 / 10</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span id="quiz-timer" class="hidden pill pill-warn mono">30:00</span>
+            <button id="quiz-reset-btn" type="button" class="btn">New Set</button>
+          </div>
+        </div>
+        <div id="exam-nav-grid" class="hidden q-grid" style="padding-top:8px; border-top:1px solid var(--border);"></div>
+      </section>
+
+      <div id="quiz-card" class="card"></div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div>
+        <strong>Pilot-in-Command Notice:</strong> Educational &amp; pre-flight aid only. Always verify official airspace, NOTAMs, and current regulations via
+        <a href="https://tc.canada.ca/en/aviation/drone-safety/learn-rules-you-fly-your-drone/drone-operation-categories-pilot-certificates/advanced-operations" target="_blank" rel="noopener noreferrer">Transport Canada</a>
+        and NAV CANADA before launch.
+      </div>
+      <div class="row">
+        <span>RPAS Ops v12 • 100% Offline-Ready Static App</span>
+        <a href="https://tc.canada.ca/en/aviation/drone-safety/learn-rules-you-fly-your-drone/drone-operation-categories-pilot-certificates/microdrones" target="_blank" rel="noopener noreferrer">Microdrone Rules (&lt;250 g)</a>
+      </div>
+    </footer>
+  </main>
+
+  <!-- PRINT / PDF CAR 901.27 SITE SURVEY SHEET -->
+  <section id="print-sheet"></section>
+
+  <!-- EMERGENCY MODAL -->
+  <div id="emergency-modal" class="hidden modal-backdrop">
+    <div class="modal-panel" style="border-color: var(--danger-border);">
+      <div class="row" style="margin-bottom: 14px;">
+        <div>
+          <span class="label-caps" style="color: var(--danger);">Quick Reference</span>
+          <h2 style="font-size: 18px; margin-top: 2px;">In-Flight Emergency Procedures</h2>
+        </div>
+        <button id="emergency-close-btn" type="button" class="btn">Close</button>
+      </div>
+      <div class="subcard" style="margin-bottom: 14px;">
+        <label for="atc-phone-input" class="field-label">Local ATC / Tower / FIC Phone (Saved Locally)</label>
+        <input id="atc-phone-input" type="text" placeholder="e.g., Vancouver Tower / FIC number" />
+      </div>
+      <div id="emergency-list" class="stack-sm"></div>
+    </div>
+  </div>
+
+  <!-- AIRCRAFT PROFILES & RECENCY MODAL -->
+  <div id="profiles-modal" class="hidden modal-backdrop">
+    <div class="modal-panel">
+      <div class="row" style="margin-bottom: 14px;">
+        <div>
+          <span class="label-caps" style="color: var(--accent);">Fleet &amp; Pilot Currency</span>
+          <h2 style="font-size: 18px; margin-top: 2px;">Aircraft Profiles &amp; Recency</h2>
+        </div>
+        <button id="profiles-close-btn" type="button" class="btn">Close</button>
+      </div>
+
+      <!-- 24-Month Recency (CAR 901.65) -->
+      <div class="subcard stack-sm" style="margin-bottom: 14px;">
+        <div class="row">
+          <span class="label-caps">24-Month Recency (CAR 901.65)</span>
+          <span id="recency-modal-status" class="mono">Not set</span>
+        </div>
+        <div>
+          <label for="recency-date-input" class="field-label">Last Exam, Flight Review, or Recurrent Training Date</label>
+          <input id="recency-date-input" type="date" />
+        </div>
+      </div>
+
+      <!-- Quick Canadian Drone Presets -->
+      <div class="subcard stack-sm" style="margin-bottom: 14px;">
+        <span class="label-caps">One-Click Canadian Drone Presets</span>
+        <div id="preset-buttons" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
+      </div>
+
+      <!-- Custom Aircraft Form -->
+      <form id="profile-form" class="subcard stack-sm" style="margin-bottom: 14px;">
+        <span class="label-caps">Add Custom Aircraft</span>
+        <div class="grid-2">
+          <div>
+            <label for="prof-name" class="field-label">Drone Model</label>
+            <input id="prof-name" type="text" required placeholder="e.g., DJI Mini 4K" />
+          </div>
+          <div>
+            <label for="prof-class" class="field-label">Weight Class</label>
+            <select id="prof-class">
+              <option value="micro">Micro (&lt; 250 g)</option>
+              <option value="small" selected>Small (250 g–25 kg)</option>
+              <option value="medium">Medium (&gt; 25–150 kg)</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div>
+            <label for="prof-reg" class="field-label">TC Registration #</label>
+            <input id="prof-reg" type="text" placeholder="N/A for Micro" />
+          </div>
+          <div>
+            <label for="prof-wind" class="field-label">Max Wind (km/h)</label>
+            <input id="prof-wind" type="number" min="1" max="120" required placeholder="38" />
+          </div>
+          <div>
+            <label for="prof-decl" class="field-label">Declarations</label>
+            <input id="prof-decl" type="text" placeholder="e.g., 922.04" />
+          </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end;">
+          <button type="submit" class="btn btn-primary">Save Aircraft Profile</button>
+        </div>
+      </form>
+
+      <div id="profiles-list" class="stack-sm"></div>
+    </div>
+  </div>
+
+  <script>
+    // 1. DATA
+    const WEIGHT_CLASSES = {
+      micro: { id: 'micro', label: 'Micro (< 250 g)', sub: 'Mini 4K • No cert/reg', note: '< 250 g (Exempt)' },
+      small: { id: 'small', label: 'Small (250 g–25 kg)', sub: 'Standard Part IX RPAS', note: '250 g–25 kg (Part IX)' },
+      medium: { id: 'medium', label: 'Medium (> 25–150 kg)', sub: 'Advanced / Complex only', note: '> 25–150 kg (152.4 m sep)' }
+    };
+
+    const DRONE_PRESETS = [
+      { name: 'DJI Mini 4K', weightClass: 'micro', reg: 'Exempt (<250g)', maxWind: 38, decl: 'Microdrone' },
+      { name: 'DJI Mini 4 Pro', weightClass: 'micro', reg: 'Exempt (<250g)', maxWind: 38, decl: 'Microdrone' },
+      { name: 'DJI Air 3S', weightClass: 'small', reg: 'C-AIR3S', maxWind: 43, decl: '922.04' },
+      { name: 'DJI Mavic 3 Pro', weightClass: 'small', reg: 'C-MAVIC3', maxWind: 43, decl: '922.04' },
+      { name: 'DJI Mavic 3 Enterprise', weightClass: 'small', reg: 'C-M3E', maxWind: 43, decl: '922.04, 922.05' },
+      { name: 'DJI Matrice 350 RTK', weightClass: 'small', reg: 'C-M350', maxWind: 43, decl: '922.04, 922.05' }
+    ];
+
+    const MICRO_GROUPS = [
+      {
+        title: 'Microdrone Airspace & Safety Go/No-Go (< 250 g)',
+        items: [
+          {
+            id: 'micro-airspace',
+            label: 'Restricted airspace & zones cleared',
+            detail: 'Not taking off/landing in a National Park, inside Class F Restricted airspace without permission, or within an emergency perimeter.'
+          },
+          {
+            id: 'micro-events',
+            label: 'No advertised event without SFOC',
+            detail: 'Confirmed site is not an advertised public event (flying a microdrone at an advertised event requires an SFOC-RPAS).'
+          },
+          {
+            id: 'micro-900-06',
+            label: 'CAR 900.06 safe separation & manned-aircraft check',
+            detail: 'Operating safely without endangering aviation or people; staying clear of aerodromes/aircraft, below 400 ft AGL, and in direct VLOS.'
+          },
+          {
+            id: 'micro-hardware',
+            label: 'Props, battery, wind & SD card checked',
+            detail: 'Batteries charged, propellers undamaged, gimbal guard removed, and wind within microdrone limits.'
+          }
+        ]
+      }
+    ];
+
+    const OPERATION_MODES = {
+      controlled: {
+        id: 'controlled',
+        name: 'Controlled Airspace',
+        standard: 'RPAS Std 922.04',
+        airspace: 'Controlled (NAV CANADA Auth)',
+        bystanders: '> 30 m (100 ft) horizontal',
+        sight: 'Unaided VLOS at all times',
+        extraCheck: {
+          id: 'mode-auth',
+          label: 'NAV CANADA RPAS Flight Authorization active',
+          detail: 'Authorization approved for exact airspace class, altitude ceiling, and time window; ATC contact info ready.'
+        }
+      },
+      near: {
+        id: 'near',
+        name: 'Near People (<30 m)',
+        standard: 'RPAS Std 922.05',
+        airspace: 'Uncontrolled (or Auth if Controlled)',
+        bystanders: '5 m to 30 m (16.4–100 ft)',
+        sight: 'Unaided VLOS at all times',
+        extraCheck: {
+          id: 'mode-near',
+          label: '922.05 Near-People declaration & 5 m buffer verified',
+          detail: 'Aircraft has an active 922.05 declaration and flight path maintains at least 5 m (16.4 ft) horizontal clearance.'
+        }
+      },
+      over: {
+        id: 'over',
+        name: 'Over People (<5 m)',
+        standard: 'RPAS Std 922.06',
+        airspace: 'Uncontrolled (or Auth if Controlled)',
+        bystanders: '< 5 m (16.4 ft) or directly over',
+        sight: 'Unaided VLOS at all times',
+        extraCheck: {
+          id: 'mode-over',
+          label: '922.06 Over-People declaration & contingency plan ready',
+          detail: 'Aircraft has an active 922.06 declaration; emergency landing zone clear of crowds.'
+        }
+      },
+      sheltered: {
+        id: 'sheltered',
+        name: 'Sheltered Ops',
+        standard: 'CARs Part IX (Sheltered)',
+        airspace: 'Uncontrolled (or Auth if Controlled)',
+        bystanders: '≥ 30 m (100 ft) at any altitude',
+        sight: '≤ 30 m above / ≤ 61 m from structure',
+        extraCheck: {
+          id: 'mode-sheltered',
+          label: 'Sheltered geometry & 3.7 km range verified',
+          detail: 'Flight stays ≤ 30 m (100 ft) above and ≤ 61 m (200 ft) horizontally from structure, within 3.7 km (2 NM) of pilot.'
+        }
+      },
+      evlos: {
+        id: 'evlos',
+        name: 'EVLOS',
+        standard: 'CARs Part IX (EVLOS)',
+        airspace: 'Uncontrolled airspace only',
+        bystanders: '≥ 30 m (100 ft) horizontal',
+        sight: 'Certified VO • ≤ 3.7 km (2 NM)',
+        extraCheck: {
+          id: 'mode-evlos',
+          label: 'Visual Observer (VO) briefed & certified',
+          detail: 'VO holds at least a Basic RPAS certificate, maintains direct comms with pilot, and stays within 3.7 km (2 NM) of aircraft.'
+        }
+      }
+    };
+
+    const BASE_GROUPS = [
+      {
+        title: '1. Docs & Aircraft Airworthiness',
+        items: [
+          {
+            id: 'reg-mark',
+            label: 'Drone registered & marked',
+            detail: 'RPAS (≥ 250 g) registered with Transport Canada and registration number visibly marked on the airframe.'
+          },
+          {
+            id: 'cert-decl',
+            label: 'Advanced certificate carried',
+            detail: 'Valid Transport Canada Advanced Operations pilot certificate and government photo ID accessible at the site.'
+          },
+          {
+            id: 'hardware',
+            label: 'Airframe, props & batteries inspected',
+            detail: 'No cracks or prop wear; flight and controller batteries charged; gimbal guard removed and micro-SD card installed.'
+          }
+        ]
+      },
+      {
+        title: '2. Airspace, Weather & Site Survey',
+        items: [
+          {
+            id: 'weather',
+            label: 'Active NOTAMs & weather verified',
+            detail: 'Checked local NOTAMs, wind speed, visibility, and confirmed no icing or expected icing conditions.'
+          },
+          {
+            id: 'site-sep',
+            label: 'Launch site & emergency zone clear',
+            detail: 'Take-off/landing pad level and free of debris, overhead wires, or uninvolved bystanders.'
+          }
+        ]
+      }
+    ];
+
+    const QUIZ_QUESTIONS = [
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Controlled Airspace (922.04)',
+        question: 'You plan to fly a 1.8 kg drone in VLOS inside Class C controlled airspace. What is required before takeoff?',
+        options: [
+          'A Basic Operations certificate and a Flight Reviewer sign-off',
+          'An Advanced certificate, a 922.04-declared drone, and NAV CANADA RPAS Flight Authorization',
+          'A Special Flight Operations Certificate (SFOC) for all flights under 25 kg',
+          'No authorization is required if you remain below 100 ft AGL'
+        ],
+        correctIndex: 1,
+        explanation: 'Controlled airspace VLOS operations require an Advanced Operations certificate, a drone with a 922.04 declaration, and an approved NAV CANADA RPAS Flight Authorization (CAR 901.71).'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Separation (922.05 vs 922.06)',
+        question: 'Your small RPAS has a 922.05 declaration (near people) but NOT 922.06 (over people). What is your minimum horizontal distance from uninvolved people?',
+        options: ['30 m (100 ft)', '15 m (50 ft)', 'More than 5 m (16.4 ft)', '0 m — you may fly directly overhead'],
+        correctIndex: 2,
+        explanation: 'Under RPAS Standard 922.05 / CAR 901.69(b), you may fly less than 30 m (100 ft) from uninvolved people, provided you stay more than 5 m (16.4 ft) away horizontally.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Sheltered Operations',
+        question: 'When flying a sheltered operation around a building without direct VLOS or a visual observer, what are the maximum structure limits?',
+        options: [
+          '≤ 30 m (100 ft) above the structure and ≤ 61 m (200 ft) horizontally from it',
+          '≤ 61 m (200 ft) above the structure and ≤ 30 m (100 ft) horizontally from it',
+          '≤ 122 m (400 ft) above the structure with no horizontal limit',
+          '≤ 15 m (50 ft) above the structure and ≤ 30 m (100 ft) from it'
+        ],
+        correctIndex: 0,
+        explanation: 'Sheltered operations allow flight up to 30 m (100 ft) above a building/structure and within 61 m (200 ft) horizontally, while staying within 3.7 km of the pilot and ≥ 30 m from uninvolved people.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • EVLOS Operations',
+        question: 'During an Extended Visual Line-of-Sight (EVLOS) operation with a small drone, which condition is mandatory?',
+        options: [
+          'It may be conducted in controlled airspace with ATC permission',
+          'The Visual Observer (VO) must hold at least a Basic drone pilot certificate',
+          'The drone can fly up to 9.3 km (5 NM) from the pilot and VO',
+          'Bystander separation drops to 5 m automatically'
+        ],
+        correctIndex: 1,
+        explanation: 'EVLOS is restricted to uncontrolled airspace, ≥ 30 m from uninvolved people, within 3.7 km (2 NM) of the pilot, control station, and a VO who holds at least a Basic RPAS certificate.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Visual Observers (CAR 901.20)',
+        question: 'Under CAR 901.20, which statement about Visual Observers (VOs) is correct?',
+        options: [
+          'A VO may monitor up to two drones simultaneously if they are in the same airspace',
+          'A VO may perform observer duties while driving a slow-moving support vehicle',
+          'A VO may not perform observer duties while operating a moving vehicle, vessel, or aircraft',
+          'A VO is exempt from maintaining timely communication with the pilot in uncontrolled airspace'
+        ],
+        correctIndex: 2,
+        explanation: 'CAR 901.20 prohibits a VO from monitoring more than one RPA at a time or performing VO duties while operating a moving vehicle, vessel, or aircraft.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Maximum Altitude (CAR 901.25)',
+        question: 'Without an SFOC-RPAS and away from any buildings or structures, what is the maximum altitude a small drone may be flown under CAR 901.25?',
+        options: ['300 ft (91 m) AGL', '400 ft (122 m) AGL', '500 ft (152 m) AGL', '1,000 ft (305 m) AGL'],
+        correctIndex: 1,
+        explanation: 'Under CAR 901.25(1), maximum altitude is 400 ft (122 m) AGL, or 100 ft (30 m) above a building/structure when within 200 ft (61 m) horizontally of it.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Aerodromes (CAR 901.47)',
+        question: 'Under CAR 901.47, how far must Basic operations stay from a certified airport centre, and what is required within 5.6 km (3 NM) of a military aerodrome?',
+        options: [
+          '1.9 km (1 NM) from airport; no extra permission for military',
+          '5.6 km (3 NM) from airport; DND permission required for military aerodrome',
+          '9.3 km (5 NM) from airport; NAV CANADA phone call only',
+          '3.7 km (2 NM) from airport; Basic certificate is sufficient'
+        ],
+        correctIndex: 1,
+        explanation: 'Basic operations must remain > 5.6 km (3 NM) from a certified airport and > 1.9 km (1 NM) from a heliport. Any pilot flying within 5.6 km (3 NM) of a military aerodrome needs Department of National Defence (DND) permission.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Medium RPAS (>25 kg)',
+        question: 'You are flying a 32 kg medium drone in VLOS with no near-people or over-people declaration. How far must you stay horizontally from uninvolved people?',
+        options: ['More than 30 m (100 ft)', 'More than 61 m (200 ft)', 'More than 152.4 m (500 ft)', 'More than 300 m (1,000 ft)'],
+        correctIndex: 2,
+        explanation: 'Without specific near/over-people safety assurance declarations, medium drones (>25 kg to 150 kg) in VLOS must remain more than 152.4 m (500 ft) horizontally from uninvolved people.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Registration & Recency',
+        question: 'How often must an Advanced Operations pilot complete a recency activity (such as a flight review, exam, or recurrent training) to keep flying legally?',
+        options: ['Every 12 months', 'Every 24 months', 'Every 36 months', 'Never — the certificate is valid for life without recency'],
+        correctIndex: 1,
+        explanation: 'Under CAR 901.65, RPAS pilots must meet recency requirements within the 24 months preceding any flight.'
+      },
+      {
+        domain: 'Air Law',
+        tag: 'Air Law • Microdrones (< 250 g)',
+        question: 'When operating a 249 g microdrone in Canada, which operation still legally requires a Special Flight Operations Certificate (SFOC-RPAS)?',
+        options: [
+          'Flying in uncontrolled airspace over an empty field',
+          'Flying at an advertised public event',
+          'Flying without a Basic or Advanced pilot certificate',
+          'Flying at 150 ft AGL in clear weather'
+        ],
+        correctIndex: 1,
+        explanation: 'While microdrones (< 250 g) do not require registration or a pilot certificate, flying any drone—including a microdrone—at an advertised event requires an SFOC-RPAS.'
+      },
+      {
+        domain: 'Meteorology',
+        tag: 'Meteorology • Density Altitude',
+        question: 'Which three atmospheric variables determine Density Altitude and directly affect rotor thrust and battery performance?',
+        options: [
+          'Wind speed, cloud coverage, and dew point',
+          'Temperature, barometric pressure, and humidity',
+          'Visibility, precipitation, and magnetic variation',
+          'Wind shear, ceiling height, and latitude'
+        ],
+        correctIndex: 1,
+        explanation: 'Density altitude is driven by temperature, pressure, and humidity. Hot, high, and humid conditions create high density altitude (thin air), reducing rotor lift and climb performance.'
+      },
+      {
+        domain: 'Meteorology',
+        tag: 'Meteorology • METAR Decoding',
+        question: 'A METAR for your departure airport includes the weather code "TSRA". What does this indicate?',
+        options: ['Light drizzle and mist', 'Thunderstorm with rain', 'Towering cumulus with freezing fog', 'Blowing snow and reduced visibility'],
+        correctIndex: 1,
+        explanation: 'In aviation METAR/TAF notation, TS stands for Thunderstorm and RA stands for Rain.'
+      },
+      {
+        domain: 'Meteorology',
+        tag: 'Meteorology • TAF Coverage',
+        question: 'A Terminal Aerodrome Forecast (TAF) provides forecast wind, visibility, and weather within what radius of the aerodrome?',
+        options: ['1 nautical mile', '3 nautical miles', '5 nautical miles', '25 nautical miles'],
+        correctIndex: 2,
+        explanation: 'A TAF covers weather conditions expected within 5 nautical miles (NM) of the centre of the aerodrome.'
+      },
+      {
+        domain: 'Meteorology',
+        tag: 'Meteorology • Airframe Icing',
+        question: 'Which type of icing forms when large supercooled water droplets strike the propellers or airframe and spread out before freezing into a hard, transparent sheet?',
+        options: ['Rime ice', 'Hoar frost', 'Clear (glaze) ice', 'Sublimation frost'],
+        correctIndex: 2,
+        explanation: 'Large supercooled droplets freeze slowly and spread, forming heavy, hard-to-shed clear ice; small droplets freeze instantly into opaque, brittle rime ice.'
+      },
+      {
+        domain: 'Meteorology',
+        tag: 'Meteorology • Wind Shear & Turbulence',
+        question: 'How is wind shear defined in aviation meteorology?',
+        options: [
+          'A gradual decrease in temperature with altitude',
+          'A rapid change in wind speed and/or direction over a short vertical or horizontal distance',
+          'Steady laminar airflow over flat water',
+          'High-altitude jet stream turbulence above 25,000 ft ASL only'
+        ],
+        correctIndex: 1,
+        explanation: 'Wind shear is a sudden change in wind speed and/or direction over a short distance, often near buildings, terrain, or temperature inversions.'
+      },
+      {
+        domain: 'Meteorology',
+        tag: 'Meteorology • Pressure Systems',
+        question: 'In the Northern Hemisphere, a low-pressure system is generally associated with:',
+        options: [
+          'Descending air, clear skies, and calm winds',
+          'Rising air, cloud formation, precipitation, and unstable weather',
+          'Clockwise surface wind flow and zero visibility',
+          'Uniformly stable air with no convective clouds'
+        ],
+        correctIndex: 1,
+        explanation: 'Low-pressure systems draw air inward and upward (counter-clockwise in the Northern Hemisphere), cooling moisture into clouds, precipitation, and unstable conditions.'
+      },
+      {
+        domain: 'Navigation',
+        tag: 'Navigation • VNC Charts',
+        question: 'What does the Maximum Elevation Figure (MEF) printed inside a quadrant on a VFR Navigation Chart (VNC) represent?',
+        options: [
+          'The highest floor of Class B controlled airspace in that quadrant',
+          'The maximum legal RPAS altitude in feet AGL',
+          'The highest known terrain or obstruction in that quadrant, in feet ASL (with a safety buffer)',
+          'The minimum cloud ceiling required for VFR flight'
+        ],
+        correctIndex: 2,
+        explanation: 'The MEF indicates the highest known terrain or obstacle in that latitude/longitude quadrant, expressed in feet Above Sea Level (ASL) with a safety margin.'
+      },
+      {
+        domain: 'Navigation',
+        tag: 'Navigation • Aviation Time',
+        question: 'Which time standard is used on Canadian METARs, TAFs, NOTAMs, and NAV CANADA authorizations?',
+        options: ['Local Standard Time (LST)', 'Pacific Daylight Time (PDT)', 'Coordinated Universal Time (UTC / Zulu)', 'Eastern Standard Time (EST)'],
+        correctIndex: 2,
+        explanation: 'Aviation weather reports, NOTAMs, and airspace authorizations use Coordinated Universal Time (UTC), denoted with a "Z" (Zulu).'
+      },
+      {
+        domain: 'Navigation',
+        tag: 'Navigation • Runway Numbering',
+        question: 'An airport runway is numbered "09". What is its approximate magnetic heading?',
+        options: ['009°', '090°', '180°', '270°'],
+        correctIndex: 1,
+        explanation: 'Runway numbers are rounded to the nearest 10 degrees of magnetic heading with the trailing zero dropped—so Runway 09 aligns with ~090° magnetic (East).'
+      },
+      {
+        domain: 'Navigation',
+        tag: 'Navigation • Publications',
+        question: 'Where do you look up runway layouts, operating hours, frequencies, and aerodrome operator contact numbers for Canadian aerodromes?',
+        options: [
+          'The Transport Canada Drone Management Portal',
+          'The Canada Flight Supplement (CFS)',
+          'The Aircraft Flight Manual (AFM)',
+          'The Civil Aviation Daily Occurrence Reporting System (CADORS)'
+        ],
+        correctIndex: 1,
+        explanation: 'The Canada Flight Supplement (CFS) is the official reference for Canadian aerodrome sketches, frequencies, operating hours, and contact information.'
+      },
+      {
+        domain: 'Flight Ops',
+        tag: 'Flight Ops • Non-Towered Aerodromes',
+        question: 'Unless otherwise published in the CFS, what is the standard traffic pattern flown by manned aircraft at a non-towered Canadian aerodrome?',
+        options: ['Right-hand circuit', 'Left-hand circuit', 'Straight-in approach from 10 NM only', 'Figure-eight holding pattern over the runway'],
+        correctIndex: 1,
+        explanation: 'Manned aircraft fly a standard left-hand circuit at non-towered aerodromes unless right-hand circuits are specified in the Canada Flight Supplement.'
+      },
+      {
+        domain: 'Flight Ops',
+        tag: 'Flight Ops • Flyaway in Controlled Airspace',
+        question: 'Your RPAS experiences a flyaway and is heading toward Class C controlled airspace. What is your immediate regulatory obligation?',
+        options: [
+          'Wait until the battery dies before filing a report',
+          'Notify the appropriate Air Traffic Control (ATC) unit immediately',
+          'Turn off the remote controller to force a crash',
+          'Only report it if the drone exceeds 400 ft AGL'
+        ],
+        correctIndex: 1,
+        explanation: 'Under CARs Part IX, you must notify Air Traffic Control immediately anytime a flyaway enters or is likely to enter controlled or Class F restricted airspace.'
+      },
+      {
+        domain: 'Systems & Theory',
+        tag: 'RPAS Systems • Cold Weather Batteries',
+        question: 'How do freezing ambient temperatures affect Lithium-Polymer (LiPo) RPAS flight batteries?',
+        options: [
+          'Internal resistance decreases, extending total flight time',
+          'Chemical reaction slows, increasing internal resistance and causing rapid voltage sag under load',
+          'Cold air doubles maximum discharge current safely',
+          'Battery capacity is unaffected as long as propellers are carbon fibre'
+        ],
+        correctIndex: 1,
+        explanation: 'Cold temperatures slow LiPo chemistry, increasing internal resistance and causing sudden voltage drops under high throttle—always pre-warm batteries and monitor voltage closely.'
+      },
+      {
+        domain: 'Systems & Theory',
+        tag: 'Human Factors • IMSAFE',
+        question: 'In the aviation IMSAFE pre-flight self-assessment checklist, what does the "E" stand for?',
+        options: ['Equipment', 'Emotion / Eating', 'Elevation', 'Endurance'],
+        correctIndex: 1,
+        explanation: 'IMSAFE stands for Illness, Medication, Stress, Alcohol (12-hour minimum under CARs), Fatigue, and Emotion / Eating.'
+      },
+      {
+        domain: 'Systems & Theory',
+        tag: 'Theory of Flight • Load Factor',
+        question: 'During a steep, level banked turn at 60° bank angle, what happens to the load factor (G-load) and stall speed of a fixed-wing or fast-moving RPAS?',
+        options: [
+          'Load factor stays at 1.0 G and stall speed drops',
+          'Load factor doubles to 2.0 G, increasing power demand and stall speed',
+          'Load factor drops to 0.5 G',
+          'Load factor only changes during vertical climbs'
+        ],
+        correctIndex: 1,
+        explanation: 'At a 60° bank in level flight, load factor reaches 2.0 G, forcing the aircraft to generate twice its weight in lift—raising stall speed and motor power draw.'
+      }
+    ];
+
+    const EMERGENCY_PROCEDURES = [
+      {
+        title: 'Flyaway / Controlled Airspace Entry',
+        steps: [
+          'Trigger Return-to-Home (RTH) or switch to manual ATTI/Sport mode to regain directional control.',
+          'Note last known heading, altitude, speed, and remaining battery endurance.',
+          'Notify Air Traffic Control immediately if the flyaway is likely to enter controlled airspace.'
+        ]
+      },
+      {
+        title: 'Lost C2 (Command & Control) Link',
+        steps: [
+          'Check controller antennas and move to an unobstructed line-of-sight position.',
+          'Maintain unaided visual contact and verify the configured failsafe (RTH, Hover, or Land) engages.',
+          'Clear the landing zone of bystanders before automatic touchdown.'
+        ]
+      },
+      {
+        title: 'Manned Aircraft Encounter',
+        steps: [
+          'Give way immediately — manned aircraft always have right-of-way under CARs Part IX.',
+          'Descend rapidly to a safe altitude or steer clear of the aircraft flight path.',
+          'Land and hold on the ground until airspace is completely clear.'
+        ]
+      },
+      {
+        title: 'Critical Battery / Propulsion Fault',
+        steps: [
+          'Abort the mission immediately and descend toward the nearest clear emergency landing zone.',
+          'Call out loudly to warn nearby people to clear the landing area.',
+          'Power down and inspect airframe/batteries before any further flight.'
+        ]
+      }
+    ];
+
+    const DEFAULT_PROFILES = [
+      { id: 'default-micro', name: 'DJI Mini 4K', weightClass: 'micro', reg: 'Exempt (<250g)', maxWind: 38, decl: 'Microdrone', cycles: 0 },
+      { id: 'default-small', name: 'DJI Mavic 3 Enterprise', weightClass: 'small', reg: 'C-SAMPLE', maxWind: 43, decl: '922.04, 922.05', cycles: 0 }
+    ];
+
+    // 2. STATE + LOCALSTORAGE
+    const STORAGE_KEY = 'rpas_advanced_companion_v12';
+
+    function defaultState() {
+      return {
+        theme: 'dark',
+        weightClass: 'small',
+        mode: 'controlled',
+        checked: [],
+        logs: [],
+        atcPhone: '',
+        recencyDate: '',
+        profiles: DEFAULT_PROFILES,
+        activeProfileId: DEFAULT_PROFILES[1].id
+      };
+    }
+
+    function loadState() {
+      try {
+        const raw =
+          localStorage.getItem(STORAGE_KEY) ||
+          localStorage.getItem('rpas_advanced_companion_v10') ||
+          localStorage.getItem('rpas_advanced_companion_v9') ||
+          localStorage.getItem('rpas_advanced_companion_v8');
+        if (!raw) return defaultState();
+        const parsed = JSON.parse(raw);
+        const profiles =
+          Array.isArray(parsed.profiles) && parsed.profiles.length > 0
+            ? parsed.profiles.map((p) => ({ ...p, weightClass: p.weightClass || 'small', cycles: Number(p.cycles) || 0 }))
+            : DEFAULT_PROFILES;
+        const activeId = profiles.some((p) => p.id === parsed.activeProfileId) ? parsed.activeProfileId : profiles[0].id;
+        return {
+          theme: parsed.theme === 'light' ? 'light' : 'dark',
+          weightClass: WEIGHT_CLASSES[parsed.weightClass] ? parsed.weightClass : 'small',
+          mode: OPERATION_MODES[parsed.mode] ? parsed.mode : 'controlled',
+          checked: Array.isArray(parsed.checked) ? parsed.checked : [],
+          logs: Array.isArray(parsed.logs) ? parsed.logs : [],
+          atcPhone: typeof parsed.atcPhone === 'string' ? parsed.atcPhone : '',
+          recencyDate: typeof parsed.recencyDate === 'string' ? parsed.recencyDate : '',
+          profiles,
+          activeProfileId: activeId
+        };
+      } catch {
+        return defaultState();
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({
+            theme: currentTheme,
+            weightClass: selectedWeightClass,
+            mode: selectedMode,
+            checked: Array.from(checkedIds),
+            logs: flightLogs,
+            atcPhone,
+            recencyDate,
+            profiles: aircraftProfiles,
+            activeProfileId
+          })
+        );
+      } catch {}
+    }
+
+    const initial = loadState();
+    let currentTheme = initial.theme;
+    let activeTab = 'checklist';
+    let selectedWeightClass = initial.weightClass;
+    let selectedMode = initial.mode;
+    let checkedIds = new Set(initial.checked);
+    let flightLogs = initial.logs;
+    let atcPhone = initial.atcPhone;
+    let recencyDate = initial.recencyDate;
+    let aircraftProfiles = initial.profiles;
+    let activeProfileId = initial.activeProfileId;
+
+    // Live Flight Timer State
+    let flightSeconds = 0;
+    let flightTimerId = null;
+
+    // Quiz State
+    let quizFormat = 'quick';
+    let activeQuestionList = [];
+    let missedIndices = [];
+    let examAnswers = {};
+    let flaggedIndices = new Set();
+    let isReviewMode = false;
+    let quizIndex = 0;
+    let quizScore = 0;
+    let selectedOption = null;
+    let quizSubmitted = false;
+    let examSecondsLeft = 30 * 60;
+    let examTimerId = null;
+
+    function shuffleIndices(count) {
+      const arr = QUIZ_QUESTIONS.map((_, i) => i);
+      for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+      }
+      return arr.slice(0, count);
+    }
+
+    function stopExamTimer() {
+      if (examTimerId !== null) {
+        clearInterval(examTimerId);
+        examTimerId = null;
+      }
+    }
+
+    function formatTimer(secs) {
+      const m = Math.floor(secs / 60);
+      const s = secs % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function startQuizSession(format) {
+      stopExamTimer();
+      quizFormat = format;
+      isReviewMode = false;
+      missedIndices = [];
+      examAnswers = {};
+      flaggedIndices = new Set();
+      quizIndex = 0;
+      quizScore = 0;
+      selectedOption = null;
+      quizSubmitted = false;
+      activeQuestionList = shuffleIndices(format === 'exam' ? 25 : 10);
+
+      if (format === 'exam') {
+        examSecondsLeft = 30 * 60;
+        examTimerId = setInterval(() => {
+          examSecondsLeft -= 1;
+          const timerEl = document.getElementById('quiz-timer');
+          if (timerEl) timerEl.textContent = formatTimer(Math.max(0, examSecondsLeft));
+          if (examSecondsLeft <= 0) gradePracticeExam();
+        }, 1000);
+      }
+      renderQuiz();
+    }
+
+    function gradePracticeExam() {
+      stopExamTimer();
+      quizScore = 0;
+      missedIndices = [];
+      activeQuestionList.forEach((realIdx, i) => {
+        if (examAnswers[i] === QUIZ_QUESTIONS[realIdx].correctIndex) quizScore += 1;
+        else missedIndices.push(realIdx);
+      });
+      quizSubmitted = true;
+      quizIndex = activeQuestionList.length;
+      renderQuiz();
+    }
+
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', currentTheme);
+      document.getElementById('theme-toggle-btn').textContent = currentTheme === 'dark' ? 'Day Mode' : 'Night Mode';
+      const metaTheme = document.querySelector('meta[name="theme-color"]');
+      if (metaTheme) metaTheme.setAttribute('content', currentTheme === 'dark' ? '#060913' : '#f1f5f9');
+    }
+
+    function getActiveProfile() {
+      return aircraftProfiles.find((p) => p.id === activeProfileId) || aircraftProfiles[0];
+    }
+
+    function syncActiveProfileToForms() {
+      const prof = getActiveProfile();
+      if (!prof) return;
+      selectedWeightClass = prof.weightClass || 'small';
+      document.getElementById('calc-max-wind').value = prof.maxWind;
+      const logAircraft = document.getElementById('log-aircraft');
+      if (logAircraft) logAircraft.value = `${prof.name} (${prof.reg || 'Micro'})`;
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function showBackupStatus(msg, isError) {
+      const el = document.getElementById('backup-status');
+      el.textContent = msg;
+      el.style.color = isError ? 'var(--danger)' : 'var(--ok)';
+      el.classList.remove('hidden');
+    }
+
+    // METAR Decoder
+    function decodeMetar(raw) {
+      const text = raw.trim().toUpperCase();
+      if (!text) return null;
+      const tokens = text.split(/\s+/);
+      const station = tokens.find((t) => /^[A-Z]{4}$/.test(t) && t !== 'META' && t !== 'AUTO') || 'N/A';
+      const timeTok = tokens.find((t) => /^\d{6}Z$/.test(t)) || 'N/A';
+      const windTok = tokens.find((t) => /^(\d{3}|VRB)\d{2,3}(G\d{2,3})?KT$/.test(t));
+      let windStr = 'Calm / N/A';
+      let steadyKmh = null;
+      let gustKmh = null;
+      if (windTok) {
+        const m = windTok.match(/^(\d{3}|VRB)(\d{2,3})(?:G(\d{2,3}))?KT$/);
+        const dir = m[1] === 'VRB' ? 'Variable' : `${m[1]}°`;
+        const spdKt = Number(m[2]);
+        const gstKt = m[3] ? Number(m[3]) : spdKt;
+        steadyKmh = Math.round(spdKt * 1.852);
+        gustKmh = Math.round(gstKt * 1.852);
+        windStr = m[3]
+          ? `${dir} at ${spdKt}G${gstKt} kt (${steadyKmh}–${gustKmh} km/h)`
+          : `${dir} at ${spdKt} kt (${steadyKmh} km/h)`;
+      }
+      const visTok = tokens.find((t) => /^\d+(\/\d+)?SM$/.test(t)) || 'N/A';
+      const clouds = tokens.filter((t) => /^(FEW|SCT|BKN|OVC|VV)\d{3}/.test(t) || t === 'SKC' || t === 'CLR');
+      const wxMap = { TS: 'Thunderstorm', RA: 'Rain', SN: 'Snow', DZ: 'Drizzle', FZ: 'Freezing', BR: 'Mist', FG: 'Fog', SH: 'Showers' };
+      const wxToks = tokens.filter((t) => /^[-+]?(TS|SH|FZ)?(RA|SN|DZ|BR|FG|GR|PL)+$/.test(t));
+      const wxDecoded = wxToks.length
+        ? wxToks.map((w) => w.replace(/(TS|SH|FZ|RA|SN|DZ|BR|FG)/g, (k) => (wxMap[k] ? wxMap[k] + ' ' : k)).trim()).join(', ')
+        : 'None reported';
+      const tempTok = tokens.find((t) => /^M?\d{2}\/M?\d{2}$/.test(t)) || 'N/A';
+      const altTok = tokens.find((t) => /^A\d{4}$/.test(t));
+      const altStr = altTok ? `${(Number(altTok.slice(1)) / 100).toFixed(2)} inHg` : 'N/A';
+      return { station, timeTok, windStr, steadyKmh, gustKmh, visTok, clouds: clouds.join(' ') || 'Clear / N/A', wxDecoded, tempTok, altStr };
+    }
+
+    // 3. RENDER
+    function renderRecency() {
+      const pill = document.getElementById('recency-pill');
+      const modalStatus = document.getElementById('recency-modal-status');
+      const input = document.getElementById('recency-date-input');
+      input.value = recencyDate;
+
+      if (!recencyDate) {
+        pill.textContent = 'Recency: Set Date';
+        pill.className = 'pill pill-warn';
+        modalStatus.textContent = 'Not set';
+        return;
+      }
+
+      const base = new Date(recencyDate + 'T00:00:00');
+      const expiry = new Date(base);
+      expiry.setMonth(expiry.getMonth() + 24);
+      const daysLeft = Math.ceil((expiry - new Date()) / (1000 * 60 * 60 * 24));
+      const expStr = expiry.toISOString().slice(0, 10);
+
+      if (daysLeft < 0) {
+        pill.textContent = 'Recency Expired';
+        pill.className = 'pill pill-danger';
+        modalStatus.textContent = `Expired (${expStr})`;
+      } else if (daysLeft <= 60) {
+        pill.textContent = `Recency: ${daysLeft}d left`;
+        pill.className = 'pill pill-warn';
+        modalStatus.textContent = `Expires ${expStr} (${daysLeft}d)`;
+      } else {
+        pill.textContent = `Recency OK (${daysLeft}d)`;
+        pill.className = 'pill pill-ok';
+        modalStatus.textContent = `Valid until ${expStr}`;
+      }
+    }
+
+    function renderAircraftBar() {
+      const select = document.getElementById('active-aircraft-select');
+      select.innerHTML = aircraftProfiles
+        .map((p) => `<option value="${p.id}">${escapeHtml(p.name)} (${escapeHtml(p.reg || 'Micro')}) • ${p.maxWind} km/h</option>`)
+        .join('');
+      select.value = activeProfileId;
+    }
+
+    function renderProfilesModal() {
+      document.getElementById('preset-buttons').innerHTML = DRONE_PRESETS.map(
+        (pr, idx) => `<button type="button" data-preset-idx="${idx}" class="preset-btn btn" style="padding:5px 9px; font-size:11px;">+ ${escapeHtml(pr.name)}</button>`
+      ).join('');
+
+      document.getElementById('profiles-list').innerHTML = aircraftProfiles
+        .map((p) => {
+          const isActive = p.id === activeProfileId;
+          const wcLabel = WEIGHT_CLASSES[p.weightClass] ? WEIGHT_CLASSES[p.weightClass].label : 'Small';
+          return `
+            <div class="subcard row">
+              <div>
+                <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                  <strong style="font-size:13px;">${escapeHtml(p.name)}</strong>
+                  <span class="mono">${escapeHtml(p.reg || 'Micro')}</span>
+                </div>
+                <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
+                  ${wcLabel} • Max Wind: ${p.maxWind} km/h • Cycles: <strong>${p.cycles || 0}</strong>${p.decl ? ` • ${escapeHtml(p.decl)}` : ''}
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <button type="button" data-cycle-prof="${p.id}" class="cycle-prof-btn btn" style="padding:4px 8px; font-size:11px;">+1 Cycle</button>
+                ${
+                  isActive
+                    ? '<span class="pill pill-ok" style="padding:3px 8px;">Active</span>'
+                    : `<button type="button" data-select-prof="${p.id}" class="select-prof-btn btn" style="padding:5px 9px;">Select</button>`
+                }
+                ${
+                  aircraftProfiles.length > 1
+                    ? `<button type="button" data-del-prof="${p.id}" class="del-prof-btn btn btn-danger" style="padding:5px 9px;">Delete</button>`
+                    : ''
+                }
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function getActiveGroups() {
+      if (selectedWeightClass === 'micro') return MICRO_GROUPS;
+      const mode = OPERATION_MODES[selectedMode];
+      return [BASE_GROUPS[0], { title: BASE_GROUPS[1].title, items: [mode.extraCheck, ...BASE_GROUPS[1].items] }];
+    }
+
+    function renderChecklist() {
+      const wc = WEIGHT_CLASSES[selectedWeightClass];
+      document.getElementById('weight-class-note').textContent = wc.note;
+      document.getElementById('weight-buttons').innerHTML = Object.values(WEIGHT_CLASSES)
+        .map((w) => {
+          const active = w.id === selectedWeightClass;
+          return `
+            <button type="button" data-weight-id="${w.id}" class="weight-btn seg-btn ${active ? 'active' : ''}">
+              <span style="display:block; font-size:12.5px; font-weight:600;">${w.label}</span>
+              <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">${w.sub}</span>
+            </button>
+          `;
+        })
+        .join('');
+
+      const opModeSection = document.getElementById('operation-mode-section');
+      if (selectedWeightClass === 'micro') {
+        opModeSection.classList.add('hidden');
+      } else {
+        opModeSection.classList.remove('hidden');
+        const mode = OPERATION_MODES[selectedMode];
+        document.getElementById('mode-standard').textContent = mode.standard;
+        document.getElementById('mode-buttons').innerHTML = Object.values(OPERATION_MODES)
+          .map((m) => `<button type="button" data-mode-id="${m.id}" class="mode-btn mode-pill ${m.id === selectedMode ? 'active' : ''}">${m.name}</button>`)
+          .join('');
+        const bystanderText = selectedWeightClass === 'medium' && mode.id === 'controlled' ? '> 152.4 m (500 ft) without decl.' : mode.bystanders;
+        document.getElementById('mode-limits').innerHTML = `
+          <div class="subcard"><span class="label-caps" style="display:block;">Airspace</span><strong style="font-size:12px;">${mode.airspace}</strong></div>
+          <div class="subcard"><span class="label-caps" style="display:block;">Bystander Limit</span><strong style="font-size:12px;">${bystanderText}</strong></div>
+          <div class="subcard"><span class="label-caps" style="display:block;">Sight / Range</span><strong style="font-size:12px;">${mode.sight}</strong></div>
+        `;
+      }
+
+      const groups = getActiveGroups();
+      const allItems = groups.flatMap((g) => g.items);
+      const totalItems = allItems.length;
+      const completedCount = allItems.filter((item) => checkedIds.has(item.id)).length;
+      const percent = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
+      const allComplete = completedCount === totalItems;
+
+      document.getElementById('progress-text').textContent = `${completedCount} / ${totalItems} Checks Complete`;
+      const bar = document.getElementById('progress-bar');
+      bar.style.width = `${percent}%`;
+      bar.className = `progress-fill ${allComplete ? 'ok' : ''}`;
+
+      const badge = document.getElementById('status-badge');
+      badge.textContent = allComplete ? 'CLEARED FOR FLIGHT' : 'NO-GO • Checks Incomplete';
+      badge.className = `pill ${allComplete ? 'pill-ok' : 'pill-warn'}`;
+
+      document.getElementById('checklist-container').innerHTML = groups
+        .map(
+          (group) => `
+            <section class="card">
+              <h2 style="margin-bottom:12px;">${group.title}</h2>
+              <div class="stack-sm">
+                ${group.items
+                  .map((item) => {
+                    const isChecked = checkedIds.has(item.id);
+                    return `
+                      <button type="button" data-item-id="${item.id}" class="checklist-item check-item ${isChecked ? 'checked' : ''}">
+                        <span class="check-box">${isChecked ? '✓' : ''}</span>
+                        <span>
+                          <span class="check-title">${item.label}</span>
+                          <span class="check-detail">${item.detail}</span>
+                        </span>
+                      </button>
+                    `;
+                  })
+                  .join('')}
+              </div>
+            </section>
+          `
+        )
+        .join('');
+    }
+
+    function renderSiteCalculator() {
+      const prof = getActiveProfile();
+      document.getElementById('site-aircraft-tag').textContent = prof ? `${prof.name} (${prof.reg || 'Micro'})` : '';
+
+      const maxWind = Math.max(1, Number(document.getElementById('calc-max-wind').value) || 1);
+      const steadyWind = Math.max(0, Number(document.getElementById('calc-steady-wind').value) || 0);
+      const gustWind = Math.max(steadyWind, Number(document.getElementById('calc-gust-wind').value) || 0);
+      const icing = document.getElementById('calc-icing').checked;
+      const altitude = Math.max(0, Number(document.getElementById('calc-altitude').value) || 0);
+      const airportKm = Math.max(0, Number(document.getElementById('calc-airport-km').value) || 0);
+      const heliportKm = Math.max(0, Number(document.getElementById('calc-heliport-km').value) || 0);
+      const nearStructure = document.getElementById('calc-structure').checked;
+      const nearMilitary = document.getElementById('calc-military').checked;
+
+      const windPct = Math.round((gustWind / maxWind) * 100);
+      document.getElementById('wind-load-text').textContent = `${windPct}% (${gustWind} / ${maxWind} km/h)`;
+      const windBar = document.getElementById('wind-load-bar');
+      windBar.style.width = `${Math.min(100, windPct)}%`;
+      windBar.className = `progress-fill ${windPct > 100 ? 'danger' : windPct >= 75 ? 'warn' : 'ok'}`;
+
+      const blockers = [];
+      const cautions = [];
+
+      if (icing) blockers.push('Icing or expected icing conditions present — do not launch.');
+      if (gustWind > maxWind) blockers.push(`Gusts (${gustWind} km/h) exceed aircraft rated limit (${maxWind} km/h).`);
+      else if (windPct >= 75) cautions.push(`Gusts are at ${windPct}% of rated limit — expect reduced battery endurance.`);
+
+      if (selectedWeightClass === 'micro') {
+        if (altitude > 400) cautions.push(`Planned altitude (${altitude} ft AGL) is above Transport Canada's 400 ft recommended ceiling for microdrones.`);
+        if (airportKm < 5.6 || heliportKm < 1.9 || nearMilitary) cautions.push('Microdrone (< 250 g): 5.6 km/1.9 km Part IX rules do not apply, but CAR 900.06 prohibits endangering aviation safety.');
+      } else {
+        if (altitude > 400 && !nearStructure) blockers.push(`Planned altitude (${altitude} ft AGL) exceeds the 400 ft (122 m) CAR 901.25 limit without an SFOC.`);
+        else if (altitude > 400 && nearStructure) cautions.push('Above 400 ft AGL: ensure aircraft stays ≤ 100 ft (30 m) above the structure and ≤ 200 ft (61 m) horizontally.');
+        if (airportKm < 5.6) cautions.push(`Within 5.6 km (3 NM) of a certified airport (${airportKm} km) — requires Advanced privileges + established procedure / ATC auth.`);
+        if (heliportKm < 1.9) cautions.push(`Within 1.9 km (1 NM) of a certified heliport (${heliportKm} km) — requires Advanced privileges + established procedure.`);
+        if (nearMilitary) cautions.push('Within 5.6 km (3 NM) of a military aerodrome — requires Department of National Defence (DND) permission.');
+      }
+
+      const badge = document.getElementById('site-verdict-badge');
+      const summary = document.getElementById('site-verdict-summary');
+      if (blockers.length > 0) {
+        badge.textContent = 'NO-GO • Limit Exceeded';
+        badge.className = 'pill pill-danger';
+        summary.textContent = 'One or more hard weather or regulatory limits are exceeded.';
+      } else if (cautions.length > 0) {
+        badge.textContent = 'CAUTION • Verify Auth';
+        badge.className = 'pill pill-warn';
+        summary.textContent = 'Within hard limits, but additional authorization or margin monitoring is required.';
+      } else {
+        badge.textContent = 'GO • Within Limits';
+        badge.className = 'pill pill-ok';
+        summary.textContent = 'Wind load is within aircraft limits and planned flight meets applicable Transport Canada rules.';
+      }
+
+      document.getElementById('site-warnings').innerHTML = [
+        ...blockers.map((b) => `<li style="color:var(--danger);">${b}</li>`),
+        ...cautions.map((c) => `<li style="color:var(--warn);">${c}</li>`)
+      ].join('');
+    }
+
+    function renderLogbook() {
+      const modeSelect = document.getElementById('log-mode');
+      if (modeSelect.options.length === 0) {
+        modeSelect.innerHTML = [
+          '<option value="micro">Microdrone (&lt; 250 g)</option>',
+          ...Object.values(OPERATION_MODES).map((m) => `<option value="${m.id}">${m.name}</option>`)
+        ].join('');
+      }
+      modeSelect.value = selectedWeightClass === 'micro' ? 'micro' : selectedMode;
+
+      const dateInput = document.getElementById('log-date');
+      if (!dateInput.value) dateInput.value = new Date().toISOString().slice(0, 10);
+
+      const logAircraft = document.getElementById('log-aircraft');
+      const prof = getActiveProfile();
+      if (prof && !logAircraft.value) logAircraft.value = `${prof.name} (${prof.reg || 'Micro'})`;
+
+      const totalMinutes = flightLogs.reduce((sum, entry) => sum + (Number(entry.duration) || 0), 0);
+      const hours = Math.floor(totalMinutes / 60);
+      const mins = totalMinutes % 60;
+      const timeLabel = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
+      document.getElementById('log-summary').textContent = `${flightLogs.length} ${flightLogs.length === 1 ? 'Flight' : 'Flights'} • ${timeLabel}`;
+      document.getElementById('export-csv-btn').disabled = flightLogs.length === 0;
+
+      const listEl = document.getElementById('log-list');
+      if (flightLogs.length === 0) {
+        listEl.innerHTML = '<div class="subcard" style="text-align:center; font-size:12.5px; color:var(--text-faint); padding:22px;">No flights logged yet. Fill out the form above or use the Checklist Flight Timer.</div>';
+        return;
+      }
+
+      listEl.innerHTML = flightLogs
+        .map((entry) => {
+          const modeLabel = entry.mode === 'micro' ? 'Microdrone (< 250 g)' : OPERATION_MODES[entry.mode] ? OPERATION_MODES[entry.mode].name : entry.mode;
+          return `
+            <article class="card row-start" style="padding:14px 16px;">
+              <div>
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:4px;">
+                  <span class="mono">${escapeHtml(entry.date)}</span>
+                  <span class="pill" style="padding:2px 8px; background:var(--surface-2); border-color:var(--border); color:var(--text-muted);">${escapeHtml(modeLabel)}</span>
+                  <span style="font-size:12px; color:var(--text-muted);">${escapeHtml(entry.duration)} min</span>
+                </div>
+                <strong style="font-size:14px;">${escapeHtml(entry.site)}</strong>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+                  ${escapeHtml(entry.aircraft)}${entry.notes ? ` • ${escapeHtml(entry.notes)}` : ''}
+                </div>
+              </div>
+              <button type="button" data-log-id="${entry.id}" class="delete-log-btn btn btn-danger" style="padding:5px 10px;">Delete</button>
+            </article>
+          `;
+        })
+        .join('');
+    }
+
+    function buildDomainBreakdownHtml() {
+      const stats = {};
+      activeQuestionList.forEach((realIdx) => {
+        const d = QUIZ_QUESTIONS[realIdx].domain;
+        if (!stats[d]) stats[d] = { total: 0, missed: 0 };
+        stats[d].total += 1;
+        if (missedIndices.includes(realIdx)) stats[d].missed += 1;
+      });
+      return Object.entries(stats)
+        .map(([domain, s]) => {
+          const right = s.total - s.missed;
+          const pct = Math.round((right / s.total) * 100);
+          const cls = pct >= 80 ? 'ok' : pct >= 60 ? 'warn' : 'danger';
+          return `
+            <div>
+              <div class="row" style="font-size:12px; margin-bottom:4px;">
+                <span>${domain}</span>
+                <span class="mono">${right}/${s.total} (${pct}%)</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill ${cls}" style="width:${pct}%;"></div></div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function renderQuiz() {
+      const totalActive = activeQuestionList.length;
+      const isExam = quizFormat === 'exam' && !isReviewMode;
+
+      document.getElementById('quiz-mode-quick').classList.toggle('active', quizFormat === 'quick');
+      document.getElementById('quiz-mode-exam').classList.toggle('active', quizFormat === 'exam');
+
+      const statusLabel = document.getElementById('quiz-status-label');
+      const scoreEl = document.getElementById('quiz-score');
+      const timerEl = document.getElementById('quiz-timer');
+      const navGrid = document.getElementById('exam-nav-grid');
+
+      if (isExam) {
+        statusLabel.textContent = 'Practice Exam • Graded at Submit';
+        if (quizSubmitted) {
+          scoreEl.textContent = `Final Score: ${quizScore} / ${totalActive}`;
+          timerEl.classList.add('hidden');
+          navGrid.classList.add('hidden');
+        } else {
+          const answeredCount = Object.keys(examAnswers).length;
+          scoreEl.textContent = `Answered: ${answeredCount} / ${totalActive}`;
+          timerEl.textContent = formatTimer(Math.max(0, examSecondsLeft));
+          timerEl.classList.remove('hidden');
+          navGrid.classList.remove('hidden');
+          navGrid.innerHTML = activeQuestionList
+            .map((_, idx) => {
+              const cls = [
+                'q-cell',
+                examAnswers[idx] !== undefined ? 'answered' : '',
+                flaggedIndices.has(idx) ? 'flagged' : '',
+                idx === quizIndex ? 'current' : ''
+              ]
+                .filter(Boolean)
+                .join(' ');
+              return `<button type="button" data-jump-idx="${idx}" class="${cls}">${idx + 1}</button>`;
+            })
+            .join('');
+        }
+      } else {
+        statusLabel.textContent = isReviewMode ? 'Targeted Review • Instant Feedback' : 'Quick 10 • Instant Feedback';
+        scoreEl.textContent = `Score: ${quizScore} / ${totalActive}`;
+        timerEl.classList.add('hidden');
+        navGrid.classList.add('hidden');
+      }
+
+      document.getElementById('quiz-mode-pill').classList.toggle('hidden', !isReviewMode);
+
+      const card = document.getElementById('quiz-card');
+      if (quizIndex >= totalActive) {
+        const pct = totalActive > 0 ? Math.round((quizScore / totalActive) * 100) : 0;
+        const passed = pct >= 80;
+        card.innerHTML = `
+          <div style="text-align:center; padding:8px 0 14px;">
+            <span class="pill ${passed ? 'pill-ok' : 'pill-warn'}">${passed ? 'PASS (≥ 80%)' : 'REVIEW NEEDED (< 80%)'}</span>
+            <h2 style="font-size:22px; margin:12px 0 6px;">${quizScore} / ${totalActive} Correct (${pct}%)</h2>
+            <p class="subtitle">${passed ? 'Solid grasp of TP 15263E Small Advanced Operations.' : 'Review your weak domains below and drill the missed items.'}</p>
+            <div style="margin-top:16px; display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
+              ${missedIndices.length > 0 ? `<button id="quiz-review-missed" type="button" class="btn" style="background:var(--warn-soft); color:var(--warn); border-color:var(--warn-border);">Review Missed (${missedIndices.length})</button>` : ''}
+              <button id="quiz-finish-restart" type="button" class="btn btn-primary">New ${quizFormat === 'exam' ? 'Practice Exam' : 'Quick 10'}</button>
+            </div>
+          </div>
+          <div class="subcard stack-sm" style="margin-top:10px;">
+            <span class="label-caps">TP 15263E Domain Breakdown</span>
+            ${buildDomainBreakdownHtml()}
+          </div>
+        `;
+        return;
+      }
+
+      const q = QUIZ_QUESTIONS[activeQuestionList[quizIndex]];
+
+      if (isExam) {
+        const chosen = examAnswers[quizIndex];
+        const isFlagged = flaggedIndices.has(quizIndex);
+        card.innerHTML = `
+          <div class="row" style="margin-bottom:10px;">
+            <span class="mono">${q.tag}</span>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:12px; color:var(--text-muted);">Question ${quizIndex + 1} of ${totalActive}</span>
+              <button id="exam-flag-btn" type="button" class="btn" style="padding:4px 9px; font-size:11px; ${isFlagged ? 'background:var(--warn-soft); color:var(--warn); border-color:var(--warn-border);' : ''}">
+                ${isFlagged ? 'Flagged' : 'Flag'}
+              </button>
+            </div>
+          </div>
+          <h2 style="font-size:16px; line-height:1.4; margin-bottom:14px;">${q.question}</h2>
+          <div class="stack-sm">
+            ${q.options
+              .map((opt, idx) => `<button type="button" data-opt-index="${idx}" class="quiz-opt ${chosen === idx ? 'selected' : ''}">${opt}</button>`)
+              .join('')}
+          </div>
+          <div class="row" style="margin-top:16px;">
+            <button id="exam-prev-btn" type="button" class="btn" ${quizIndex === 0 ? 'disabled' : ''}>Previous</button>
+            <div style="display:flex; gap:8px;">
+              ${quizIndex + 1 < totalActive ? '<button id="exam-next-btn" type="button" class="btn btn-primary">Next</button>' : ''}
+              <button id="exam-submit-btn" type="button" class="btn ${quizIndex + 1 === totalActive ? 'btn-primary' : ''}">Submit Exam</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      const answered = selectedOption !== null;
+      const isCorrect = selectedOption === q.correctIndex;
+
+      card.innerHTML = `
+        <div class="row" style="margin-bottom:10px;">
+          <span class="mono">${q.tag}</span>
+          <span style="font-size:12px; color:var(--text-muted);">Question ${quizIndex + 1} of ${totalActive}</span>
+        </div>
+        <h2 style="font-size:16px; line-height:1.4; margin-bottom:14px;">${q.question}</h2>
+        <div class="stack-sm">
+          ${q.options
+            .map((opt, idx) => {
+              let cls = 'quiz-opt';
+              if (answered) {
+                if (idx === q.correctIndex) cls += ' correct';
+                else if (idx === selectedOption) cls += ' wrong';
+                else cls += ' dim';
+              }
+              return `<button type="button" data-opt-index="${idx}" ${answered ? 'disabled' : ''} class="${cls}">${opt}</button>`;
+            })
+            .join('')}
+        </div>
+        ${
+          answered
+            ? `
+              <div class="subcard" style="margin-top:14px; border-color:${isCorrect ? 'var(--ok-border)' : 'var(--warn-border)'}; background:${isCorrect ? 'var(--ok-soft)' : 'var(--warn-soft)'};">
+                <div class="label-caps" style="color:${isCorrect ? 'var(--ok)' : 'var(--warn)'}; margin-bottom:4px;">${isCorrect ? 'Correct' : 'Not Quite'}</div>
+                <div style="font-size:12.5px;">${q.explanation}</div>
+              </div>
+              <div style="margin-top:14px; display:flex; justify-content:flex-end;">
+                <button id="quiz-next-btn" type="button" class="btn btn-primary">${quizIndex + 1 === totalActive ? 'See Results' : 'Next Question'}</button>
+              </div>
+            `
+            : ''
+        }
+      `;
+    }
+
+    function renderEmergency() {
+      document.getElementById('atc-phone-input').value = atcPhone;
+      document.getElementById('emergency-list').innerHTML = EMERGENCY_PROCEDURES.map(
+        (proc) => `
+          <section class="subcard">
+            <div class="label-caps" style="color:var(--danger); margin-bottom:6px;">${proc.title}</div>
+            <ol style="margin:0; padding-left:18px; font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;">
+              ${proc.steps.map((step) => `<li>${step}</li>`).join('')}
+            </ol>
+          </section>
+        `
+      ).join('');
+    }
+
+    function buildAndPrintSurvey() {
+      const prof = getActiveProfile();
+      const groups = getActiveGroups();
+      const allItems = groups.flatMap((g) => g.items);
+      const siteName = document.getElementById('site-name-input').value.trim() || 'Unspecified Site';
+      const coords = document.getElementById('site-coords-input').value.trim() || 'Not recorded';
+      const verdict = document.getElementById('site-verdict-badge').textContent;
+      const windText = document.getElementById('wind-load-text').textContent;
+      const alt = document.getElementById('calc-altitude').value;
+      const metar = document.getElementById('metar-input').value.trim() || 'None entered';
+
+      document.getElementById('print-sheet').innerHTML = `
+        <h1>RPAS Site Survey &amp; Pre-Flight Record (CAR 901.27)</h1>
+        <p style="margin:0 0 12px; font-size:12px; color:#475569;">Generated ${new Date().toLocaleString()} • RPAS Ops Companion</p>
+        <h2>1. Mission &amp; Aircraft Details</h2>
+        <table>
+          <tr><th>Site / Location</th><td>${escapeHtml(siteName)} (${escapeHtml(coords)})</td></tr>
+          <tr><th>Aircraft &amp; Reg #</th><td>${escapeHtml(prof ? `${prof.name} (${prof.reg})` : 'N/A')}</td></tr>
+          <tr><th>Weight Class / Mode</th><td>${escapeHtml(WEIGHT_CLASSES[selectedWeightClass].label)} • ${selectedWeightClass === 'micro' ? 'Microdrone (<250g)' : escapeHtml(OPERATION_MODES[selectedMode].name)}</td></tr>
+          <tr><th>ATC / Tower Contact</th><td>${escapeHtml(atcPhone || 'Not recorded')}</td></tr>
+        </table>
+        <h2>2. Weather &amp; Site Assessment</h2>
+        <table>
+          <tr><th>Site Verdict</th><td><strong>${escapeHtml(verdict)}</strong></td></tr>
+          <tr><th>Wind Load</th><td>${escapeHtml(windText)} • Planned Altitude: ${escapeHtml(alt)} ft AGL</td></tr>
+          <tr><th>Raw METAR</th><td>${escapeHtml(metar)}</td></tr>
+        </table>
+        <h2>3. Pre-Flight Checklist Verification</h2>
+        <table>
+          ${allItems
+            .map((item) => `<tr><th>${checkedIds.has(item.id) ? '[PASS]' : '[OPEN]'}</th><td><strong>${escapeHtml(item.label)}</strong> — ${escapeHtml(item.detail)}</td></tr>`)
+            .join('')}
+        </table>
+      `;
+      window.print();
+    }
+
+    function render() {
+      applyTheme();
+      const views = {
+        checklist: document.getElementById('view-checklist'),
+        site: document.getElementById('view-site'),
+        logbook: document.getElementById('view-logbook'),
+        quiz: document.getElementById('view-quiz')
+      };
+      Object.entries(views).forEach(([key, el]) => el.classList.toggle('hidden', key !== activeTab));
+      document.querySelectorAll('.tab-btn').forEach((btn) => btn.classList.toggle('active', btn.getAttribute('data-tab') === activeTab));
+
+      renderRecency();
+      renderAircraftBar();
+      renderProfilesModal();
+      renderChecklist();
+      renderSiteCalculator();
+      renderLogbook();
+      renderQuiz();
+      renderEmergency();
+    }
+
+    // 4. EVENTS
+    document.getElementById('theme-toggle-btn').addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      saveState();
+      applyTheme();
+    });
+
+    document.querySelectorAll('.print-survey-btn').forEach((btn) => {
+      btn.addEventListener('click', buildAndPrintSurvey);
+    });
+
+    // Flight Timer Bridge
+    document.getElementById('timer-toggle-btn').addEventListener('click', () => {
+      const btn = document.getElementById('timer-toggle-btn');
+      if (flightTimerId !== null) {
+        clearInterval(flightTimerId);
+        flightTimerId = null;
+        btn.textContent = 'Resume Flight';
+      } else {
+        flightTimerId = setInterval(() => {
+          flightSeconds += 1;
+          document.getElementById('flight-timer-display').textContent = formatTimer(flightSeconds);
+        }, 1000);
+        btn.textContent = 'Pause Flight';
+      }
+    });
+
+    document.getElementById('timer-reset-btn').addEventListener('click', () => {
+      if (flightTimerId !== null) {
+        clearInterval(flightTimerId);
+        flightTimerId = null;
+      }
+      flightSeconds = 0;
+      document.getElementById('flight-timer-display').textContent = '00:00';
+      document.getElementById('timer-toggle-btn').textContent = 'Start Flight';
+    });
+
+    document.getElementById('timer-log-btn').addEventListener('click', () => {
+      if (flightTimerId !== null) {
+        clearInterval(flightTimerId);
+        flightTimerId = null;
+        document.getElementById('timer-toggle-btn').textContent = 'Start Flight';
+      }
+      const mins = Math.max(1, Math.ceil(flightSeconds / 60));
+      document.getElementById('log-duration').value = mins;
+      const siteVal = document.getElementById('site-name-input').value.trim();
+      if (siteVal) document.getElementById('log-site').value = siteVal;
+      syncActiveProfileToForms();
+      activeTab = 'logbook';
+      render();
+      document.getElementById('log-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // GPS & Copy Coords
+    document.getElementById('gps-btn').addEventListener('click', () => {
+      const status = document.getElementById('gps-status');
+      status.classList.remove('hidden');
+      if (!navigator.geolocation) {
+        status.textContent = 'Geolocation is not supported in this browser; enter coordinates manually.';
+        return;
+      }
+      status.textContent = 'Fetching GPS coordinates...';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(5);
+          const lng = pos.coords.longitude.toFixed(5);
+          document.getElementById('site-coords-input').value = `${lat}, ${lng}`;
+          status.textContent = `GPS locked (±${Math.round(pos.coords.accuracy)} m).`;
+        },
+        () => {
+          status.textContent = 'Location permission denied or unavailable; enter coordinates manually.';
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    });
+
+    document.getElementById('copy-coords-btn').addEventListener('click', () => {
+      const val = document.getElementById('site-coords-input').value.trim();
+      if (!val) return;
+      const status = document.getElementById('gps-status');
+      status.classList.remove('hidden');
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(val).then(() => {
+          status.textContent = 'Coordinates copied to clipboard.';
+        }).catch(() => {
+          status.textContent = 'Copy ready — select and copy from the field.';
+        });
+      } else {
+        const input = document.getElementById('site-coords-input');
+        input.select();
+        document.execCommand('copy');
+        status.textContent = 'Coordinates copied.';
+      }
+    });
+
+    // METAR Decoder
+    function runMetarDecode() {
+      const res = decodeMetar(document.getElementById('metar-input').value);
+      const out = document.getElementById('metar-output');
+      if (!res) {
+        out.classList.add('hidden');
+        return;
+      }
+      out.classList.remove('hidden');
+      out.innerHTML = `
+        <div class="subcard"><span class="label-caps" style="display:block;">Station / UTC</span><strong>${escapeHtml(res.station)} • ${escapeHtml(res.timeTok)}</strong></div>
+        <div class="subcard"><span class="label-caps" style="display:block;">Wind</span><strong>${escapeHtml(res.windStr)}</strong></div>
+        <div class="subcard"><span class="label-caps" style="display:block;">Visibility / Wx</span><strong>${escapeHtml(res.visTok)} • ${escapeHtml(res.wxDecoded)}</strong></div>
+        <div class="subcard"><span class="label-caps" style="display:block;">Clouds</span><strong>${escapeHtml(res.clouds)}</strong></div>
+        <div class="subcard"><span class="label-caps" style="display:block;">Temp / Dewpoint</span><strong>${escapeHtml(res.tempTok)} °C</strong></div>
+        <div class="subcard"><span class="label-caps" style="display:block;">Altimeter</span><strong>${escapeHtml(res.altStr)}</strong></div>
+      `;
+      if (res.steadyKmh !== null) {
+        document.getElementById('calc-steady-wind').value = res.steadyKmh;
+        document.getElementById('calc-gust-wind').value = res.gustKmh;
+        renderSiteCalculator();
+      }
+    }
+
+    document.getElementById('metar-decode-btn').addEventListener('click', runMetarDecode);
+    document.getElementById('metar-sample-cyvr').addEventListener('click', () => {
+      document.getElementById('metar-input').value = 'METAR CYVR 201800Z 29012G20KT 15SM FEW035 SCT080 09/05 A3004';
+      runMetarDecode();
+    });
+    document.getElementById('metar-sample-cyyz').addEventListener('click', () => {
+      document.getElementById('metar-input').value = 'METAR CYYZ 201800Z 24016G26KT 6SM -RA BKN022 OVC040 04/02 A2978';
+      runMetarDecode();
+    });
+
+    document.getElementById('active-aircraft-select').addEventListener('change', (e) => {
+      activeProfileId = e.target.value;
+      syncActiveProfileToForms();
+      saveState();
+      render();
+    });
+
+    document.getElementById('weight-buttons').addEventListener('click', (e) => {
+      const btn = e.target.closest('.weight-btn');
+      if (!btn) return;
+      selectedWeightClass = btn.getAttribute('data-weight-id');
+      saveState();
+      render();
+    });
+
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeTab = btn.getAttribute('data-tab');
+        render();
+      });
+    });
+
+    document.querySelectorAll('.site-input').forEach((el) => {
+      el.addEventListener('input', renderSiteCalculator);
+      el.addEventListener('change', renderSiteCalculator);
+    });
+
+    document.getElementById('mode-buttons').addEventListener('click', (e) => {
+      const btn = e.target.closest('.mode-btn');
+      if (!btn) return;
+      selectedMode = btn.getAttribute('data-mode-id');
+      saveState();
+      render();
+    });
+
+    document.getElementById('checklist-container').addEventListener('click', (e) => {
+      const btn = e.target.closest('.checklist-item');
+      if (!btn) return;
+      const id = btn.getAttribute('data-item-id');
+      if (checkedIds.has(id)) checkedIds.delete(id);
+      else checkedIds.add(id);
+      saveState();
+      render();
+    });
+
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      checkedIds.clear();
+      saveState();
+      render();
+    });
+
+    document.getElementById('quiz-mode-quick').addEventListener('click', () => startQuizSession('quick'));
+    document.getElementById('quiz-mode-exam').addEventListener('click', () => startQuizSession('exam'));
+    document.getElementById('quiz-reset-btn').addEventListener('click', () => startQuizSession(quizFormat));
+
+    document.getElementById('exam-nav-grid').addEventListener('click', (e) => {
+      const cell = e.target.closest('.q-cell');
+      if (!cell) return;
+      quizIndex = Number(cell.getAttribute('data-jump-idx'));
+      renderQuiz();
+    });
+
+    document.getElementById('quiz-card').addEventListener('click', (e) => {
+      const optBtn = e.target.closest('.quiz-opt');
+      if (optBtn) {
+        const chosenIdx = Number(optBtn.getAttribute('data-opt-index'));
+        if (quizFormat === 'exam' && !isReviewMode) {
+          examAnswers[quizIndex] = chosenIdx;
+          renderQuiz();
+          return;
+        }
+        if (selectedOption === null) {
+          const realIdx = activeQuestionList[quizIndex];
+          selectedOption = chosenIdx;
+          if (selectedOption === QUIZ_QUESTIONS[realIdx].correctIndex) quizScore += 1;
+          else missedIndices.push(realIdx);
+          renderQuiz();
+        }
+        return;
+      }
+
+      if (e.target.id === 'exam-flag-btn') {
+        if (flaggedIndices.has(quizIndex)) flaggedIndices.delete(quizIndex);
+        else flaggedIndices.add(quizIndex);
+        renderQuiz();
+        return;
+      }
+      if (e.target.id === 'exam-prev-btn' && quizIndex > 0) {
+        quizIndex -= 1;
+        renderQuiz();
+        return;
+      }
+      if (e.target.id === 'exam-next-btn' && quizIndex + 1 < activeQuestionList.length) {
+        quizIndex += 1;
+        renderQuiz();
+        return;
+      }
+      if (e.target.id === 'exam-submit-btn') {
+        gradePracticeExam();
+        return;
+      }
+      if (e.target.id === 'quiz-next-btn') {
+        quizIndex += 1;
+        selectedOption = null;
+        renderQuiz();
+        return;
+      }
+      if (e.target.id === 'quiz-review-missed') {
+        stopExamTimer();
+        activeQuestionList = [...missedIndices];
+        missedIndices = [];
+        isReviewMode = true;
+        quizIndex = 0;
+        quizScore = 0;
+        selectedOption = null;
+        renderQuiz();
+        return;
+      }
+      if (e.target.id === 'quiz-finish-restart') {
+        startQuizSession(quizFormat);
+      }
+    });
+
+    document.getElementById('log-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      flightLogs.unshift({
+        id: String(Date.now()),
+        date: document.getElementById('log-date').value,
+        duration: Number(document.getElementById('log-duration').value),
+        site: document.getElementById('log-site').value.trim(),
+        aircraft: document.getElementById('log-aircraft').value.trim(),
+        mode: document.getElementById('log-mode').value,
+        notes: document.getElementById('log-notes').value.trim()
+      });
+      saveState();
+      e.target.reset();
+      document.getElementById('log-date').value = new Date().toISOString().slice(0, 10);
+      syncActiveProfileToForms();
+      renderLogbook();
+    });
+
+    document.getElementById('log-list').addEventListener('click', (e) => {
+      const delBtn = e.target.closest('.delete-log-btn');
+      if (!delBtn) return;
+      const id = delBtn.getAttribute('data-log-id');
+      flightLogs = flightLogs.filter((entry) => entry.id !== id);
+      saveState();
+      renderLogbook();
+    });
+
+    document.getElementById('export-csv-btn').addEventListener('click', () => {
+      if (flightLogs.length === 0) return;
+      const headers = ['Date', 'Site', 'Aircraft', 'Operation Mode', 'Duration (min)', 'Notes'];
+      const rows = flightLogs.map((e) => [
+        e.date,
+        e.site,
+        e.aircraft,
+        e.mode === 'micro' ? 'Microdrone (< 250 g)' : OPERATION_MODES[e.mode] ? OPERATION_MODES[e.mode].name : e.mode,
+        e.duration,
+        e.notes || ''
+      ]);
+      const csv = [headers, ...rows].map((row) => row.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rpas-flight-log-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // JSON Backup / Restore / Clear
+    document.getElementById('export-json-btn').addEventListener('click', () => {
+      const payload = {
+        version: 12,
+        exportedAt: new Date().toISOString(),
+        theme: currentTheme,
+        weightClass: selectedWeightClass,
+        mode: selectedMode,
+        checked: Array.from(checkedIds),
+        logs: flightLogs,
+        atcPhone,
+        recencyDate,
+        profiles: aircraftProfiles,
+        activeProfileId
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `rpas-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showBackupStatus('JSON backup downloaded.', false);
+    });
+
+    document.getElementById('import-json-btn').addEventListener('click', () => {
+      document.getElementById('import-json-input').click();
+    });
+
+    document.getElementById('import-json-input').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result));
+          if (!parsed || typeof parsed !== 'object') throw new Error('Invalid JSON');
+          if (parsed.theme === 'light' || parsed.theme === 'dark') currentTheme = parsed.theme;
+          if (WEIGHT_CLASSES[parsed.weightClass]) selectedWeightClass = parsed.weightClass;
+          if (OPERATION_MODES[parsed.mode]) selectedMode = parsed.mode;
+          checkedIds = new Set(Array.isArray(parsed.checked) ? parsed.checked : []);
+          if (Array.isArray(parsed.logs)) flightLogs = parsed.logs;
+          if (typeof parsed.atcPhone === 'string') atcPhone = parsed.atcPhone;
+          if (typeof parsed.recencyDate === 'string') recencyDate = parsed.recencyDate;
+          if (Array.isArray(parsed.profiles) && parsed.profiles.length > 0) aircraftProfiles = parsed.profiles;
+          if (parsed.activeProfileId) activeProfileId = parsed.activeProfileId;
+          saveState();
+          syncActiveProfileToForms();
+          render();
+          showBackupStatus('Backup restored successfully.', false);
+        } catch {
+          showBackupStatus('Could not import file: invalid JSON backup.', true);
+        }
+        e.target.value = '';
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById('clear-data-btn').addEventListener('click', () => {
+      document.getElementById('clear-confirm-box').classList.remove('hidden');
+    });
+    document.getElementById('clear-confirm-no').addEventListener('click', () => {
+      document.getElementById('clear-confirm-box').classList.add('hidden');
+    });
+    document.getElementById('clear-confirm-yes').addEventListener('click', () => {
+      try { localStorage.removeItem(STORAGE_KEY); } catch {}
+      const fresh = defaultState();
+      currentTheme = fresh.theme;
+      selectedWeightClass = fresh.weightClass;
+      selectedMode = fresh.mode;
+      checkedIds = new Set();
+      flightLogs = [];
+      atcPhone = '';
+      recencyDate = '';
+      aircraftProfiles = DEFAULT_PROFILES;
+      activeProfileId = DEFAULT_PROFILES[1].id;
+      document.getElementById('clear-confirm-box').classList.add('hidden');
+      syncActiveProfileToForms();
+      render();
+      showBackupStatus('All local data cleared.', false);
+    });
+
+    // Modals
+    const emergencyModal = document.getElementById('emergency-modal');
+    const profilesModal = document.getElementById('profiles-modal');
+
+    document.getElementById('emergency-open-btn').addEventListener('click', () => emergencyModal.classList.remove('hidden'));
+    document.getElementById('emergency-close-btn').addEventListener('click', () => emergencyModal.classList.add('hidden'));
+    emergencyModal.addEventListener('click', (e) => { if (e.target === emergencyModal) emergencyModal.classList.add('hidden'); });
+
+    document.getElementById('profiles-open-btn').addEventListener('click', () => profilesModal.classList.remove('hidden'));
+    document.getElementById('profiles-close-btn').addEventListener('click', () => profilesModal.classList.add('hidden'));
+    profilesModal.addEventListener('click', (e) => { if (e.target === profilesModal) profilesModal.classList.add('hidden'); });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        emergencyModal.classList.add('hidden');
+        profilesModal.classList.add('hidden');
+      }
+    });
+
+    document.getElementById('atc-phone-input').addEventListener('input', (e) => {
+      atcPhone = e.target.value;
+      saveState();
+    });
+
+    document.getElementById('recency-date-input').addEventListener('change', (e) => {
+      recencyDate = e.target.value;
+      saveState();
+      renderRecency();
+    });
+
+    document.getElementById('preset-buttons').addEventListener('click', (e) => {
+      const btn = e.target.closest('.preset-btn');
+      if (!btn) return;
+      const preset = DRONE_PRESETS[Number(btn.getAttribute('data-preset-idx'))];
+      if (!preset) return;
+      const newProf = { id: 'prof-' + Date.now(), ...preset, cycles: 0 };
+      aircraftProfiles.push(newProf);
+      activeProfileId = newProf.id;
+      syncActiveProfileToForms();
+      saveState();
+      render();
+    });
+
+    document.getElementById('profile-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newProf = {
+        id: 'prof-' + Date.now(),
+        name: document.getElementById('prof-name').value.trim(),
+        weightClass: document.getElementById('prof-class').value,
+        reg: document.getElementById('prof-reg').value.trim() || 'Exempt (<250g)',
+        maxWind: Math.max(1, Number(document.getElementById('prof-wind').value) || 38),
+        decl: document.getElementById('prof-decl').value.trim(),
+        cycles: 0
+      };
+      aircraftProfiles.push(newProf);
+      activeProfileId = newProf.id;
+      syncActiveProfileToForms();
+      saveState();
+      e.target.reset();
+      render();
+    });
+
+    document.getElementById('profiles-list').addEventListener('click', (e) => {
+      const cycBtn = e.target.closest('.cycle-prof-btn');
+      if (cycBtn) {
+        const id = cycBtn.getAttribute('data-cycle-prof');
+        const target = aircraftProfiles.find((p) => p.id === id);
+        if (target) {
+          target.cycles = (Number(target.cycles) || 0) + 1;
+          saveState();
+          renderProfilesModal();
+        }
+        return;
+      }
+      const selBtn = e.target.closest('.select-prof-btn');
+      if (selBtn) {
+        activeProfileId = selBtn.getAttribute('data-select-prof');
+        syncActiveProfileToForms();
+        saveState();
+        render();
+        return;
+      }
+      const delBtn = e.target.closest('.del-prof-btn');
+      if (delBtn && aircraftProfiles.length > 1) {
+        const delId = delBtn.getAttribute('data-del-prof');
+        aircraftProfiles = aircraftProfiles.filter((p) => p.id !== delId);
+        if (activeProfileId === delId) activeProfileId = aircraftProfiles[0].id;
+        syncActiveProfileToForms();
+        saveState();
+        render();
+      }
+    });
+
+    syncActiveProfileToForms();
+    startQuizSession('quick');
+    render();
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
