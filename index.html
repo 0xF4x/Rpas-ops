@@ -2392,15 +2392,6 @@
       const siteVal = document.getElementById('site-name-input').value.trim();
       if (siteVal) document.getElementById('log-site').value = siteVal;
   
-    // v17 Advanced Aide-Mémoire Tab Switcher
-    document.getElementById('am-tabs').addEventListener('click', (e) => {
-      const btn = e.target.closest('.am-tab-btn');
-      if (!btn) return;
-      const target = btn.getAttribute('data-am-tab');
-      document.querySelectorAll('.am-tab-btn').forEach((b) => b.classList.toggle('active', b === btn));
-      document.querySelectorAll('.am-panel').forEach((p) => p.classList.toggle('hidden', p.id !== 'am-panel-' + target));
-    });
-
     syncActiveProfileToForms();
       activeTab = 'logbook';
       render();
@@ -3058,6 +3049,13 @@
     });
 
     const refModal = document.getElementById('ref-modal');
+    document.getElementById('am-tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.am-tab-btn');
+      if (!btn) return;
+      const target = btn.getAttribute('data-am-tab');
+      document.querySelectorAll('.am-tab-btn').forEach((b) => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.am-panel').forEach((p) => p.classList.toggle('hidden', p.id !== 'am-panel-' + target));
+    });
     document.getElementById('ref-open-btn').addEventListener('click', () => refModal.classList.remove('hidden'));
     document.getElementById('ref-close-btn').addEventListener('click', () => refModal.classList.add('hidden'));
     refModal.addEventListener('click', (e) => { if (e.target === refModal) refModal.classList.add('hidden'); });
