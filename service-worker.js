@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rpas-v18.1';
+const CACHE_NAME = 'rpas-v18.2';
 const ASSETS = ['./', './index.html', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', (event) => {

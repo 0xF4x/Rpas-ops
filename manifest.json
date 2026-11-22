@@ -1,6 +1,6 @@
 {
-  "name": "RPAS Cockpit (CARs Part IX)",
-  "short_name": "RPAS",
+  "name": "RPAS Ops",
+  "short_name": "RPAS Ops",
   "description": "Transport Canada RPAS Pre-Flight Checklist, Site & Wind Calculator, Exam Drill, and Flight Logbook.",
   "start_url": "./index.html",
   "display": "standalone",
