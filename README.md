@@ -1,5 +1,3 @@
-# AERO·IX — Made-in-Canada Drone Companion (v16)
-
 A 100% offline-first, zero-dependency Progressive Web App (PWA) built for Canadian RPAS pilots operating under Transport Canada CARs Part IX.
 
 ## Highlights
