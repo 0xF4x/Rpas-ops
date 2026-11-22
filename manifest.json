@@ -1,11 +1,11 @@
 {
-  "name": "RPAS Advanced Companion",
-  "short_name": "RPAS Ops",
+  "name": "RPAS Cockpit (CARs Part IX)",
+  "short_name": "RPAS",
   "description": "Transport Canada RPAS Pre-Flight Checklist, Site & Wind Calculator, Exam Drill, and Flight Logbook.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#020617",
-  "theme_color": "#020617",
+  "background_color": "#05070e",
+  "theme_color": "#05070e",
   "icons": [
     {
       "src": "icon.svg",

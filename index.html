@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#060913" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>RPAS Ops • Canadian Drone Companion</title>
+  <title>RPAS Cockpit • Canada</title>
   <style>
     :root {
       --bg: #060913;
@@ -283,11 +283,11 @@
     .quiz-opt.wrong { background: var(--danger-soft); border-color: var(--danger-border); color: var(--danger); }
     .quiz-opt.dim { opacity: 0.5; }
 
-    .q-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(34px, 1fr)); gap: 6px; }
+    .q-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(30px, 1fr)); gap: 5px; }
     .q-cell {
-      padding: 6px 0;
-      border-radius: 8px;
-      font-size: 11.5px;
+      padding: 5px 0;
+      border-radius: 7px;
+      font-size: 11px;
       font-weight: 600;
       border: 1px solid var(--border);
       background: var(--surface-2);
@@ -321,6 +321,24 @@
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
     }
 
+    details.card-details > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      user-select: none;
+    }
+    details.card-details > summary::-webkit-details-marker { display: none; }
+    details.card-details > summary::after {
+      content: '▾';
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: transform 0.15s ease;
+    }
+    details.card-details[open] > summary::after { transform: rotate(180deg); }
+
     footer {
       margin-top: 28px;
       padding-top: 16px;
@@ -333,7 +351,6 @@
     }
     footer a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
 
-    /* Print / PDF CAR 901.27 Site Survey Sheet */
     #print-sheet { display: none; }
     @media print {
       body { background: #ffffff !important; color: #0f172a !important; }
@@ -345,60 +362,350 @@
       #print-sheet td, #print-sheet th { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; }
       #print-sheet th { background: #f1f5f9; width: 28%; }
     }
+  
+    .btn-theme-day {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.22), rgba(245, 158, 11, 0.14));
+      color: #fbbf24;
+      border: 1px solid rgba(251, 191, 36, 0.55);
+      box-shadow: 0 0 10px rgba(251, 191, 36, 0.18);
+    }
+    .btn-theme-day:hover {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.34), rgba(245, 158, 11, 0.24));
+      border-color: #fbbf24;
+    }
+    .btn-theme-night {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(79, 70, 229, 0.12));
+      color: #4338ca;
+      border: 1px solid rgba(99, 102, 241, 0.5);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.15);
+    }
+    .btn-theme-night:hover {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.28), rgba(79, 70, 229, 0.2));
+      border-color: #4f46e5;
+    }
+  
+    /* === v16 CARs Part IX MINIMALIST OVERHAUL === */
+    :root {
+      --bg: #05070e;
+      --bg-glow: radial-gradient(ellipse 75% 40% at 50% -12%, rgba(56, 189, 248, 0.13), transparent);
+      --surface: rgba(15, 22, 36, 0.78);
+      --surface-solid: #0f1624;
+      --surface-2: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.18);
+      --shadow: 0 10px 30px -14px rgba(0, 0, 0, 0.65);
+    }
+    html[data-theme="light"] {
+      --bg: #f4f6f9;
+      --bg-glow: radial-gradient(ellipse 75% 40% at 50% -12%, rgba(2, 132, 199, 0.08), transparent);
+      --surface: rgba(255, 255, 255, 0.96);
+      --surface-solid: #ffffff;
+      --surface-2: #f8fafc;
+      --border: rgba(15, 23, 42, 0.08);
+      --border-strong: rgba(15, 23, 42, 0.18);
+      --shadow: 0 6px 20px -10px rgba(15, 23, 42, 0.12);
+    }
+    .container { max-width: 720px; padding: 18px 16px 56px; }
+    .card { border-radius: 18px; padding: 16px 18px; }
+    .subcard { border-radius: 12px; }
+
+    /* Razor-thin brand bar */
+    .brand-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .brand-title {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .brand-dot { color: #ef4444; }
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-top: 3px;
+    }
+    .brand-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    /* Unified Cockpit Hero Strip */
+    .cockpit-strip {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .cockpit-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    #status-badge {
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 13px;
+      letter-spacing: 0.02em;
+    }
+    .quick-pills {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .quick-pill-btn {
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .quick-pill-btn:hover {
+      border-color: var(--border-strong);
+      color: var(--text);
+    }
+    .cockpit-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .aircraft-picker {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 190px;
+    }
+    .aircraft-picker select {
+      font-weight: 600;
+      padding: 7px 10px;
+      border-radius: 10px;
+    }
+
+    /* Collapsible Weight Class Override */
+    details.weight-override {
+      padding: 11px 15px;
+    }
+    details.weight-override > summary {
+      list-style: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    details.weight-override > summary::-webkit-details-marker { display: none; }
+    details.weight-override[open] > summary { margin-bottom: 12px; }
+    .override-hint {
+      font-size: 11px;
+      color: var(--text-faint);
+      font-weight: 600;
+    }
+
+    /* Segmented Tabs (Desktop) + Sticky Bottom Thumb-Bar (Mobile) */
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      width: 100%;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      margin-top: 12px;
+    }
+    .tab-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+    .tab-ico { font-size: 13px; line-height: 1; }
+
+    @media (max-width: 680px) {
+      .container { padding: 14px 14px 96px; }
+      .tabs {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 40;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+        border-top: 1px solid var(--border-strong);
+        background: rgba(8, 12, 22, 0.88);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        padding: 7px 10px calc(9px + env(safe-area-inset-bottom, 0px));
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.45);
+      }
+      html[data-theme="light"] .tabs {
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 -6px 20px rgba(15, 23, 42, 0.08);
+      }
+      .tab-btn {
+        flex-direction: column;
+        gap: 3px;
+        padding: 7px 4px;
+        font-size: 10.5px;
+        border-radius: 11px;
+      }
+      .tab-ico { font-size: 15px; }
+    }
+  
+    .tab-btn.tab-complete {
+      color: var(--ok);
+      background: var(--ok-soft);
+      border: 1px solid var(--ok-border);
+    }
+    .tab-btn.tab-complete:hover {
+      color: var(--ok);
+    }
+    .tab-btn.active.tab-complete {
+      background: #10b981;
+      color: #022c22;
+      border: 1px solid #34d399;
+      box-shadow: 0 2px 12px rgba(16, 185, 129, 0.38);
+    }
+    html[data-theme="light"] .tab-btn.active.tab-complete {
+      background: #059669;
+      color: #ffffff;
+      border-color: #059669;
+    }
+  
+    .am-table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 4px; }
+    .am-table th, .am-table td { text-align: left; padding: 6px 7px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .am-table th { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 700; }
+    .am-table td { color: var(--text-muted); }
+    .am-table td:first-child { color: var(--text); font-weight: 600; white-space: nowrap; }
+    .am-table tr:last-child td { border-bottom: none; }
+  
+    .brand-emblem {
+      color: var(--text);
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .brand-emblem:hover {
+      transform: rotate(15deg) scale(1.04);
+    }
   </style>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <meta name="theme-color" content="#05070e" />
 </head>
 <body>
   <main class="container">
     <!-- HEADER -->
-    <header style="margin-bottom: 20px;">
-      <div class="row" style="margin-bottom: 6px;">
-        <span class="eyebrow"><span class="dot"></span>CARs Part IX • RPAS Companion</span>
-        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-          <span id="status-badge" class="pill pill-warn">NO-GO • Checks Incomplete</span>
-          <button id="theme-toggle-btn" type="button" class="btn" style="padding: 5px 10px; border-radius: 999px; font-size: 11.5px;">
-            Day Mode
-          </button>
-          <button id="emergency-open-btn" type="button" class="btn-emergency">Emergency</button>
+    <header style="margin-bottom: 16px;">
+      <!-- Razor-thin Brand Bar -->
+      <div class="brand-bar">
+        <div class="brand-mark" title="CARs Part IX • Canada">
+          <svg class="brand-emblem" width="34" height="34" viewBox="0 0 64 64" fill="none" aria-label="RPAS Compass Emblem" role="img">
+            <!-- Outer tactical ring -->
+            <circle cx="32" cy="32" r="28" stroke="currentColor" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="10 6"/>
+            <!-- Quadcopter diagonal rotor rings -->
+            <circle cx="15" cy="15" r="6.5" stroke="currentColor" stroke-opacity="0.48" stroke-width="1.8"/>
+            <circle cx="49" cy="15" r="6.5" stroke="currentColor" stroke-opacity="0.48" stroke-width="1.8"/>
+            <circle cx="49" cy="49" r="6.5" stroke="currentColor" stroke-opacity="0.48" stroke-width="1.8"/>
+            <circle cx="15" cy="49" r="6.5" stroke="currentColor" stroke-opacity="0.48" stroke-width="1.8"/>
+            <!-- Diagonal X-frame spars -->
+            <line x1="20" y1="20" x2="27" y2="27" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+            <line x1="44" y1="20" x2="37" y2="27" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+            <line x1="44" y1="44" x2="37" y2="37" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+            <line x1="20" y1="44" x2="27" y2="37" stroke="currentColor" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+            <!-- 4-Point NATO / Star Compass Rose (Crimson North) -->
+            <polygon points="32,4 37,27 32,32 27,27" fill="#ef4444"/>
+            <polygon points="32,60 37,37 32,32 27,37" fill="currentColor" fill-opacity="0.88"/>
+            <polygon points="60,32 37,27 32,32 37,37" fill="currentColor" fill-opacity="0.65"/>
+            <polygon points="4,32 27,27 32,32 27,37" fill="currentColor" fill-opacity="0.65"/>
+            <!-- Center reticle -->
+            <circle cx="32" cy="32" r="3" fill="var(--bg)" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="brand-actions">
+          <button id="theme-toggle-btn" type="button" class="btn btn-theme-day" aria-label="Toggle Day or Night Mode" title="Toggle Day / Night Mode" style="padding: 6px 11px; border-radius: 999px; font-size: 13px;">☀</button>
+          <button id="emergency-open-btn" type="button" class="btn-emergency" style="padding: 6px 12px; border-radius: 999px;">SOS</button>
         </div>
       </div>
 
-      <h1>Advanced Drone Companion</h1>
-      <p class="subtitle">Weight-class pre-flight checklist, METAR &amp; site survey, airspace links, flight logbook, and TP 15263E exam prep.</p>
-
-      <!-- Active Aircraft & Recency Bar -->
-      <div class="card" style="margin-top: 14px; padding: 12px 14px;">
-        <div class="row">
-          <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:210px;">
-            <span class="label-caps" style="white-space:nowrap;">Aircraft</span>
-            <select id="active-aircraft-select"></select>
+      <!-- Unified Cockpit Strip: Go/No-Go Hero + Quick Tools + Active Aircraft -->
+      <div class="cockpit-strip">
+        <div class="cockpit-top">
+          <span id="status-badge" class="pill pill-warn">NO-GO • Checks Incomplete</span>
+          <div class="quick-pills">
+            <button id="clearance-open-btn" type="button" class="quick-pill-btn">Clearance</button>
+            <button id="ref-open-btn" type="button" class="quick-pill-btn">Aide-Mémoire</button>
+          </div>
+        </div>
+        <div class="cockpit-bottom">
+          <div class="aircraft-picker">
+            <select id="active-aircraft-select" aria-label="Active Aircraft"></select>
           </div>
           <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
             <span id="recency-pill" class="pill pill-warn" style="padding:4px 9px; font-size:11px;">Recency: Set Date</span>
-            <button id="profiles-open-btn" type="button" class="btn">Fleet &amp; Recency</button>
+            <button id="profiles-open-btn" type="button" class="quick-pill-btn">Fleet</button>
           </div>
         </div>
       </div>
 
-      <!-- Tab Switcher: Checklist -> Site & Wind -> Logbook -> Exam Drill -->
+      <!-- Primary Navigation (Top Segmented Bar on Desktop, Sticky Thumb-Bar on Mobile) -->
       <nav class="tabs" aria-label="Primary">
-        <button id="tab-checklist" type="button" data-tab="checklist" class="tab-btn active">Checklist</button>
-        <button id="tab-site" type="button" data-tab="site" class="tab-btn">Site &amp; Wind</button>
-        <button id="tab-logbook" type="button" data-tab="logbook" class="tab-btn">Logbook</button>
-        <button id="tab-quiz" type="button" data-tab="quiz" class="tab-btn">Exam Drill</button>
+        <button id="tab-checklist" type="button" data-tab="checklist" class="tab-btn active"><span class="tab-ico" aria-hidden="true">✓</span><span>Checklist</span></button>
+        <button id="tab-site" type="button" data-tab="site" class="tab-btn"><span class="tab-ico" aria-hidden="true">◎</span><span>Site &amp; Wind</span></button>
+        <button id="tab-logbook" type="button" data-tab="logbook" class="tab-btn"><span class="tab-ico" aria-hidden="true">☰</span><span>Logbook</span></button>
+        <button id="tab-quiz" type="button" data-tab="quiz" class="tab-btn"><span class="tab-ico" aria-hidden="true">★</span><span>Exam</span></button>
       </nav>
     </header>
 
     <!-- VIEW 1: CHECKLIST -->
     <div id="view-checklist" class="stack">
-      <section class="card">
-        <div class="row" style="margin-bottom: 12px;">
-          <span class="label-caps">Drone Weight Class</span>
-          <span id="weight-class-note" class="mono">250 g–25 kg</span>
-        </div>
+      <details class="card weight-override">
+        <summary>
+          <span><strong style="color:var(--text);">Weight Class:</strong> <span id="weight-class-note" class="mono">250 g–25 kg</span></span>
+          <span class="override-hint">Auto from aircraft • Override ▾</span>
+        </summary>
         <div id="weight-buttons" class="grid-3"></div>
-      </section>
+      </details>
 
       <section id="operation-mode-section" class="card">
         <div class="row" style="margin-bottom: 12px;">
@@ -425,7 +732,6 @@
           <div id="progress-bar" class="progress-fill" style="width: 0%;"></div>
         </div>
 
-        <!-- Live Flight Timer Bridge -->
         <div class="subcard row" style="margin-top: 4px;">
           <div>
             <span class="label-caps" style="display:block;">Flight Timer</span>
@@ -440,6 +746,19 @@
       </section>
 
       <div id="checklist-container" class="stack"></div>
+
+      <!-- Custom Gear Checks -->
+      <section class="card stack-sm">
+        <div class="row">
+          <h2>Custom Gear &amp; Mission Checks</h2>
+          <span class="mono">Saved Locally</span>
+        </div>
+        <form id="custom-check-form" style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input id="custom-check-label" type="text" required placeholder="e.g., ND16 filter installed &amp; strobe charged" style="flex:1; min-width:200px;" />
+          <button type="submit" class="btn btn-primary">+ Add Check</button>
+        </form>
+        <div id="custom-checks-list" class="stack-sm"></div>
+      </section>
     </div>
 
     <!-- VIEW 2: SITE & WIND -->
@@ -458,11 +777,14 @@
         <ul id="site-warnings" style="margin:10px 0 0; padding-left:18px; font-size:12px; display:flex; flex-direction:column; gap:4px;"></ul>
       </section>
 
-      <!-- Official Canadian Airspace Map Launcher & GPS -->
+      <!-- Official Canadian Airspace Map Launcher, GPS & Live Weather -->
       <section class="card stack-sm">
         <div class="row">
-          <h2>Canadian Airspace Tools &amp; Site GPS</h2>
-          <button id="gps-btn" type="button" class="btn">Get My GPS</button>
+          <h2>Canadian Airspace, GPS &amp; Live Weather</h2>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button id="gps-btn" type="button" class="btn">Get My GPS</button>
+            <button id="live-wx-btn" type="button" class="btn btn-primary">Fetch Live Wind</button>
+          </div>
         </div>
         <div class="grid-2">
           <div>
@@ -481,30 +803,58 @@
           <a href="https://map.navdrone.ca/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Open NAV Drone Viewer</a>
           <a href="https://portal.navdrone.ca/" target="_blank" rel="noopener noreferrer" class="btn">NAV Drone Auth Portal</a>
           <a href="https://nrc.canada.ca/en/drone-tool/" target="_blank" rel="noopener noreferrer" class="btn">NRC Airspace Map</a>
+          <button id="site-clearance-btn" type="button" class="btn btn-ok">Who Do I Contact?</button>
         </div>
         <p id="gps-status" class="hidden" style="margin:0; font-size:11.5px; color:var(--text-muted);"></p>
       </section>
 
-      <!-- Offline METAR Decoder -->
-      <section class="card stack-sm">
-        <div class="row">
-          <h2>METAR Decoder (Offline-Ready)</h2>
+      <!-- Collapsible Solar, Civil Twilight & Kp Index -->
+      <details class="card card-details">
+        <summary>
+          <div>
+            <h2>Solar, Civil Twilight &amp; Kp Index</h2>
+            <span style="font-size:11.5px; color:var(--text-muted);">Sunrise/sunset, CAR 901.39 strobe cutoff &amp; GPS geomagnetic check</span>
+          </div>
+        </summary>
+        <div class="stack-sm" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button id="solar-calc-btn" type="button" class="btn">Update Solar</button>
+            <button id="kp-fetch-btn" type="button" class="btn btn-primary">Check Kp Index</button>
+          </div>
+          <div id="solar-grid" class="grid-3" style="font-size:12px;">
+            <div class="subcard"><span class="label-caps" style="display:block;">Sunrise / Sunset</span><strong id="solar-sun-times">--:-- / --:--</strong></div>
+            <div class="subcard"><span class="label-caps" style="display:block;">Civil Twilight (CAR 901.39)</span><strong id="solar-twilight">--:--</strong></div>
+            <div class="subcard"><span class="label-caps" style="display:block;">Kp Geomagnetic (GPS)</span><strong id="kp-value">Tap Check Kp</strong></div>
+          </div>
+          <p id="solar-note" style="margin:0; font-size:11.5px; color:var(--text-muted);">Calculated offline from site coordinates (defaults to Vancouver/Richmond if blank). Night strobes required after civil twilight.</p>
+        </div>
+      </details>
+
+      <!-- Collapsible Offline METAR Decoder -->
+      <details class="card card-details">
+        <summary>
+          <div>
+            <h2>METAR Decoder (Offline-Ready)</h2>
+            <span style="font-size:11.5px; color:var(--text-muted);">Paste raw METAR to decode &amp; auto-fill wind/gusts in km/h</span>
+          </div>
+        </summary>
+        <div class="stack-sm" style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border);">
           <div style="display:flex; gap:6px;">
             <button id="metar-sample-cyvr" type="button" class="btn" style="padding:4px 9px; font-size:11px;">Sample CYVR</button>
             <button id="metar-sample-cyyz" type="button" class="btn" style="padding:4px 9px; font-size:11px;">Sample CYYZ</button>
           </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <input
+              id="metar-input"
+              type="text"
+              style="flex:1; min-width:220px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px;"
+              placeholder="Paste raw METAR (e.g., METAR CYVR 201800Z 29012G20KT 15SM FEW035 09/05 A3004)"
+            />
+            <button id="metar-decode-btn" type="button" class="btn btn-primary">Decode &amp; Apply Wind</button>
+          </div>
+          <div id="metar-output" class="hidden grid-3" style="font-size:12px;"></div>
         </div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <input
-            id="metar-input"
-            type="text"
-            style="flex:1; min-width:220px; font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:12px;"
-            placeholder="Paste raw METAR (e.g., METAR CYVR 201800Z 29012G20KT 15SM FEW035 09/05 A3004)"
-          />
-          <button id="metar-decode-btn" type="button" class="btn btn-primary">Decode &amp; Apply Wind</button>
-        </div>
-        <div id="metar-output" class="hidden grid-3" style="font-size:12px;"></div>
-      </section>
+      </details>
 
       <section class="card stack-sm">
         <div class="row">
@@ -608,13 +958,25 @@
         </form>
       </section>
 
-      <section class="card">
+      <!-- Logbook Summary, Hours by Aircraft & Filters -->
+      <section class="card stack-sm">
         <div class="row">
           <div>
             <span class="label-caps">Logged Experience</span>
             <div id="log-summary" style="font-size:18px; font-weight:700; margin-top:2px;">0 Flights • 0 min</div>
           </div>
           <button id="export-csv-btn" type="button" class="btn">Export CSV</button>
+        </div>
+        <div id="log-aircraft-stats" class="hidden" style="display:flex; flex-wrap:wrap; gap:6px; padding-top:6px; border-top:1px solid var(--border);"></div>
+        <div class="grid-2" style="padding-top:6px; border-top:1px solid var(--border);">
+          <div>
+            <label for="log-filter-aircraft" class="field-label">Filter by Aircraft</label>
+            <select id="log-filter-aircraft"><option value="all">All Aircraft</option></select>
+          </div>
+          <div>
+            <label for="log-filter-mode" class="field-label">Filter by Mode</label>
+            <select id="log-filter-mode"><option value="all">All Modes</option></select>
+          </div>
         </div>
       </section>
 
@@ -647,43 +1009,74 @@
       </section>
     </div>
 
-    <!-- VIEW 4: EXAM DRILL -->
+    <!-- VIEW 4: EXAM & FLIGHT REVIEW PREP -->
     <div id="view-quiz" class="hidden stack">
       <section class="card">
         <div class="row" style="margin-bottom: 12px;">
-          <span class="label-caps">Small Advanced Exam Prep (TP 15263E)</span>
-          <span class="mono">80% Pass Mark</span>
+          <span class="label-caps">Small Advanced Exam &amp; Flight Review</span>
+          <span class="mono">50-Q Bank • 80% Pass</span>
         </div>
-        <div class="grid-2">
+        <div class="grid-3">
           <button id="quiz-mode-quick" type="button" class="quiz-mode-btn seg-btn active">
             <span style="display:block; font-size:12.5px; font-weight:600;">Quick 10</span>
-            <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">10 random questions • Instant feedback</span>
+            <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">10 random • Instant feedback</span>
           </button>
           <button id="quiz-mode-exam" type="button" class="quiz-mode-btn seg-btn">
-            <span style="display:block; font-size:12.5px; font-weight:600;">Practice Exam (25 Qs)</span>
-            <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">30:00 timer • Navigator &amp; domain report</span>
+            <span style="display:block; font-size:12.5px; font-weight:600;">Full Exam (50 Qs)</span>
+            <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">60:00 timer • Real TC format</span>
+          </button>
+          <button id="quiz-mode-review" type="button" class="quiz-mode-btn seg-btn">
+            <span style="display:block; font-size:12.5px; font-weight:600;">Flight Review Prep</span>
+            <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">TP 15395E practical guide</span>
           </button>
         </div>
       </section>
 
-      <section class="card stack-sm">
-        <div class="row">
-          <div>
-            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-              <span id="quiz-status-label" class="label-caps">Quick 10 • Instant Feedback</span>
-              <span id="quiz-mode-pill" class="hidden pill pill-warn" style="padding:2px 8px; font-size:11px;">Reviewing Missed</span>
+      <!-- Quiz Sub-View -->
+      <div id="quiz-subview" class="stack">
+        <section class="card stack-sm">
+          <div class="row">
+            <div>
+              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                <span id="quiz-status-label" class="label-caps">Quick 10 • Instant Feedback</span>
+                <span id="quiz-mode-pill" class="hidden pill pill-warn" style="padding:2px 8px; font-size:11px;">Reviewing Missed</span>
+              </div>
+              <div id="quiz-score" style="font-size:18px; font-weight:700; margin-top:2px;">Score: 0 / 10</div>
             </div>
-            <div id="quiz-score" style="font-size:18px; font-weight:700; margin-top:2px;">Score: 0 / 10</div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span id="quiz-timer" class="hidden pill pill-warn mono">60:00</span>
+              <button id="quiz-reset-btn" type="button" class="btn">New Set</button>
+            </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span id="quiz-timer" class="hidden pill pill-warn mono">30:00</span>
-            <button id="quiz-reset-btn" type="button" class="btn">New Set</button>
-          </div>
-        </div>
-        <div id="exam-nav-grid" class="hidden q-grid" style="padding-top:8px; border-top:1px solid var(--border);"></div>
-      </section>
+          <div id="exam-nav-grid" class="hidden q-grid" style="padding-top:8px; border-top:1px solid var(--border);"></div>
+        </section>
 
-      <div id="quiz-card" class="card"></div>
+        <div id="quiz-card" class="card"></div>
+        <section class="card stack-sm">
+          <div class="row">
+            <span class="label-caps">Exam Readiness Trend</span>
+            <span id="exam-avg-pill" class="mono">No attempts yet</span>
+          </div>
+          <div id="exam-history-chart" style="display:flex; align-items:flex-end; gap:8px; min-height:54px; padding-top:6px;"></div>
+        </section>
+      </div>
+
+      <!-- Flight Review Prep Sub-View (TP 15395E) -->
+      <div id="review-prep-subview" class="hidden stack">
+        <section class="card">
+          <div class="row" style="margin-bottom: 10px;">
+            <div>
+              <span class="label-caps">In-Person Flight Review Readiness (TP 15395E)</span>
+              <div id="review-prep-progress" style="font-size:18px; font-weight:700; margin-top:2px;">0 / 10 Ready</div>
+            </div>
+            <button id="review-prep-reset" type="button" class="btn">Reset Prep</button>
+          </div>
+          <div class="progress-track">
+            <div id="review-prep-bar" class="progress-fill" style="width:0%;"></div>
+          </div>
+        </section>
+        <div id="review-prep-list" class="stack"></div>
+      </div>
     </div>
 
     <!-- FOOTER -->
@@ -694,7 +1087,7 @@
         and NAV CANADA before launch.
       </div>
       <div class="row">
-        <span>RPAS Ops v12 • 100% Offline-Ready Static App</span>
+        <span>CARs Part IX v15 • Made in Canada • Offline-First PWA</span>
         <a href="https://tc.canada.ca/en/aviation/drone-safety/learn-rules-you-fly-your-drone/drone-operation-categories-pilot-certificates/microdrones" target="_blank" rel="noopener noreferrer">Microdrone Rules (&lt;250 g)</a>
       </div>
     </footer>
@@ -732,7 +1125,6 @@
         <button id="profiles-close-btn" type="button" class="btn">Close</button>
       </div>
 
-      <!-- 24-Month Recency (CAR 901.65) -->
       <div class="subcard stack-sm" style="margin-bottom: 14px;">
         <div class="row">
           <span class="label-caps">24-Month Recency (CAR 901.65)</span>
@@ -744,13 +1136,11 @@
         </div>
       </div>
 
-      <!-- Quick Canadian Drone Presets -->
       <div class="subcard stack-sm" style="margin-bottom: 14px;">
         <span class="label-caps">One-Click Canadian Drone Presets</span>
         <div id="preset-buttons" style="display:flex; flex-wrap:wrap; gap:6px;"></div>
       </div>
 
-      <!-- Custom Aircraft Form -->
       <form id="profile-form" class="subcard stack-sm" style="margin-bottom: 14px;">
         <span class="label-caps">Add Custom Aircraft</span>
         <div class="grid-2">
@@ -786,7 +1176,153 @@
         </div>
       </form>
 
-      <div id="profiles-list" class="stack-sm"></div>
+      <div id="profiles-list" class="stack-sm" style="margin-bottom:14px;"></div>
+
+      <!-- Battery Inventory Manager -->
+      <div class="subcard stack-sm">
+        <span class="label-caps">Battery Inventory Manager</span>
+        <form id="battery-form" style="display:flex; gap:6px; flex-wrap:wrap;">
+          <input id="bat-label" type="text" required placeholder="e.g., Mini 4K Bat #1" style="flex:1; min-width:140px;" />
+          <input id="bat-cycles" type="number" min="0" max="999" value="0" style="width:76px;" title="Cycles" />
+          <button type="submit" class="btn btn-primary">+ Add</button>
+        </form>
+        <div id="battery-list" class="stack-sm"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANADIAN CLEARANCE & AUTHORITY ROUTER MODAL -->
+  <div id="clearance-modal" class="hidden modal-backdrop">
+    <div class="modal-panel">
+      <div class="row" style="margin-bottom: 14px;">
+        <div>
+          <span class="label-caps" style="color: var(--ok);">Clearance &amp; Authorization Router</span>
+          <h2 style="font-size: 18px; margin-top: 2px;">Who Do I Contact?</h2>
+        </div>
+        <button id="clearance-close-btn" type="button" class="btn">Close</button>
+      </div>
+      <div id="clearance-tabs" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;"></div>
+      <div id="clearance-body" class="stack-sm"></div>
+    </div>
+  </div>
+
+  <!-- CANADIAN AIRSPACE & VNC CHEAT SHEET MODAL -->
+  <div id="ref-modal" class="hidden modal-backdrop">
+    <div class="modal-panel">
+      <div class="row" style="margin-bottom: 12px;">
+        <div>
+          <span class="label-caps" style="color: var(--accent);">Offline Kneeboard • CARs Part IX</span>
+          <h2 style="font-size: 18px; margin-top: 2px;">Advanced Pilot Aide-Mémoire</h2>
+        </div>
+        <button id="ref-close-btn" type="button" class="btn">Close</button>
+      </div>
+
+      <div id="am-tabs" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;">
+        <button type="button" data-am-tab="airspace" class="am-tab-btn mode-pill active">Airspace &amp; 922</button>
+        <button type="button" data-am-tab="radio" class="am-tab-btn mode-pill">Radio &amp; Brief</button>
+        <button type="button" data-am-tab="regs" class="am-tab-btn mode-pill">Regs &amp; Docs</button>
+        <button type="button" data-am-tab="wx" class="am-tab-btn mode-pill">Wx, Math &amp; ICAO</button>
+      </div>
+
+      <!-- TAB 1: AIRSPACE & 922 -->
+      <div id="am-panel-airspace" class="am-panel stack-sm" style="font-size:12px;">
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:4px;">RPAS Standard 922 &amp; Advanced Ops Matrix</div>
+          <table class="am-table">
+            <thead>
+              <tr><th>Mode / Std</th><th>Bystanders</th><th>Key Requirement</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>922.04</td><td>&gt; 30 m (100 ft)</td><td>Controlled airspace + NAV CANADA Auth</td></tr>
+              <tr><td>922.05</td><td>&gt; 5 m (16.4 ft)</td><td>Active 922.05 declaration (Near People)</td></tr>
+              <tr><td>922.06</td><td>&lt; 5 m / Over</td><td>Active 922.06 declaration (Over People)</td></tr>
+              <tr><td>Sheltered</td><td>≥ 30 m</td><td>≤ 30 m above &amp; ≤ 61 m from structure; ≤ 3.7 km</td></tr>
+              <tr><td>EVLOS</td><td>≥ 30 m</td><td>Uncontrolled only; Basic-certified VO; ≤ 3.7 km</td></tr>
+              <tr><td>Medium</td><td>&gt; 152.4 m (500 ft)</td><td>&gt; 25–150 kg without near/over-people decl.</td></tr>
+            </tbody>
+          </table>
+        </section>
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">Canadian Airspace Classes (A–G)</div>
+          <ul style="margin:0; padding-left:16px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
+            <li><strong>Class A / B:</strong> High-level / low-level controlled — ATC clearance required.</li>
+            <li><strong>Class C / D:</strong> Major &amp; regional airport Control Zones — NAV CANADA RPAS Auth required.</li>
+            <li><strong>Class E:</strong> Controlled airspace (airways/control areas) — Auth required if entering.</li>
+            <li><strong>Class F (CYR / CYA):</strong> CYR = Restricted (prohibited without permission, incl. microdrones); CYA = Advisory.</li>
+            <li><strong>Class G:</strong> Uncontrolled airspace — Basic &amp; Advanced operations permitted within Part IX limits.</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- TAB 2: RADIO & BRIEF -->
+      <div id="am-panel-radio" class="am-panel hidden stack-sm" style="font-size:12px;">
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">VHF Radio Callout Script (ROC-A Required)</div>
+          <div style="color:var(--text); font-weight:600; margin-bottom:4px;">1. Who you’re calling → 2. Who you are → 3. Position → 4. Altitude AGL → 5. Intentions</div>
+          <div class="mono" style="background:var(--surface); padding:8px 10px; border-radius:8px; border:1px solid var(--border); color:var(--text-muted); line-height:1.5;">
+            “[Aerodrome] Traffic, RPAS [Reg], 2 miles east of the field, operating surface to 300 feet AGL for the next 15 minutes, monitoring [Freq].”
+          </div>
+          <ul style="margin:8px 0 0; padding-left:16px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
+            <li><strong>Distress / Urgency:</strong> <strong>MAYDAY</strong> (immediate danger) • <strong>PAN-PAN</strong> (urgent safety).</li>
+            <li><strong>Key Frequencies:</strong> <strong>121.5 MHz</strong> Emergency Guard • <strong>126.7 MHz</strong> Enroute Advisory.</li>
+            <li><strong>Circuit:</strong> Standard <strong>Left-Hand</strong> traffic pattern unless CFS specifies right-hand.</li>
+          </ul>
+        </section>
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">IMSAFE Fitness &amp; 30-Second VO Brief</div>
+          <div style="color:var(--text-muted); margin-bottom:6px;"><strong>I</strong>llness • <strong>M</strong>edication • <strong>S</strong>tress • <strong>A</strong>lcohol (<strong>12 h</strong> CARs rule) • <strong>F</strong>atigue • <strong>E</strong>motion / Eating</div>
+          <ul style="margin:0; padding-left:16px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
+            <li><strong>VO Comms &amp; Sector:</strong> Confirm direct voice/radio link and assign airspace + bystander scan sectors.</li>
+            <li><strong>Failsafe &amp; ELZ:</strong> Brief RTH height (above tallest obstacle) and point out Emergency Landing Zone.</li>
+            <li><strong>Callouts:</strong> “Launching”, “Manned aircraft [clock/alt]”, “Bystander entering”, “Lost link / RTH”.</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- TAB 3: REGS & DOCS -->
+      <div id="am-panel-regs" class="am-panel hidden stack-sm" style="font-size:12px;">
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">Mandatory Docs to Carry On Site (CARs Part IX)</div>
+          <ul style="margin:0; padding-left:16px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
+            <li><strong>Pilot Certificate:</strong> Basic or Advanced RPAS certificate (digital or printed) + Gov’t Photo ID.</li>
+            <li><strong>Registration:</strong> Certificate of Registration + registration number visibly marked on drone (≥ 250 g).</li>
+            <li><strong>Manuals (CAR 901.30):</strong> Manufacturer operating manuals immediately available to crew.</li>
+            <li><strong>Authorizations:</strong> Active NAV CANADA RPAS Flight Authorization or SFOC-RPAS (if applicable).</li>
+          </ul>
+        </section>
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">Hard Numbers &amp; Mandatory Reporting</div>
+          <ul style="margin:0; padding-left:16px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
+            <li><strong>Ceiling (CAR 901.25):</strong> 400 ft (122 m) AGL, or +100 ft above a structure within 200 ft horizontally.</li>
+            <li><strong>Aerodromes (CAR 901.47):</strong> 5.6 km (3 NM) airport • 1.9 km (1 NM) heliport • 5.6 km military (DND).</li>
+            <li><strong>Recency (CAR 901.65):</strong> Qualifying activity required every <strong>24 months</strong>.</li>
+            <li><strong>Universal Rules:</strong> <strong>CAR 900.06</strong> (no reckless ops, incl. &lt;250 g) • <strong>CAR 900.08</strong> (no emergency perimeters).</li>
+            <li><strong>Reporting:</strong> Controlled/CYR flyaway → <strong>ATC immediately</strong> • Serious injury or manned collision → <strong>TSB Canada</strong>.</li>
+          </ul>
+        </section>
+      </div>
+
+      <!-- TAB 4: WX, MATH & ICAO -->
+      <div id="am-panel-wx" class="am-panel hidden stack-sm" style="font-size:12px;">
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">Quick Mental Math &amp; Field Rules of Thumb</div>
+          <ul style="margin:0; padding-left:16px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
+            <li><strong>Wind:</strong> 1 kt = <strong>1.852 km/h</strong> • 1 m/s = <strong>3.6 km/h</strong>.</li>
+            <li><strong>Altitude:</strong> <strong>ASL</strong> = Ground Elevation + AGL • <strong>MEF</strong> = highest quadrant obstacle (ft ASL + buffer).</li>
+            <li><strong>Magnetic Variation:</strong> <strong>East is Least</strong> (subtract East), <strong>West is Best</strong> (add West).</li>
+            <li><strong>Fog / Icing Risk:</strong> Temp–Dewpoint spread <strong>≤ 2–3 °C</strong> = high fog, mist, or rotor icing risk.</li>
+            <li><strong>Cold LiPo:</strong> Pre-warm flight packs; expect higher internal resistance &amp; voltage sag under load.</li>
+          </ul>
+        </section>
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">Common METAR Codes</div>
+          <div style="color:var(--text-muted);"><strong>FEW</strong> (1–2/8) • <strong>SCT</strong> (3–4/8) • <strong>BKN</strong> (5–7/8 ceiling) • <strong>OVC</strong> (8/8 ceiling) • <strong>TSRA</strong> (Thunderstorm/Rain) • <strong>FZRA</strong> (Freezing Rain) • <strong>BR</strong> (Mist) • <strong>FG</strong> (Fog) • <strong>VRB</strong> (Variable Wind)</div>
+        </section>
+        <section class="subcard">
+          <div class="label-caps" style="color:var(--accent); margin-bottom:6px;">ICAO Phonetic Alphabet</div>
+          <div style="color:var(--text-muted); line-height:1.6;">Alfa • Bravo • Charlie • Delta • Echo • Foxtrot • Golf • Hotel • India • Juliett • Kilo • Lima • Mike • November • Oscar • Papa • Quebec • Romeo • Sierra • Tango • Uniform • Victor • Whiskey • X-ray • Yankee • Zulu</div>
+        </section>
+      </div>
     </div>
   </div>
 
@@ -811,95 +1347,39 @@
       {
         title: 'Microdrone Airspace & Safety Go/No-Go (< 250 g)',
         items: [
-          {
-            id: 'micro-airspace',
-            label: 'Restricted airspace & zones cleared',
-            detail: 'Not taking off/landing in a National Park, inside Class F Restricted airspace without permission, or within an emergency perimeter.'
-          },
-          {
-            id: 'micro-events',
-            label: 'No advertised event without SFOC',
-            detail: 'Confirmed site is not an advertised public event (flying a microdrone at an advertised event requires an SFOC-RPAS).'
-          },
-          {
-            id: 'micro-900-06',
-            label: 'CAR 900.06 safe separation & manned-aircraft check',
-            detail: 'Operating safely without endangering aviation or people; staying clear of aerodromes/aircraft, below 400 ft AGL, and in direct VLOS.'
-          },
-          {
-            id: 'micro-hardware',
-            label: 'Props, battery, wind & SD card checked',
-            detail: 'Batteries charged, propellers undamaged, gimbal guard removed, and wind within microdrone limits.'
-          }
+          { id: 'micro-airspace', label: 'Restricted airspace & zones cleared', detail: 'Not taking off/landing in a National Park, inside Class F Restricted airspace without permission, or within an emergency perimeter.' },
+          { id: 'micro-events', label: 'No advertised event without SFOC', detail: 'Confirmed site is not an advertised public event (flying a microdrone at an advertised event requires an SFOC-RPAS).' },
+          { id: 'micro-900-06', label: 'CAR 900.06 safe separation & manned-aircraft check', detail: 'Operating safely without endangering aviation or people; staying clear of aerodromes/aircraft, below 400 ft AGL, and in direct VLOS.' },
+          { id: 'micro-hardware', label: 'Props, battery, wind & SD card checked', detail: 'Batteries charged, propellers undamaged, gimbal guard removed, and wind within microdrone limits.' }
         ]
       }
     ];
 
     const OPERATION_MODES = {
       controlled: {
-        id: 'controlled',
-        name: 'Controlled Airspace',
-        standard: 'RPAS Std 922.04',
-        airspace: 'Controlled (NAV CANADA Auth)',
-        bystanders: '> 30 m (100 ft) horizontal',
-        sight: 'Unaided VLOS at all times',
-        extraCheck: {
-          id: 'mode-auth',
-          label: 'NAV CANADA RPAS Flight Authorization active',
-          detail: 'Authorization approved for exact airspace class, altitude ceiling, and time window; ATC contact info ready.'
-        }
+        id: 'controlled', name: 'Controlled Airspace', standard: 'RPAS Std 922.04',
+        airspace: 'Controlled (NAV CANADA Auth)', bystanders: '> 30 m (100 ft) horizontal', sight: 'Unaided VLOS at all times',
+        extraCheck: { id: 'mode-auth', label: 'NAV CANADA RPAS Flight Authorization active', detail: 'Authorization approved for exact airspace class, altitude ceiling, and time window; ATC contact info ready.' }
       },
       near: {
-        id: 'near',
-        name: 'Near People (<30 m)',
-        standard: 'RPAS Std 922.05',
-        airspace: 'Uncontrolled (or Auth if Controlled)',
-        bystanders: '5 m to 30 m (16.4–100 ft)',
-        sight: 'Unaided VLOS at all times',
-        extraCheck: {
-          id: 'mode-near',
-          label: '922.05 Near-People declaration & 5 m buffer verified',
-          detail: 'Aircraft has an active 922.05 declaration and flight path maintains at least 5 m (16.4 ft) horizontal clearance.'
-        }
+        id: 'near', name: 'Near People (<30 m)', standard: 'RPAS Std 922.05',
+        airspace: 'Uncontrolled (or Auth if Controlled)', bystanders: '5 m to 30 m (16.4–100 ft)', sight: 'Unaided VLOS at all times',
+        extraCheck: { id: 'mode-near', label: '922.05 Near-People declaration & 5 m buffer verified', detail: 'Aircraft has an active 922.05 declaration and flight path maintains at least 5 m (16.4 ft) horizontal clearance.' }
       },
       over: {
-        id: 'over',
-        name: 'Over People (<5 m)',
-        standard: 'RPAS Std 922.06',
-        airspace: 'Uncontrolled (or Auth if Controlled)',
-        bystanders: '< 5 m (16.4 ft) or directly over',
-        sight: 'Unaided VLOS at all times',
-        extraCheck: {
-          id: 'mode-over',
-          label: '922.06 Over-People declaration & contingency plan ready',
-          detail: 'Aircraft has an active 922.06 declaration; emergency landing zone clear of crowds.'
-        }
+        id: 'over', name: 'Over People (<5 m)', standard: 'RPAS Std 922.06',
+        airspace: 'Uncontrolled (or Auth if Controlled)', bystanders: '< 5 m (16.4 ft) or directly over', sight: 'Unaided VLOS at all times',
+        extraCheck: { id: 'mode-over', label: '922.06 Over-People declaration & contingency plan ready', detail: 'Aircraft has an active 922.06 declaration; emergency landing zone clear of crowds.' }
       },
       sheltered: {
-        id: 'sheltered',
-        name: 'Sheltered Ops',
-        standard: 'CARs Part IX (Sheltered)',
-        airspace: 'Uncontrolled (or Auth if Controlled)',
-        bystanders: '≥ 30 m (100 ft) at any altitude',
-        sight: '≤ 30 m above / ≤ 61 m from structure',
-        extraCheck: {
-          id: 'mode-sheltered',
-          label: 'Sheltered geometry & 3.7 km range verified',
-          detail: 'Flight stays ≤ 30 m (100 ft) above and ≤ 61 m (200 ft) horizontally from structure, within 3.7 km (2 NM) of pilot.'
-        }
+        id: 'sheltered', name: 'Sheltered Ops', standard: 'CARs Part IX (Sheltered)',
+        airspace: 'Uncontrolled (or Auth if Controlled)', bystanders: '≥ 30 m (100 ft) at any altitude', sight: '≤ 30 m above / ≤ 61 m from structure',
+        extraCheck: { id: 'mode-sheltered', label: 'Sheltered geometry & 3.7 km range verified', detail: 'Flight stays ≤ 30 m (100 ft) above and ≤ 61 m (200 ft) horizontally from structure, within 3.7 km (2 NM) of pilot.' }
       },
       evlos: {
-        id: 'evlos',
-        name: 'EVLOS',
-        standard: 'CARs Part IX (EVLOS)',
-        airspace: 'Uncontrolled airspace only',
-        bystanders: '≥ 30 m (100 ft) horizontal',
-        sight: 'Certified VO • ≤ 3.7 km (2 NM)',
-        extraCheck: {
-          id: 'mode-evlos',
-          label: 'Visual Observer (VO) briefed & certified',
-          detail: 'VO holds at least a Basic RPAS certificate, maintains direct comms with pilot, and stays within 3.7 km (2 NM) of aircraft.'
-        }
+        id: 'evlos', name: 'EVLOS', standard: 'CARs Part IX (EVLOS)',
+        airspace: 'Uncontrolled airspace only', bystanders: '≥ 30 m (100 ft) horizontal', sight: 'Certified VO • ≤ 3.7 km (2 NM)',
+        extraCheck: { id: 'mode-evlos', label: 'Visual Observer (VO) briefed & certified', detail: 'VO holds at least a Basic RPAS certificate, maintains direct comms with pilot, and stays within 3.7 km (2 NM) of aircraft.' }
       }
     };
 
@@ -907,346 +1387,116 @@
       {
         title: '1. Docs & Aircraft Airworthiness',
         items: [
-          {
-            id: 'reg-mark',
-            label: 'Drone registered & marked',
-            detail: 'RPAS (≥ 250 g) registered with Transport Canada and registration number visibly marked on the airframe.'
-          },
-          {
-            id: 'cert-decl',
-            label: 'Advanced certificate carried',
-            detail: 'Valid Transport Canada Advanced Operations pilot certificate and government photo ID accessible at the site.'
-          },
-          {
-            id: 'hardware',
-            label: 'Airframe, props & batteries inspected',
-            detail: 'No cracks or prop wear; flight and controller batteries charged; gimbal guard removed and micro-SD card installed.'
-          }
+          { id: 'reg-mark', label: 'Drone registered & marked', detail: 'RPAS (≥ 250 g) registered with Transport Canada and registration number visibly marked on the airframe.' },
+          { id: 'cert-decl', label: 'Advanced certificate carried', detail: 'Valid Transport Canada Advanced Operations pilot certificate and government photo ID accessible at the site.' },
+          { id: 'hardware', label: 'Airframe, props & batteries inspected', detail: 'No cracks or prop wear; flight and controller batteries charged; gimbal guard removed and micro-SD card installed.' }
         ]
       },
       {
         title: '2. Airspace, Weather & Site Survey',
         items: [
-          {
-            id: 'weather',
-            label: 'Active NOTAMs & weather verified',
-            detail: 'Checked local NOTAMs, wind speed, visibility, and confirmed no icing or expected icing conditions.'
-          },
-          {
-            id: 'site-sep',
-            label: 'Launch site & emergency zone clear',
-            detail: 'Take-off/landing pad level and free of debris, overhead wires, or uninvolved bystanders.'
-          }
+          { id: 'weather', label: 'Active NOTAMs & weather verified', detail: 'Checked local NOTAMs, wind speed, visibility, and confirmed no icing or expected icing conditions.' },
+          { id: 'site-sep', label: 'Launch site & emergency zone clear', detail: 'Take-off/landing pad level and free of debris, overhead wires, or uninvolved bystanders.' }
         ]
       }
     ];
 
-    const QUIZ_QUESTIONS = [
+    const FLIGHT_REVIEW_GROUPS = [
       {
-        domain: 'Air Law',
-        tag: 'Air Law • Controlled Airspace (922.04)',
-        question: 'You plan to fly a 1.8 kg drone in VLOS inside Class C controlled airspace. What is required before takeoff?',
-        options: [
-          'A Basic Operations certificate and a Flight Reviewer sign-off',
-          'An Advanced certificate, a 922.04-declared drone, and NAV CANADA RPAS Flight Authorization',
-          'A Special Flight Operations Certificate (SFOC) for all flights under 25 kg',
-          'No authorization is required if you remain below 100 ft AGL'
-        ],
-        correctIndex: 1,
-        explanation: 'Controlled airspace VLOS operations require an Advanced Operations certificate, a drone with a 922.04 declaration, and an approved NAV CANADA RPAS Flight Authorization (CAR 901.71).'
+        title: '1. Documents to Bring (Review Day)',
+        items: [
+          { id: 'fr-exam', label: 'Passed Small Advanced Exam reference number', detail: 'Confirmation of ≥ 80% score from Transport Canada Drone Management Portal.' },
+          { id: 'fr-id', label: 'Government-issued photo ID', detail: 'Driver’s licence or passport matching your Drone Management Portal name.' },
+          { id: 'fr-reg', label: 'Aircraft registration & operating manual', detail: 'Proof of registration (marked on drone) and manufacturer operating manual accessible.' }
+        ]
       },
       {
-        domain: 'Air Law',
-        tag: 'Air Law • Separation (922.05 vs 922.06)',
-        question: 'Your small RPAS has a 922.05 declaration (near people) but NOT 922.06 (over people). What is your minimum horizontal distance from uninvolved people?',
-        options: ['30 m (100 ft)', '15 m (50 ft)', 'More than 5 m (16.4 ft)', '0 m — you may fly directly overhead'],
-        correctIndex: 2,
-        explanation: 'Under RPAS Standard 922.05 / CAR 901.69(b), you may fly less than 30 m (100 ft) from uninvolved people, provided you stay more than 5 m (16.4 ft) away horizontally.'
+        title: '2. Ground Briefing & Site Survey',
+        items: [
+          { id: 'fr-survey', label: 'Complete verbal & written CAR 901.27 site survey', detail: 'Identify airspace class, aerodromes, obstacles, bystanders, NOTAMs, and weather.' },
+          { id: 'fr-auth', label: 'Walk through NAV CANADA authorization request', detail: 'Explain how to submit a controlled airspace request in NAV Drone and identify ATC phone numbers.' },
+          { id: 'fr-failsafe', label: 'Verify RTH altitude & lost-link settings', detail: 'Demonstrate setting RTH height above tallest nearby obstacle and checking battery limits.' }
+        ]
       },
       {
-        domain: 'Air Law',
-        tag: 'Air Law • Sheltered Operations',
-        question: 'When flying a sheltered operation around a building without direct VLOS or a visual observer, what are the maximum structure limits?',
-        options: [
-          '≤ 30 m (100 ft) above the structure and ≤ 61 m (200 ft) horizontally from it',
-          '≤ 61 m (200 ft) above the structure and ≤ 30 m (100 ft) horizontally from it',
-          '≤ 122 m (400 ft) above the structure with no horizontal limit',
-          '≤ 15 m (50 ft) above the structure and ≤ 30 m (100 ft) from it'
-        ],
-        correctIndex: 0,
-        explanation: 'Sheltered operations allow flight up to 30 m (100 ft) above a building/structure and within 61 m (200 ft) horizontally, while staying within 3.7 km of the pilot and ≥ 30 m from uninvolved people.'
-      },
-      {
-        domain: 'Air Law',
-        tag: 'Air Law • EVLOS Operations',
-        question: 'During an Extended Visual Line-of-Sight (EVLOS) operation with a small drone, which condition is mandatory?',
-        options: [
-          'It may be conducted in controlled airspace with ATC permission',
-          'The Visual Observer (VO) must hold at least a Basic drone pilot certificate',
-          'The drone can fly up to 9.3 km (5 NM) from the pilot and VO',
-          'Bystander separation drops to 5 m automatically'
-        ],
-        correctIndex: 1,
-        explanation: 'EVLOS is restricted to uncontrolled airspace, ≥ 30 m from uninvolved people, within 3.7 km (2 NM) of the pilot, control station, and a VO who holds at least a Basic RPAS certificate.'
-      },
-      {
-        domain: 'Air Law',
-        tag: 'Air Law • Visual Observers (CAR 901.20)',
-        question: 'Under CAR 901.20, which statement about Visual Observers (VOs) is correct?',
-        options: [
-          'A VO may monitor up to two drones simultaneously if they are in the same airspace',
-          'A VO may perform observer duties while driving a slow-moving support vehicle',
-          'A VO may not perform observer duties while operating a moving vehicle, vessel, or aircraft',
-          'A VO is exempt from maintaining timely communication with the pilot in uncontrolled airspace'
-        ],
-        correctIndex: 2,
-        explanation: 'CAR 901.20 prohibits a VO from monitoring more than one RPA at a time or performing VO duties while operating a moving vehicle, vessel, or aircraft.'
-      },
-      {
-        domain: 'Air Law',
-        tag: 'Air Law • Maximum Altitude (CAR 901.25)',
-        question: 'Without an SFOC-RPAS and away from any buildings or structures, what is the maximum altitude a small drone may be flown under CAR 901.25?',
-        options: ['300 ft (91 m) AGL', '400 ft (122 m) AGL', '500 ft (152 m) AGL', '1,000 ft (305 m) AGL'],
-        correctIndex: 1,
-        explanation: 'Under CAR 901.25(1), maximum altitude is 400 ft (122 m) AGL, or 100 ft (30 m) above a building/structure when within 200 ft (61 m) horizontally of it.'
-      },
-      {
-        domain: 'Air Law',
-        tag: 'Air Law • Aerodromes (CAR 901.47)',
-        question: 'Under CAR 901.47, how far must Basic operations stay from a certified airport centre, and what is required within 5.6 km (3 NM) of a military aerodrome?',
-        options: [
-          '1.9 km (1 NM) from airport; no extra permission for military',
-          '5.6 km (3 NM) from airport; DND permission required for military aerodrome',
-          '9.3 km (5 NM) from airport; NAV CANADA phone call only',
-          '3.7 km (2 NM) from airport; Basic certificate is sufficient'
-        ],
-        correctIndex: 1,
-        explanation: 'Basic operations must remain > 5.6 km (3 NM) from a certified airport and > 1.9 km (1 NM) from a heliport. Any pilot flying within 5.6 km (3 NM) of a military aerodrome needs Department of National Defence (DND) permission.'
-      },
-      {
-        domain: 'Air Law',
-        tag: 'Air Law • Medium RPAS (>25 kg)',
-        question: 'You are flying a 32 kg medium drone in VLOS with no near-people or over-people declaration. How far must you stay horizontally from uninvolved people?',
-        options: ['More than 30 m (100 ft)', 'More than 61 m (200 ft)', 'More than 152.4 m (500 ft)', 'More than 300 m (1,000 ft)'],
-        correctIndex: 2,
-        explanation: 'Without specific near/over-people safety assurance declarations, medium drones (>25 kg to 150 kg) in VLOS must remain more than 152.4 m (500 ft) horizontally from uninvolved people.'
-      },
-      {
-        domain: 'Air Law',
-        tag: 'Air Law • Registration & Recency',
-        question: 'How often must an Advanced Operations pilot complete a recency activity (such as a flight review, exam, or recurrent training) to keep flying legally?',
-        options: ['Every 12 months', 'Every 24 months', 'Every 36 months', 'Never — the certificate is valid for life without recency'],
-        correctIndex: 1,
-        explanation: 'Under CAR 901.65, RPAS pilots must meet recency requirements within the 24 months preceding any flight.'
-      },
-      {
-        domain: 'Air Law',
-        tag: 'Air Law • Microdrones (< 250 g)',
-        question: 'When operating a 249 g microdrone in Canada, which operation still legally requires a Special Flight Operations Certificate (SFOC-RPAS)?',
-        options: [
-          'Flying in uncontrolled airspace over an empty field',
-          'Flying at an advertised public event',
-          'Flying without a Basic or Advanced pilot certificate',
-          'Flying at 150 ft AGL in clear weather'
-        ],
-        correctIndex: 1,
-        explanation: 'While microdrones (< 250 g) do not require registration or a pilot certificate, flying any drone—including a microdrone—at an advertised event requires an SFOC-RPAS.'
-      },
-      {
-        domain: 'Meteorology',
-        tag: 'Meteorology • Density Altitude',
-        question: 'Which three atmospheric variables determine Density Altitude and directly affect rotor thrust and battery performance?',
-        options: [
-          'Wind speed, cloud coverage, and dew point',
-          'Temperature, barometric pressure, and humidity',
-          'Visibility, precipitation, and magnetic variation',
-          'Wind shear, ceiling height, and latitude'
-        ],
-        correctIndex: 1,
-        explanation: 'Density altitude is driven by temperature, pressure, and humidity. Hot, high, and humid conditions create high density altitude (thin air), reducing rotor lift and climb performance.'
-      },
-      {
-        domain: 'Meteorology',
-        tag: 'Meteorology • METAR Decoding',
-        question: 'A METAR for your departure airport includes the weather code "TSRA". What does this indicate?',
-        options: ['Light drizzle and mist', 'Thunderstorm with rain', 'Towering cumulus with freezing fog', 'Blowing snow and reduced visibility'],
-        correctIndex: 1,
-        explanation: 'In aviation METAR/TAF notation, TS stands for Thunderstorm and RA stands for Rain.'
-      },
-      {
-        domain: 'Meteorology',
-        tag: 'Meteorology • TAF Coverage',
-        question: 'A Terminal Aerodrome Forecast (TAF) provides forecast wind, visibility, and weather within what radius of the aerodrome?',
-        options: ['1 nautical mile', '3 nautical miles', '5 nautical miles', '25 nautical miles'],
-        correctIndex: 2,
-        explanation: 'A TAF covers weather conditions expected within 5 nautical miles (NM) of the centre of the aerodrome.'
-      },
-      {
-        domain: 'Meteorology',
-        tag: 'Meteorology • Airframe Icing',
-        question: 'Which type of icing forms when large supercooled water droplets strike the propellers or airframe and spread out before freezing into a hard, transparent sheet?',
-        options: ['Rime ice', 'Hoar frost', 'Clear (glaze) ice', 'Sublimation frost'],
-        correctIndex: 2,
-        explanation: 'Large supercooled droplets freeze slowly and spread, forming heavy, hard-to-shed clear ice; small droplets freeze instantly into opaque, brittle rime ice.'
-      },
-      {
-        domain: 'Meteorology',
-        tag: 'Meteorology • Wind Shear & Turbulence',
-        question: 'How is wind shear defined in aviation meteorology?',
-        options: [
-          'A gradual decrease in temperature with altitude',
-          'A rapid change in wind speed and/or direction over a short vertical or horizontal distance',
-          'Steady laminar airflow over flat water',
-          'High-altitude jet stream turbulence above 25,000 ft ASL only'
-        ],
-        correctIndex: 1,
-        explanation: 'Wind shear is a sudden change in wind speed and/or direction over a short distance, often near buildings, terrain, or temperature inversions.'
-      },
-      {
-        domain: 'Meteorology',
-        tag: 'Meteorology • Pressure Systems',
-        question: 'In the Northern Hemisphere, a low-pressure system is generally associated with:',
-        options: [
-          'Descending air, clear skies, and calm winds',
-          'Rising air, cloud formation, precipitation, and unstable weather',
-          'Clockwise surface wind flow and zero visibility',
-          'Uniformly stable air with no convective clouds'
-        ],
-        correctIndex: 1,
-        explanation: 'Low-pressure systems draw air inward and upward (counter-clockwise in the Northern Hemisphere), cooling moisture into clouds, precipitation, and unstable conditions.'
-      },
-      {
-        domain: 'Navigation',
-        tag: 'Navigation • VNC Charts',
-        question: 'What does the Maximum Elevation Figure (MEF) printed inside a quadrant on a VFR Navigation Chart (VNC) represent?',
-        options: [
-          'The highest floor of Class B controlled airspace in that quadrant',
-          'The maximum legal RPAS altitude in feet AGL',
-          'The highest known terrain or obstruction in that quadrant, in feet ASL (with a safety buffer)',
-          'The minimum cloud ceiling required for VFR flight'
-        ],
-        correctIndex: 2,
-        explanation: 'The MEF indicates the highest known terrain or obstacle in that latitude/longitude quadrant, expressed in feet Above Sea Level (ASL) with a safety margin.'
-      },
-      {
-        domain: 'Navigation',
-        tag: 'Navigation • Aviation Time',
-        question: 'Which time standard is used on Canadian METARs, TAFs, NOTAMs, and NAV CANADA authorizations?',
-        options: ['Local Standard Time (LST)', 'Pacific Daylight Time (PDT)', 'Coordinated Universal Time (UTC / Zulu)', 'Eastern Standard Time (EST)'],
-        correctIndex: 2,
-        explanation: 'Aviation weather reports, NOTAMs, and airspace authorizations use Coordinated Universal Time (UTC), denoted with a "Z" (Zulu).'
-      },
-      {
-        domain: 'Navigation',
-        tag: 'Navigation • Runway Numbering',
-        question: 'An airport runway is numbered "09". What is its approximate magnetic heading?',
-        options: ['009°', '090°', '180°', '270°'],
-        correctIndex: 1,
-        explanation: 'Runway numbers are rounded to the nearest 10 degrees of magnetic heading with the trailing zero dropped—so Runway 09 aligns with ~090° magnetic (East).'
-      },
-      {
-        domain: 'Navigation',
-        tag: 'Navigation • Publications',
-        question: 'Where do you look up runway layouts, operating hours, frequencies, and aerodrome operator contact numbers for Canadian aerodromes?',
-        options: [
-          'The Transport Canada Drone Management Portal',
-          'The Canada Flight Supplement (CFS)',
-          'The Aircraft Flight Manual (AFM)',
-          'The Civil Aviation Daily Occurrence Reporting System (CADORS)'
-        ],
-        correctIndex: 1,
-        explanation: 'The Canada Flight Supplement (CFS) is the official reference for Canadian aerodrome sketches, frequencies, operating hours, and contact information.'
-      },
-      {
-        domain: 'Flight Ops',
-        tag: 'Flight Ops • Non-Towered Aerodromes',
-        question: 'Unless otherwise published in the CFS, what is the standard traffic pattern flown by manned aircraft at a non-towered Canadian aerodrome?',
-        options: ['Right-hand circuit', 'Left-hand circuit', 'Straight-in approach from 10 NM only', 'Figure-eight holding pattern over the runway'],
-        correctIndex: 1,
-        explanation: 'Manned aircraft fly a standard left-hand circuit at non-towered aerodromes unless right-hand circuits are specified in the Canada Flight Supplement.'
-      },
-      {
-        domain: 'Flight Ops',
-        tag: 'Flight Ops • Flyaway in Controlled Airspace',
-        question: 'Your RPAS experiences a flyaway and is heading toward Class C controlled airspace. What is your immediate regulatory obligation?',
-        options: [
-          'Wait until the battery dies before filing a report',
-          'Notify the appropriate Air Traffic Control (ATC) unit immediately',
-          'Turn off the remote controller to force a crash',
-          'Only report it if the drone exceeds 400 ft AGL'
-        ],
-        correctIndex: 1,
-        explanation: 'Under CARs Part IX, you must notify Air Traffic Control immediately anytime a flyaway enters or is likely to enter controlled or Class F restricted airspace.'
-      },
-      {
-        domain: 'Systems & Theory',
-        tag: 'RPAS Systems • Cold Weather Batteries',
-        question: 'How do freezing ambient temperatures affect Lithium-Polymer (LiPo) RPAS flight batteries?',
-        options: [
-          'Internal resistance decreases, extending total flight time',
-          'Chemical reaction slows, increasing internal resistance and causing rapid voltage sag under load',
-          'Cold air doubles maximum discharge current safely',
-          'Battery capacity is unaffected as long as propellers are carbon fibre'
-        ],
-        correctIndex: 1,
-        explanation: 'Cold temperatures slow LiPo chemistry, increasing internal resistance and causing sudden voltage drops under high throttle—always pre-warm batteries and monitor voltage closely.'
-      },
-      {
-        domain: 'Systems & Theory',
-        tag: 'Human Factors • IMSAFE',
-        question: 'In the aviation IMSAFE pre-flight self-assessment checklist, what does the "E" stand for?',
-        options: ['Equipment', 'Emotion / Eating', 'Elevation', 'Endurance'],
-        correctIndex: 1,
-        explanation: 'IMSAFE stands for Illness, Medication, Stress, Alcohol (12-hour minimum under CARs), Fatigue, and Emotion / Eating.'
-      },
-      {
-        domain: 'Systems & Theory',
-        tag: 'Theory of Flight • Load Factor',
-        question: 'During a steep, level banked turn at 60° bank angle, what happens to the load factor (G-load) and stall speed of a fixed-wing or fast-moving RPAS?',
-        options: [
-          'Load factor stays at 1.0 G and stall speed drops',
-          'Load factor doubles to 2.0 G, increasing power demand and stall speed',
-          'Load factor drops to 0.5 G',
-          'Load factor only changes during vertical climbs'
-        ],
-        correctIndex: 1,
-        explanation: 'At a 60° bank in level flight, load factor reaches 2.0 G, forcing the aircraft to generate twice its weight in lift—raising stall speed and motor power draw.'
+        title: '3. Practical Flight & Emergency Drills',
+        items: [
+          { id: 'fr-takeoff', label: 'Controlled takeoff, hover & precision landing', detail: 'Call out "Launching", check hover stability at eye level, and land smoothly on pad.' },
+          { id: 'fr-orient', label: 'Orientation & box/figure-8 circuit in VLOS', detail: 'Maintain smooth control nose-in, side-on, and nose-out without relying solely on the screen.' },
+          { id: 'fr-lostlink', label: 'Simulated Lost C2 Link & Flyaway briefing', detail: 'Verbalize immediate actions, RTH verification, and ATC notification if entering controlled airspace.' },
+          { id: 'fr-manned', label: 'Simulated Manned Aircraft incursion', detail: 'Immediately yield right-of-way, descend safely, and land until airspace is clear.' }
+        ]
       }
+    ];
+
+    // 50 Transport Canada Small Advanced Exam (TP 15263E) Questions
+    const QUIZ_QUESTIONS = [
+      // AIR LAW (16)
+      { domain: 'Air Law', tag: 'Air Law • Controlled Airspace (922.04)', question: 'You plan to fly a 1.8 kg drone in VLOS inside Class C controlled airspace. What is required before takeoff?', options: ['A Basic certificate and Flight Reviewer sign-off', 'An Advanced certificate, a 922.04-declared drone, and NAV CANADA RPAS Flight Authorization', 'An SFOC for all flights under 25 kg', 'No authorization if below 100 ft AGL'], correctIndex: 1, explanation: 'Controlled airspace VLOS requires an Advanced certificate, a 922.04-declared drone, and NAV CANADA RPAS Flight Authorization (CAR 901.71).' },
+      { domain: 'Air Law', tag: 'Air Law • Separation (922.05)', question: 'Your small RPAS has a 922.05 declaration (near people) but NOT 922.06 (over people). What is your minimum horizontal distance from uninvolved people?', options: ['30 m (100 ft)', '15 m (50 ft)', 'More than 5 m (16.4 ft)', '0 m — directly overhead'], correctIndex: 2, explanation: 'Under RPAS Standard 922.05 / CAR 901.69(b), you may fly < 30 m from uninvolved people, provided you stay > 5 m (16.4 ft) horizontally.' },
+      { domain: 'Air Law', tag: 'Air Law • Sheltered Ops', question: 'When flying a sheltered operation around a building without direct VLOS or a visual observer, what are the maximum structure limits?', options: ['≤ 30 m (100 ft) above and ≤ 61 m (200 ft) horizontally from the structure', '≤ 61 m (200 ft) above and ≤ 30 m (100 ft) horizontally', '≤ 122 m (400 ft) above with no horizontal limit', '≤ 15 m above and ≤ 30 m horizontally'], correctIndex: 0, explanation: 'Sheltered operations allow flight ≤ 30 m (100 ft) above a structure and ≤ 61 m (200 ft) horizontally, within 3.7 km of the pilot and ≥ 30 m from uninvolved people.' },
+      { domain: 'Air Law', tag: 'Air Law • EVLOS Ops', question: 'During an Extended Visual Line-of-Sight (EVLOS) operation with a small drone, which condition is mandatory?', options: ['May be conducted in controlled airspace with ATC permission', 'The Visual Observer (VO) must hold at least a Basic drone pilot certificate', 'Range extends up to 9.3 km (5 NM)', 'Bystander separation drops to 5 m automatically'], correctIndex: 1, explanation: 'EVLOS is restricted to uncontrolled airspace, ≥ 30 m from uninvolved people, within 3.7 km (2 NM) of pilot/station/VO, and requires a VO with at least a Basic certificate.' },
+      { domain: 'Air Law', tag: 'Air Law • Visual Observers (CAR 901.20)', question: 'Under CAR 901.20, which statement about Visual Observers (VOs) is correct?', options: ['A VO may monitor two drones simultaneously', 'A VO may perform duties while driving a slow support vehicle', 'A VO may not perform observer duties while operating a moving vehicle, vessel, or aircraft', 'A VO is exempt from timely communication in Class G'], correctIndex: 2, explanation: 'CAR 901.20 prohibits a VO from monitoring more than one RPA at a time or performing VO duties while operating a moving vehicle, vessel, or aircraft.' },
+      { domain: 'Air Law', tag: 'Air Law • Max Altitude (CAR 901.25)', question: 'Without an SFOC-RPAS and away from any buildings or structures, what is the maximum altitude a small drone may be flown under CAR 901.25?', options: ['300 ft (91 m) AGL', '400 ft (122 m) AGL', '500 ft (152 m) AGL', '1,000 ft (305 m) AGL'], correctIndex: 1, explanation: 'Under CAR 901.25(1), maximum altitude is 400 ft (122 m) AGL, or 100 ft (30 m) above a structure when within 200 ft (61 m) horizontally of it.' },
+      { domain: 'Air Law', tag: 'Air Law • Aerodromes (CAR 901.47)', question: 'Under CAR 901.47, how far must Basic operations stay from a certified airport centre, and what is required within 5.6 km (3 NM) of a military aerodrome?', options: ['1.9 km from airport; no extra permission for military', '5.6 km (3 NM) from airport; DND permission required for military aerodrome', '9.3 km from airport; NAV CANADA phone call only', '3.7 km from airport; Basic certificate is sufficient'], correctIndex: 1, explanation: 'Basic ops must remain > 5.6 km (3 NM) from a certified airport and > 1.9 km (1 NM) from a heliport. Within 5.6 km of a military aerodrome requires DND permission.' },
+      { domain: 'Air Law', tag: 'Air Law • Medium RPAS', question: 'You are flying a 32 kg medium drone in VLOS with no near-people or over-people declaration. How far must you stay horizontally from uninvolved people?', options: ['More than 30 m (100 ft)', 'More than 61 m (200 ft)', 'More than 152.4 m (500 ft)', 'More than 300 m (1,000 ft)'], correctIndex: 2, explanation: 'Medium drones (>25 kg to 150 kg) in VLOS without near/over-people declarations must stay > 152.4 m (500 ft) horizontally from uninvolved people.' },
+      { domain: 'Air Law', tag: 'Air Law • Recency (CAR 901.65)', question: 'How often must an Advanced Operations pilot complete a recency activity (flight review, exam, or recurrent training) to keep flying legally?', options: ['Every 12 months', 'Every 24 months', 'Every 36 months', 'Never — valid for life without recency'], correctIndex: 1, explanation: 'Under CAR 901.65, RPAS pilots must complete a qualifying recency activity within the 24 months preceding any flight.' },
+      { domain: 'Air Law', tag: 'Air Law • Microdrones (<250 g)', question: 'When operating a 249 g microdrone in Canada, which operation still legally requires a Special Flight Operations Certificate (SFOC-RPAS)?', options: ['Flying in uncontrolled airspace over an empty field', 'Flying at an advertised public event', 'Flying without a Basic or Advanced pilot certificate', 'Flying at 150 ft AGL in clear weather'], correctIndex: 1, explanation: 'While microdrones (< 250 g) do not require registration or a certificate, flying any drone—including a microdrone—at an advertised event requires an SFOC-RPAS.' },
+      { domain: 'Air Law', tag: 'Air Law • Minimum Age', question: 'What is the minimum age to hold a Transport Canada Pilot Certificate — Advanced Operations?', options: ['14 years old', '16 years old', '18 years old', '21 years old'], correctIndex: 1, explanation: 'Basic Operations requires age 14+, Advanced Operations requires age 16+, and Level 1 Complex requires age 18+.' },
+      { domain: 'Air Law', tag: 'Air Law • Alcohol Limit', question: 'Under CARs Part IX, what is the minimum waiting period between consuming alcohol and acting as an RPAS pilot or crew member?', options: ['4 hours', '8 hours', '12 hours', '24 hours'], correctIndex: 2, explanation: 'CARs prohibit acting as an RPAS crew member within 12 hours of consuming an alcoholic beverage or while under the influence.' },
+      { domain: 'Air Law', tag: 'Air Law • Class F Airspace', question: 'What does "CYR" indicate on a Canadian VFR Navigation Chart?', options: ['Class C Control Zone', 'Class F Special Use Restricted Airspace (entry prohibited without permission)', 'Class F Advisory Airspace for flight training', 'Civilian Youth Recreational Zone'], correctIndex: 1, explanation: 'CYR stands for Restricted airspace (Class F) — no aircraft, including microdrones, may enter without permission from the user agency.' },
+      { domain: 'Air Law', tag: 'Air Law • Class F Advisory', question: 'What does "CYA" indicate on a Canadian VNC chart?', options: ['Class F Advisory Airspace (e.g., soaring, parachuting, or flight training)', 'Controlled Yield Airspace', 'Canadian Yachting Area', 'Class A High-Level Airspace'], correctIndex: 0, explanation: 'CYA denotes Class F Advisory airspace where special non-hazardous or high-density aviation activity (like aerobatics or flight training) occurs.' },
+      { domain: 'Air Law', tag: 'Air Law • Operating Weight', question: 'How do the CARs define the "operating weight" of a remotely piloted aircraft?', options: ['Dry airframe weight excluding batteries', 'Weight of the aircraft at any point during flight, including batteries, payload, and attached equipment', 'Combined weight of the drone and the handheld controller', 'Weight listed on the retail box only'], correctIndex: 1, explanation: 'Operating weight includes the drone, batteries, SD card, props, guards, strobes, and any payload—not the ground controller.' },
+      { domain: 'Air Law', tag: 'Air Law • National Parks', question: 'Can an Advanced Operations pilot take off or land a recreational or commercial drone inside a Parks Canada National Park without a Restricted Activity Permit?', options: ['Yes, if flying a microdrone under 250 g', 'Yes, with NAV CANADA authorization alone', 'No — taking off or landing inside a National Park is prohibited without a permit from the Park Superintendent', 'Yes, if staying below 200 ft AGL'], correctIndex: 2, explanation: 'Under National Parks of Canada Aircraft Access Regulations, taking off or landing any drone (including microdrones) inside a National Park requires Superintendent authorization.' },
+
+      // METEOROLOGY (10)
+      { domain: 'Meteorology', tag: 'Meteorology • Density Altitude', question: 'Which three atmospheric variables determine Density Altitude and directly affect rotor thrust and battery performance?', options: ['Wind speed, cloud coverage, and dew point', 'Temperature, barometric pressure, and humidity', 'Visibility, precipitation, and magnetic variation', 'Wind shear, ceiling height, and latitude'], correctIndex: 1, explanation: 'Hot, high-elevation, and humid conditions create high density altitude (thin air), reducing rotor lift and climb performance.' },
+      { domain: 'Meteorology', tag: 'Meteorology • METAR Decoding', question: 'A METAR for your departure airport includes the weather code "TSRA". What does this indicate?', options: ['Light drizzle and mist', 'Thunderstorm with rain', 'Towering cumulus with freezing fog', 'Blowing snow and reduced visibility'], correctIndex: 1, explanation: 'In METAR/TAF notation, TS = Thunderstorm and RA = Rain.' },
+      { domain: 'Meteorology', tag: 'Meteorology • TAF Coverage', question: 'A Terminal Aerodrome Forecast (TAF) provides forecast wind, visibility, and weather within what radius of the aerodrome?', options: ['1 nautical mile', '3 nautical miles', '5 nautical miles', '25 nautical miles'], correctIndex: 2, explanation: 'A TAF forecasts weather expected within 5 nautical miles (NM) of the centre of the aerodrome.' },
+      { domain: 'Meteorology', tag: 'Meteorology • Airframe Icing', question: 'Which type of icing forms when large supercooled water droplets strike propellers and spread before freezing into a hard, transparent sheet?', options: ['Rime ice', 'Hoar frost', 'Clear (glaze) ice', 'Sublimation frost'], correctIndex: 2, explanation: 'Large supercooled droplets spread and form heavy clear ice; small droplets freeze instantly into opaque, brittle rime ice.' },
+      { domain: 'Meteorology', tag: 'Meteorology • Wind Shear', question: 'How is wind shear defined in aviation meteorology?', options: ['A gradual decrease in temperature with altitude', 'A rapid change in wind speed and/or direction over a short vertical or horizontal distance', 'Steady laminar airflow over flat water', 'Jet stream turbulence above 25,000 ft ASL only'], correctIndex: 1, explanation: 'Wind shear is a sudden change in wind speed and/or direction over a short distance, often around buildings, terrain, or inversions.' },
+      { domain: 'Meteorology', tag: 'Meteorology • Pressure Systems', question: 'In the Northern Hemisphere, a low-pressure system is generally associated with:', options: ['Descending air, clear skies, and calm winds', 'Rising air, cloud formation, precipitation, and unstable weather', 'Clockwise surface wind flow and zero visibility', 'Uniformly stable air with no convective clouds'], correctIndex: 1, explanation: 'Low-pressure systems draw air inward and upward (counter-clockwise in the Northern Hemisphere), producing clouds, precipitation, and turbulence.' },
+      { domain: 'Meteorology', tag: 'Meteorology • Cloud Ceiling', question: 'In a METAR, which cloud layer defines an official "ceiling"?', options: ['The lowest FEW layer', 'The lowest SCT (scattered) layer', 'The lowest BKN (broken), OVC (overcast), or VV (vertical visibility) layer', 'Any cirrus cloud above 20,000 ft'], correctIndex: 2, explanation: 'An official ceiling is the height AGL of the lowest Broken (BKN), Overcast (OVC), or obscured Vertical Visibility (VV) layer.' },
+      { domain: 'Meteorology', tag: 'Meteorology • Dewpoint Spread', question: 'A METAR reports temperature/dewpoint as "08/07". What weather hazard is most likely to form?', options: ['Severe dry microbursts', 'Fog, mist, or low stratus clouds reducing visibility', 'Extreme high density altitude', 'Clear air turbulence'], correctIndex: 1, explanation: 'When temperature and dewpoint are within 2–3 °C of each other, the air is nearly saturated—creating high risk of fog, mist, or rapid low cloud formation.' },
+      { domain: 'Meteorology', tag: 'Meteorology • METAR Wind Units', question: 'A Canadian METAR reports wind as "27015G25KT". Roughly what is the gust speed in km/h?', options: ['25 km/h', '35 km/h', '46 km/h', '65 km/h'], correctIndex: 2, explanation: '1 knot = 1.852 km/h. 25 kt × 1.852 ≈ 46.3 km/h—exceeding the rated limit of most consumer drones.' },
+      { domain: 'Meteorology', tag: 'Meteorology • Mechanical Turbulence', question: 'Flying on the downwind (lee) side of tall downtown buildings in strong winds exposes your RPAS primarily to:', options: ['Smooth laminar updrafts', 'Mechanical turbulence and unpredictable eddies/rotors', 'Reduced air pressure only', 'Radiation fog'], correctIndex: 1, explanation: 'Wind flowing around and over buildings creates swirling mechanical turbulence and sudden downdrafts on the lee side.' },
+
+      // NAVIGATION (8)
+      { domain: 'Navigation', tag: 'Navigation • VNC MEF', question: 'What does the Maximum Elevation Figure (MEF) printed inside a quadrant on a VFR Navigation Chart (VNC) represent?', options: ['Highest floor of Class B airspace', 'Maximum legal RPAS altitude in feet AGL', 'Highest known terrain or obstruction in that quadrant in feet ASL (with a safety buffer)', 'Minimum cloud ceiling for VFR flight'], correctIndex: 2, explanation: 'MEF shows the highest terrain or obstacle in that quadrant in feet Above Sea Level (ASL) plus a safety margin.' },
+      { domain: 'Navigation', tag: 'Navigation • Aviation Time', question: 'Which time standard is used on Canadian METARs, TAFs, NOTAMs, and NAV CANADA authorizations?', options: ['Local Standard Time (LST)', 'Pacific Daylight Time (PDT)', 'Coordinated Universal Time (UTC / Zulu)', 'Eastern Standard Time (EST)'], correctIndex: 2, explanation: 'Aviation weather, NOTAMs, and NAV CANADA authorizations all use UTC (Zulu / "Z").' },
+      { domain: 'Navigation', tag: 'Navigation • Runway Numbering', question: 'An airport runway is numbered "09". What is its approximate magnetic heading?', options: ['009°', '090°', '180°', '270°'], correctIndex: 1, explanation: 'Runway numbers represent magnetic heading rounded to the nearest 10 degrees with the trailing zero removed (09 = 090° magnetic).' },
+      { domain: 'Navigation', tag: 'Navigation • Publications (CFS)', question: 'Where do you look up runway layouts, operating hours, frequencies, and operator phone numbers for Canadian aerodromes?', options: ['Drone Management Portal', 'Canada Flight Supplement (CFS)', 'Aircraft Flight Manual (AFM)', 'CADORS database'], correctIndex: 1, explanation: 'The Canada Flight Supplement (CFS) lists official aerodrome sketches, frequencies, hours, and contact numbers.' },
+      { domain: 'Navigation', tag: 'Navigation • VTA vs VNC', question: 'Which chart provides larger-scale (1:250,000), more detailed airspace depictions around major Canadian cities like Vancouver or Toronto?', options: ['VFR Navigation Chart (VNC)', 'VFR Terminal Area Chart (VTA)', 'Low Altitude Enroute Chart (LO)', 'World Aeronautical Chart (WAC)'], correctIndex: 1, explanation: 'VTA charts are 1:250,000 scale (twice the detail of 1:500,000 VNCs) for complex terminal airspace around major cities.' },
+      { domain: 'Navigation', tag: 'Navigation • Magnetic Variation', question: 'If True North is 000° and local magnetic variation is 16° East (like Vancouver, BC), what is the Magnetic heading? ("East is least, West is best")', options: ['016° Magnetic', '344° Magnetic', '180° Magnetic', '000° Magnetic'], correctIndex: 1, explanation: 'East is least: subtract East variation from True (360° − 16° = 344° Magnetic).' },
+      { domain: 'Navigation', tag: 'Navigation • AGL vs ASL', question: 'Your launch site sits at 1,200 ft ASL and you hover your drone at 300 ft AGL. What is your drone’s altitude in ASL?', options: ['300 ft ASL', '900 ft ASL', '1,200 ft ASL', '1,500 ft ASL'], correctIndex: 3, explanation: 'ASL = Ground Elevation (1,200 ft) + Height Above Ground (300 ft) = 1,500 ft ASL.' },
+      { domain: 'Navigation', tag: 'Navigation • NOTAMs', question: 'Why must an RPAS pilot check active NOTAMs before every flight?', options: ['To check battery charging rates', 'To identify temporary airspace closures, forest fire TFRs, crane obstacles, or aerodrome changes', 'To register a new drone', 'To calculate magnetic variation'], correctIndex: 1, explanation: 'NOTAMs (Notices to Airmen/Air Missions) publish time-critical temporary hazards, airspace restrictions, and facility changes not yet on charts.' },
+
+      // FLIGHT OPS & RADIOTELEPHONY (8)
+      { domain: 'Flight Ops', tag: 'Flight Ops • Non-Towered Circuit', question: 'Unless otherwise published in the CFS, what is the standard traffic pattern flown by manned aircraft at a non-towered Canadian aerodrome?', options: ['Right-hand circuit', 'Left-hand circuit', 'Straight-in approach from 10 NM only', 'Figure-eight holding pattern'], correctIndex: 1, explanation: 'Manned aircraft fly a standard left-hand circuit unless right-hand circuits are specified in the CFS.' },
+      { domain: 'Flight Ops', tag: 'Flight Ops • Flyaway Notification', question: 'Your RPAS experiences a flyaway and is heading toward Class C controlled airspace. What is your immediate regulatory obligation?', options: ['Wait until the battery dies before reporting', 'Notify the appropriate Air Traffic Control (ATC) unit immediately', 'Turn off the remote controller to force a crash', 'Only report if the drone exceeds 400 ft AGL'], correctIndex: 1, explanation: 'CARs Part IX requires immediate notification to ATC whenever a flyaway enters or is likely to enter controlled or Class F restricted airspace.' },
+      { domain: 'Flight Ops', tag: 'Flight Ops • Emergency Perimeters', question: 'Under CAR 900.08, when may you fly an RPAS inside the security perimeter of a police or fire emergency operation?', options: ['Whenever you hold an Advanced certificate', 'Only if you are flying a microdrone under 250 g', 'Never, unless you are operating on behalf of the emergency response authority with authorization', 'Whenever you stay above 200 ft AGL'], correctIndex: 2, explanation: 'CAR 900.08 prohibits flying over or within an emergency security perimeter unless authorized as part of the response.' },
+      { domain: 'Flight Ops', tag: 'Flight Ops • TSB Reporting', question: 'When must an RPAS pilot report an occurrence to the Transportation Safety Board (TSB) of Canada?', options: ['Only if the drone weighs over 25 kg', 'Whenever an incident causes a serious injury/fatality or a collision with a manned aircraft', 'For every hard landing that breaks a propeller', 'Only during commercial operations'], correctIndex: 1, explanation: 'Serious injuries, fatalities, or collisions involving manned aircraft are mandatory TSB reportable occurrences.' },
+      { domain: 'Flight Ops', tag: 'Radiotelephony • ROC-A', question: 'Before transmitting on an aviation VHF radio frequency (such as an ATF or MF) in Canada, what qualification is required?', options: ['A Basic RPAS certificate alone', 'A Restricted Operator Certificate with Aeronautical Qualification (ROC-A)', 'A HAM radio licence only', 'No certificate is needed for drones'], correctIndex: 1, explanation: 'Transmitting on aeronautical VHF frequencies in Canada requires an ISED Restricted Operator Certificate with Aeronautical Qualification (ROC-A).' },
+      { domain: 'Flight Ops', tag: 'Radiotelephony • Phonetic Alphabet', question: 'In the ICAO phonetic alphabet, how is the Canadian registration prefix "C-FGH" pronounced over aviation radio?', options: ['Charlie – Foxtrot – Golf – Hotel', 'Canada – Frank – George – Henry', 'Charlie – Fox – Gulf – Hotel', 'Cobra – Foxtrot – Golf – House'], correctIndex: 0, explanation: 'Standard ICAO phonetics: C = Charlie, F = Foxtrot, G = Golf, H = Hotel.' },
+      { domain: 'Flight Ops', tag: 'Radiotelephony • Urgency Calls', question: 'What is the international aviation radiotelephony call for an URGENCY condition (serious safety concern, not immediate distress)?', options: ['MAYDAY, MAYDAY, MAYDAY', 'PAN-PAN, PAN-PAN, PAN-PAN', 'SECURITE, SECURITE, SECURITE', 'ROGER, WILCO'], correctIndex: 1, explanation: 'MAYDAY is for immediate life-threatening distress; PAN-PAN is for urgent safety situations.' },
+      { domain: 'Flight Ops', tag: 'Flight Ops • Night Operations', question: 'To operate a small RPAS at night under CARs Part IX, what equipment is mandatory on the aircraft?', options: ['A thermal camera', 'Position/anti-collision lights visible from a distance sufficient to maintain VLOS and allow other aircraft to see it', 'A Mode C transponder', 'An audible siren'], correctIndex: 1, explanation: 'CAR 901.39 requires night-capable lights that allow the pilot to maintain VLOS and detect aircraft orientation.' },
+
+      // SYSTEMS, HUMAN FACTORS & THEORY (8)
+      { domain: 'Systems & Theory', tag: 'RPAS Systems • Cold LiPo Batteries', question: 'How do freezing ambient temperatures affect Lithium-Polymer (LiPo) RPAS flight batteries?', options: ['Internal resistance decreases, extending flight time', 'Chemical reaction slows, increasing internal resistance and causing rapid voltage sag under load', 'Cold air doubles safe discharge current', 'Capacity is unaffected with carbon-fibre props'], correctIndex: 1, explanation: 'Cold slows LiPo chemistry, raising internal resistance and risking sudden voltage drop under throttle—always pre-warm batteries.' },
+      { domain: 'Systems & Theory', tag: 'Human Factors • IMSAFE', question: 'In the aviation IMSAFE pre-flight self-assessment checklist, what does the "E" stand for?', options: ['Equipment', 'Emotion / Eating', 'Elevation', 'Endurance'], correctIndex: 1, explanation: 'IMSAFE stands for Illness, Medication, Stress, Alcohol, Fatigue, and Emotion / Eating.' },
+      { domain: 'Systems & Theory', tag: 'Theory of Flight • Load Factor', question: 'During a steep, level banked turn at 60° bank angle, what happens to load factor (G-load) and stall speed?', options: ['Load factor stays 1.0 G and stall speed drops', 'Load factor doubles to 2.0 G, increasing power demand and stall speed', 'Load factor drops to 0.5 G', 'Load factor only changes during vertical climbs'], correctIndex: 1, explanation: 'At a 60° level bank, load factor is 2.0 G—requiring twice the lift and increasing stall speed and motor draw.' },
+      { domain: 'Systems & Theory', tag: 'RPAS Systems • Compass Interference', question: 'Taking off from a reinforced concrete rooftop or steel bridge deck primarily threatens which RPAS sensor?', options: ['Barometric altimeter', 'Magnetometer (compass), risking erratic yaw or toilet-bowling', 'Optical flow camera', 'Battery thermistor'], correctIndex: 1, explanation: 'Ferrous rebar and steel distort local magnetic fields, causing compass errors and unstable flight.' },
+      { domain: 'Systems & Theory', tag: 'RPAS Systems • GNSS Dilution', question: 'What does a high HDOP (Horizontal Dilution of Precision) or low satellite count indicate during pre-flight?', options: ['Stronger GPS accuracy', 'Poor satellite geometry and degraded horizontal position accuracy', 'Higher wind resistance', 'A fully charged flight battery'], correctIndex: 1, explanation: 'Lower HDOP means better satellite geometry; high HDOP means degraded GPS positioning accuracy.' },
+      { domain: 'Systems & Theory', tag: 'RPAS Systems • C2 Link Frequency', question: 'Compared to 5.8 GHz, how does a 2.4 GHz command-and-control (C2) radio link generally behave?', options: ['Shorter range and worse obstacle penetration', 'Longer range and better obstacle penetration, though more prone to Wi-Fi congestion in urban areas', 'Works only underground', 'Requires no line-of-sight at all'], correctIndex: 1, explanation: 'Lower frequencies (2.4 GHz) travel farther and penetrate light foliage better than 5.8 GHz, but share spectrum with urban Wi-Fi.' },
+      { domain: 'Systems & Theory', tag: 'Human Factors • Tunnel Vision', question: 'Fixating on the controller camera feed while losing awareness of approaching manned aircraft or bystanders is an example of:', options: ['Positive transfer', 'Loss of situational awareness / cognitive tunnelling', 'Effective crew resource management', 'Spatial orientation'], correctIndex: 1, explanation: 'Screen fixation degrades situational awareness—pilots must keep primary focus on the aircraft and surrounding airspace in VLOS.' },
+      { domain: 'Systems & Theory', tag: 'Theory of Flight • Multi-Rotor Yaw', question: 'How does a standard quadcopter generate yaw (rotation around its vertical axis)?', options: ['By tilting the camera gimbal left or right', 'By varying the speed (torque) between clockwise and counter-clockwise spinning motor pairs', 'By reversing all four propellers simultaneously', 'By shifting the battery pack'], correctIndex: 1, explanation: 'Quadcopters yaw by increasing torque on one diagonal pair (e.g., CW motors) while decreasing torque on the opposite (CCW) pair.' }
     ];
 
     const EMERGENCY_PROCEDURES = [
-      {
-        title: 'Flyaway / Controlled Airspace Entry',
-        steps: [
-          'Trigger Return-to-Home (RTH) or switch to manual ATTI/Sport mode to regain directional control.',
-          'Note last known heading, altitude, speed, and remaining battery endurance.',
-          'Notify Air Traffic Control immediately if the flyaway is likely to enter controlled airspace.'
-        ]
-      },
-      {
-        title: 'Lost C2 (Command & Control) Link',
-        steps: [
-          'Check controller antennas and move to an unobstructed line-of-sight position.',
-          'Maintain unaided visual contact and verify the configured failsafe (RTH, Hover, or Land) engages.',
-          'Clear the landing zone of bystanders before automatic touchdown.'
-        ]
-      },
-      {
-        title: 'Manned Aircraft Encounter',
-        steps: [
-          'Give way immediately — manned aircraft always have right-of-way under CARs Part IX.',
-          'Descend rapidly to a safe altitude or steer clear of the aircraft flight path.',
-          'Land and hold on the ground until airspace is completely clear.'
-        ]
-      },
-      {
-        title: 'Critical Battery / Propulsion Fault',
-        steps: [
-          'Abort the mission immediately and descend toward the nearest clear emergency landing zone.',
-          'Call out loudly to warn nearby people to clear the landing area.',
-          'Power down and inspect airframe/batteries before any further flight.'
-        ]
-      }
+      { title: 'Flyaway / Controlled Airspace Entry', steps: ['Trigger Return-to-Home (RTH) or switch to manual ATTI/Sport mode to regain directional control.', 'Note last known heading, altitude, speed, and remaining battery endurance.', 'Notify Air Traffic Control immediately if the flyaway is likely to enter controlled airspace.'] },
+      { title: 'Lost C2 (Command & Control) Link', steps: ['Check controller antennas and move to an unobstructed line-of-sight position.', 'Maintain unaided visual contact and verify the configured failsafe (RTH, Hover, or Land) engages.', 'Clear the landing zone of bystanders before automatic touchdown.'] },
+      { title: 'Manned Aircraft Encounter', steps: ['Give way immediately — manned aircraft always have right-of-way under CARs Part IX.', 'Descend rapidly to a safe altitude or steer clear of the aircraft flight path.', 'Land and hold on the ground until airspace is completely clear.'] },
+      { title: 'Critical Battery / Propulsion Fault', steps: ['Abort the mission immediately and descend toward the nearest clear emergency landing zone.', 'Call out loudly to warn nearby people to clear the landing area.', 'Power down and inspect airframe/batteries before any further flight.'] }
     ];
 
     const DEFAULT_PROFILES = [
@@ -1255,7 +1505,7 @@
     ];
 
     // 2. STATE + LOCALSTORAGE
-    const STORAGE_KEY = 'rpas_advanced_companion_v12';
+    const STORAGE_KEY = 'rpas_advanced_companion_v14';
 
     function defaultState() {
       return {
@@ -1263,6 +1513,10 @@
         weightClass: 'small',
         mode: 'controlled',
         checked: [],
+        customChecks: [],
+        reviewChecked: [],
+        batteries: [],
+        examHistory: [],
         logs: [],
         atcPhone: '',
         recencyDate: '',
@@ -1275,9 +1529,9 @@
       try {
         const raw =
           localStorage.getItem(STORAGE_KEY) ||
-          localStorage.getItem('rpas_advanced_companion_v10') ||
-          localStorage.getItem('rpas_advanced_companion_v9') ||
-          localStorage.getItem('rpas_advanced_companion_v8');
+          localStorage.getItem('rpas_advanced_companion_v13') ||
+          localStorage.getItem('rpas_advanced_companion_v12') ||
+          localStorage.getItem('rpas_advanced_companion_v10');
         if (!raw) return defaultState();
         const parsed = JSON.parse(raw);
         const profiles =
@@ -1290,6 +1544,10 @@
           weightClass: WEIGHT_CLASSES[parsed.weightClass] ? parsed.weightClass : 'small',
           mode: OPERATION_MODES[parsed.mode] ? parsed.mode : 'controlled',
           checked: Array.isArray(parsed.checked) ? parsed.checked : [],
+          customChecks: Array.isArray(parsed.customChecks) ? parsed.customChecks : [],
+          reviewChecked: Array.isArray(parsed.reviewChecked) ? parsed.reviewChecked : [],
+          batteries: Array.isArray(parsed.batteries) ? parsed.batteries : [],
+          examHistory: Array.isArray(parsed.examHistory) ? parsed.examHistory : [],
           logs: Array.isArray(parsed.logs) ? parsed.logs : [],
           atcPhone: typeof parsed.atcPhone === 'string' ? parsed.atcPhone : '',
           recencyDate: typeof parsed.recencyDate === 'string' ? parsed.recencyDate : '',
@@ -1310,6 +1568,10 @@
             weightClass: selectedWeightClass,
             mode: selectedMode,
             checked: Array.from(checkedIds),
+            customChecks,
+            reviewChecked: Array.from(reviewCheckedIds),
+            batteries,
+            examHistory,
             logs: flightLogs,
             atcPhone,
             recencyDate,
@@ -1326,18 +1588,24 @@
     let selectedWeightClass = initial.weightClass;
     let selectedMode = initial.mode;
     let checkedIds = new Set(initial.checked);
+    let customChecks = initial.customChecks;
+    let reviewCheckedIds = new Set(initial.reviewChecked);
+    let batteries = initial.batteries;
+    let examHistory = initial.examHistory;
     let flightLogs = initial.logs;
     let atcPhone = initial.atcPhone;
     let recencyDate = initial.recencyDate;
     let aircraftProfiles = initial.profiles;
     let activeProfileId = initial.activeProfileId;
 
-    // Live Flight Timer State
+    // Filters & Timers
+    let logFilterAircraft = 'all';
+    let logFilterMode = 'all';
     let flightSeconds = 0;
     let flightTimerId = null;
 
     // Quiz State
-    let quizFormat = 'quick';
+    let quizFormat = 'quick'; // 'quick' | 'exam' | 'review'
     let activeQuestionList = [];
     let missedIndices = [];
     let examAnswers = {};
@@ -1347,7 +1615,7 @@
     let quizScore = 0;
     let selectedOption = null;
     let quizSubmitted = false;
-    let examSecondsLeft = 30 * 60;
+    let examSecondsLeft = 60 * 60;
     let examTimerId = null;
 
     function shuffleIndices(count) {
@@ -1377,6 +1645,10 @@
     function startQuizSession(format) {
       stopExamTimer();
       quizFormat = format;
+      if (format === 'review') {
+        renderQuiz();
+        return;
+      }
       isReviewMode = false;
       missedIndices = [];
       examAnswers = {};
@@ -1385,10 +1657,10 @@
       quizScore = 0;
       selectedOption = null;
       quizSubmitted = false;
-      activeQuestionList = shuffleIndices(format === 'exam' ? 25 : 10);
+      activeQuestionList = shuffleIndices(format === 'exam' ? 50 : 10);
 
       if (format === 'exam') {
-        examSecondsLeft = 30 * 60;
+        examSecondsLeft = 60 * 60;
         examTimerId = setInterval(() => {
           examSecondsLeft -= 1;
           const timerEl = document.getElementById('quiz-timer');
@@ -1409,12 +1681,18 @@
       });
       quizSubmitted = true;
       quizIndex = activeQuestionList.length;
+      recordExamAttempt('Full 50', quizScore, activeQuestionList.length);
       renderQuiz();
     }
 
     function applyTheme() {
       document.documentElement.setAttribute('data-theme', currentTheme);
-      document.getElementById('theme-toggle-btn').textContent = currentTheme === 'dark' ? 'Day Mode' : 'Night Mode';
+      const btn = document.getElementById('theme-toggle-btn');
+      if (btn) {
+        btn.textContent = currentTheme === 'dark' ? '☀' : '☾';
+        btn.classList.toggle('btn-theme-day', currentTheme === 'dark');
+        btn.classList.toggle('btn-theme-night', currentTheme !== 'dark');
+      }
       const metaTheme = document.querySelector('meta[name="theme-color"]');
       if (metaTheme) metaTheme.setAttribute('content', currentTheme === 'dark' ? '#060913' : '#f1f5f9');
     }
@@ -1443,7 +1721,6 @@
       el.classList.remove('hidden');
     }
 
-    // METAR Decoder
     function decodeMetar(raw) {
       const text = raw.trim().toUpperCase();
       if (!text) return null;
@@ -1461,9 +1738,7 @@
         const gstKt = m[3] ? Number(m[3]) : spdKt;
         steadyKmh = Math.round(spdKt * 1.852);
         gustKmh = Math.round(gstKt * 1.852);
-        windStr = m[3]
-          ? `${dir} at ${spdKt}G${gstKt} kt (${steadyKmh}–${gustKmh} km/h)`
-          : `${dir} at ${spdKt} kt (${steadyKmh} km/h)`;
+        windStr = m[3] ? `${dir} at ${spdKt}G${gstKt} kt (${steadyKmh}–${gustKmh} km/h)` : `${dir} at ${spdKt} kt (${steadyKmh} km/h)`;
       }
       const visTok = tokens.find((t) => /^\d+(\/\d+)?SM$/.test(t)) || 'N/A';
       const clouds = tokens.filter((t) => /^(FEW|SCT|BKN|OVC|VV)\d{3}/.test(t) || t === 'SKC' || t === 'CLR');
@@ -1482,8 +1757,7 @@
     function renderRecency() {
       const pill = document.getElementById('recency-pill');
       const modalStatus = document.getElementById('recency-modal-status');
-      const input = document.getElementById('recency-date-input');
-      input.value = recencyDate;
+      document.getElementById('recency-date-input').value = recencyDate;
 
       if (!recencyDate) {
         pill.textContent = 'Recency: Set Date';
@@ -1538,21 +1812,13 @@
                   <span class="mono">${escapeHtml(p.reg || 'Micro')}</span>
                 </div>
                 <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
-                  ${wcLabel} • Max Wind: ${p.maxWind} km/h • Cycles: <strong>${p.cycles || 0}</strong>${p.decl ? ` • ${escapeHtml(p.decl)}` : ''}
+                  ${wcLabel} • Max Wind: ${p.maxWind} km/h${p.decl ? ` • ${escapeHtml(p.decl)}` : ''}
                 </div>
               </div>
               <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
-                <button type="button" data-cycle-prof="${p.id}" class="cycle-prof-btn btn" style="padding:4px 8px; font-size:11px;">+1 Cycle</button>
-                ${
-                  isActive
-                    ? '<span class="pill pill-ok" style="padding:3px 8px;">Active</span>'
-                    : `<button type="button" data-select-prof="${p.id}" class="select-prof-btn btn" style="padding:5px 9px;">Select</button>`
-                }
-                ${
-                  aircraftProfiles.length > 1
-                    ? `<button type="button" data-del-prof="${p.id}" class="del-prof-btn btn btn-danger" style="padding:5px 9px;">Delete</button>`
-                    : ''
-                }
+                
+                ${isActive ? '<span class="pill pill-ok" style="padding:3px 8px;">Active</span>' : `<button type="button" data-select-prof="${p.id}" class="select-prof-btn btn" style="padding:5px 9px;">Select</button>`}
+                ${aircraftProfiles.length > 1 ? `<button type="button" data-del-prof="${p.id}" class="del-prof-btn btn btn-danger" style="padding:5px 9px;">Delete</button>` : ''}
               </div>
             </div>
           `;
@@ -1570,15 +1836,7 @@
       const wc = WEIGHT_CLASSES[selectedWeightClass];
       document.getElementById('weight-class-note').textContent = wc.note;
       document.getElementById('weight-buttons').innerHTML = Object.values(WEIGHT_CLASSES)
-        .map((w) => {
-          const active = w.id === selectedWeightClass;
-          return `
-            <button type="button" data-weight-id="${w.id}" class="weight-btn seg-btn ${active ? 'active' : ''}">
-              <span style="display:block; font-size:12.5px; font-weight:600;">${w.label}</span>
-              <span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">${w.sub}</span>
-            </button>
-          `;
-        })
+        .map((w) => `<button type="button" data-weight-id="${w.id}" class="weight-btn seg-btn ${w.id === selectedWeightClass ? 'active' : ''}"><span style="display:block; font-size:12.5px; font-weight:600;">${w.label}</span><span style="display:block; font-size:11px; color:var(--text-muted); margin-top:2px;">${w.sub}</span></button>`)
         .join('');
 
       const opModeSection = document.getElementById('operation-mode-section');
@@ -1600,11 +1858,11 @@
       }
 
       const groups = getActiveGroups();
-      const allItems = groups.flatMap((g) => g.items);
+      const allItems = [...groups.flatMap((g) => g.items), ...customChecks];
       const totalItems = allItems.length;
       const completedCount = allItems.filter((item) => checkedIds.has(item.id)).length;
       const percent = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
-      const allComplete = completedCount === totalItems;
+      const allComplete = totalItems > 0 && completedCount === totalItems;
 
       document.getElementById('progress-text').textContent = `${completedCount} / ${totalItems} Checks Complete`;
       const bar = document.getElementById('progress-bar');
@@ -1614,6 +1872,9 @@
       const badge = document.getElementById('status-badge');
       badge.textContent = allComplete ? 'CLEARED FOR FLIGHT' : 'NO-GO • Checks Incomplete';
       badge.className = `pill ${allComplete ? 'pill-ok' : 'pill-warn'}`;
+
+      const checklistTab = document.getElementById('tab-checklist');
+      if (checklistTab) checklistTab.classList.toggle('tab-complete', allComplete);
 
       document.getElementById('checklist-container').innerHTML = groups
         .map(
@@ -1640,6 +1901,26 @@
           `
         )
         .join('');
+
+      const customList = document.getElementById('custom-checks-list');
+      if (customChecks.length === 0) {
+        customList.innerHTML = '<div style="font-size:12px; color:var(--text-faint);">No custom checks yet. Add gear items like ND filters, strobe light, or landing pad.</div>';
+      } else {
+        customList.innerHTML = customChecks
+          .map((item) => {
+            const isChecked = checkedIds.has(item.id);
+            return `
+              <div class="row" style="gap:8px; flex-wrap:nowrap;">
+                <button type="button" data-item-id="${item.id}" class="checklist-item check-item ${isChecked ? 'checked' : ''}" style="flex:1;">
+                  <span class="check-box">${isChecked ? '✓' : ''}</span>
+                  <span class="check-title">${escapeHtml(item.label)}</span>
+                </button>
+                <button type="button" data-del-custom="${item.id}" class="del-custom-btn btn btn-danger" style="padding:8px 10px;">✕</button>
+              </div>
+            `;
+          })
+          .join('');
+      }
     }
 
     function renderSiteCalculator() {
@@ -1664,7 +1945,6 @@
 
       const blockers = [];
       const cautions = [];
-
       if (icing) blockers.push('Icing or expected icing conditions present — do not launch.');
       if (gustWind > maxWind) blockers.push(`Gusts (${gustWind} km/h) exceed aircraft rated limit (${maxWind} km/h).`);
       else if (windPct >= 75) cautions.push(`Gusts are at ${windPct}% of rated limit — expect reduced battery endurance.`);
@@ -1719,20 +1999,63 @@
       const prof = getActiveProfile();
       if (prof && !logAircraft.value) logAircraft.value = `${prof.name} (${prof.reg || 'Micro'})`;
 
-      const totalMinutes = flightLogs.reduce((sum, entry) => sum + (Number(entry.duration) || 0), 0);
+      // Populate filter dropdowns
+      const uniqueAircraft = [...new Set(flightLogs.map((l) => l.aircraft))];
+      const acFilter = document.getElementById('log-filter-aircraft');
+      acFilter.innerHTML = ['<option value="all">All Aircraft</option>', ...uniqueAircraft.map((a) => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`)].join('');
+      acFilter.value = uniqueAircraft.includes(logFilterAircraft) ? logFilterAircraft : 'all';
+      logFilterAircraft = acFilter.value;
+
+      const modeFilter = document.getElementById('log-filter-mode');
+      if (modeFilter.options.length <= 1) {
+        modeFilter.innerHTML = [
+          '<option value="all">All Modes</option>',
+          '<option value="micro">Microdrone (&lt; 250 g)</option>',
+          ...Object.values(OPERATION_MODES).map((m) => `<option value="${m.id}">${m.name}</option>`)
+        ].join('');
+      }
+      modeFilter.value = logFilterMode;
+
+      // Hours by aircraft breakdown
+      const byAircraft = {};
+      flightLogs.forEach((e) => {
+        byAircraft[e.aircraft] = (byAircraft[e.aircraft] || 0) + (Number(e.duration) || 0);
+      });
+      const statsEl = document.getElementById('log-aircraft-stats');
+      const acEntries = Object.entries(byAircraft);
+      if (acEntries.length > 0) {
+        statsEl.classList.remove('hidden');
+        statsEl.innerHTML = acEntries
+          .map(([ac, mins]) => {
+            const h = Math.floor(mins / 60);
+            const m = mins % 60;
+            return `<span class="pill" style="background:var(--surface-2); border-color:var(--border); color:var(--text-muted);">${escapeHtml(ac)}: <strong style="color:var(--text);">${h > 0 ? `${h}h ${m}m` : `${m}m`}</strong></span>`;
+          })
+          .join('');
+      } else {
+        statsEl.classList.add('hidden');
+      }
+
+      const filtered = flightLogs.filter((e) => {
+        if (logFilterAircraft !== 'all' && e.aircraft !== logFilterAircraft) return false;
+        if (logFilterMode !== 'all' && e.mode !== logFilterMode) return false;
+        return true;
+      });
+
+      const totalMinutes = filtered.reduce((sum, entry) => sum + (Number(entry.duration) || 0), 0);
       const hours = Math.floor(totalMinutes / 60);
       const mins = totalMinutes % 60;
       const timeLabel = hours > 0 ? `${hours}h ${mins}m` : `${mins} min`;
-      document.getElementById('log-summary').textContent = `${flightLogs.length} ${flightLogs.length === 1 ? 'Flight' : 'Flights'} • ${timeLabel}`;
+      document.getElementById('log-summary').textContent = `${filtered.length} ${filtered.length === 1 ? 'Flight' : 'Flights'} • ${timeLabel}`;
       document.getElementById('export-csv-btn').disabled = flightLogs.length === 0;
 
       const listEl = document.getElementById('log-list');
-      if (flightLogs.length === 0) {
-        listEl.innerHTML = '<div class="subcard" style="text-align:center; font-size:12.5px; color:var(--text-faint); padding:22px;">No flights logged yet. Fill out the form above or use the Checklist Flight Timer.</div>';
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<div class="subcard" style="text-align:center; font-size:12.5px; color:var(--text-faint); padding:22px;">No matching flights logged yet.</div>';
         return;
       }
 
-      listEl.innerHTML = flightLogs
+      listEl.innerHTML = filtered
         .map((entry) => {
           const modeLabel = entry.mode === 'micro' ? 'Microdrone (< 250 g)' : OPERATION_MODES[entry.mode] ? OPERATION_MODES[entry.mode].name : entry.mode;
           return `
@@ -1781,20 +2104,65 @@
         .join('');
     }
 
-    function renderQuiz() {
-      const totalActive = activeQuestionList.length;
-      const isExam = quizFormat === 'exam' && !isReviewMode;
+    function renderFlightReviewPrep() {
+      const allItems = FLIGHT_REVIEW_GROUPS.flatMap((g) => g.items);
+      const done = allItems.filter((i) => reviewCheckedIds.has(i.id)).length;
+      const pct = Math.round((done / allItems.length) * 100);
+      document.getElementById('review-prep-progress').textContent = `${done} / ${allItems.length} Ready (${pct}%)`;
+      const bar = document.getElementById('review-prep-bar');
+      bar.style.width = `${pct}%`;
+      bar.className = `progress-fill ${done === allItems.length ? 'ok' : ''}`;
 
+      document.getElementById('review-prep-list').innerHTML = FLIGHT_REVIEW_GROUPS.map(
+        (group) => `
+          <section class="card">
+            <h2 style="margin-bottom:12px;">${group.title}</h2>
+            <div class="stack-sm">
+              ${group.items
+                .map((item) => {
+                  const isChecked = reviewCheckedIds.has(item.id);
+                  return `
+                    <button type="button" data-review-id="${item.id}" class="review-item check-item ${isChecked ? 'checked' : ''}">
+                      <span class="check-box">${isChecked ? '✓' : ''}</span>
+                      <span>
+                        <span class="check-title">${item.label}</span>
+                        <span class="check-detail">${item.detail}</span>
+                      </span>
+                    </button>
+                  `;
+                })
+                .join('')}
+            </div>
+          </section>
+        `
+      ).join('');
+    }
+
+    function renderQuiz() {
       document.getElementById('quiz-mode-quick').classList.toggle('active', quizFormat === 'quick');
       document.getElementById('quiz-mode-exam').classList.toggle('active', quizFormat === 'exam');
+      document.getElementById('quiz-mode-review').classList.toggle('active', quizFormat === 'review');
 
+      const quizSub = document.getElementById('quiz-subview');
+      const revSub = document.getElementById('review-prep-subview');
+      if (quizFormat === 'review') {
+        quizSub.classList.add('hidden');
+        revSub.classList.remove('hidden');
+        renderFlightReviewPrep();
+        return;
+      }
+      quizSub.classList.remove('hidden');
+      revSub.classList.add('hidden');
+
+      const totalActive = activeQuestionList.length;
+      const isExam = quizFormat === 'exam' && !isReviewMode;
       const statusLabel = document.getElementById('quiz-status-label');
       const scoreEl = document.getElementById('quiz-score');
       const timerEl = document.getElementById('quiz-timer');
       const navGrid = document.getElementById('exam-nav-grid');
 
       if (isExam) {
-        statusLabel.textContent = 'Practice Exam • Graded at Submit';
+        statusLabel.textContent = 'Full Mock Exam (50 Qs) • 60:00 Limit';
         if (quizSubmitted) {
           scoreEl.textContent = `Final Score: ${quizScore} / ${totalActive}`;
           timerEl.classList.add('hidden');
@@ -1807,14 +2175,7 @@
           navGrid.classList.remove('hidden');
           navGrid.innerHTML = activeQuestionList
             .map((_, idx) => {
-              const cls = [
-                'q-cell',
-                examAnswers[idx] !== undefined ? 'answered' : '',
-                flaggedIndices.has(idx) ? 'flagged' : '',
-                idx === quizIndex ? 'current' : ''
-              ]
-                .filter(Boolean)
-                .join(' ');
+              const cls = ['q-cell', examAnswers[idx] !== undefined ? 'answered' : '', flaggedIndices.has(idx) ? 'flagged' : '', idx === quizIndex ? 'current' : ''].filter(Boolean).join(' ');
               return `<button type="button" data-jump-idx="${idx}" class="${cls}">${idx + 1}</button>`;
             })
             .join('');
@@ -1839,7 +2200,7 @@
             <p class="subtitle">${passed ? 'Solid grasp of TP 15263E Small Advanced Operations.' : 'Review your weak domains below and drill the missed items.'}</p>
             <div style="margin-top:16px; display:flex; flex-wrap:wrap; justify-content:center; gap:10px;">
               ${missedIndices.length > 0 ? `<button id="quiz-review-missed" type="button" class="btn" style="background:var(--warn-soft); color:var(--warn); border-color:var(--warn-border);">Review Missed (${missedIndices.length})</button>` : ''}
-              <button id="quiz-finish-restart" type="button" class="btn btn-primary">New ${quizFormat === 'exam' ? 'Practice Exam' : 'Quick 10'}</button>
+              <button id="quiz-finish-restart" type="button" class="btn btn-primary">New ${quizFormat === 'exam' ? '50-Q Exam' : 'Quick 10'}</button>
             </div>
           </div>
           <div class="subcard stack-sm" style="margin-top:10px;">
@@ -1867,9 +2228,7 @@
           </div>
           <h2 style="font-size:16px; line-height:1.4; margin-bottom:14px;">${q.question}</h2>
           <div class="stack-sm">
-            ${q.options
-              .map((opt, idx) => `<button type="button" data-opt-index="${idx}" class="quiz-opt ${chosen === idx ? 'selected' : ''}">${opt}</button>`)
-              .join('')}
+            ${q.options.map((opt, idx) => `<button type="button" data-opt-index="${idx}" class="quiz-opt ${chosen === idx ? 'selected' : ''}">${opt}</button>`).join('')}
           </div>
           <div class="row" style="margin-top:16px;">
             <button id="exam-prev-btn" type="button" class="btn" ${quizIndex === 0 ? 'disabled' : ''}>Previous</button>
@@ -1936,8 +2295,7 @@
 
     function buildAndPrintSurvey() {
       const prof = getActiveProfile();
-      const groups = getActiveGroups();
-      const allItems = groups.flatMap((g) => g.items);
+      const allItems = [...getActiveGroups().flatMap((g) => g.items), ...customChecks];
       const siteName = document.getElementById('site-name-input').value.trim() || 'Unspecified Site';
       const coords = document.getElementById('site-coords-input').value.trim() || 'Not recorded';
       const verdict = document.getElementById('site-verdict-badge').textContent;
@@ -1947,7 +2305,7 @@
 
       document.getElementById('print-sheet').innerHTML = `
         <h1>RPAS Site Survey &amp; Pre-Flight Record (CAR 901.27)</h1>
-        <p style="margin:0 0 12px; font-size:12px; color:#475569;">Generated ${new Date().toLocaleString()} • RPAS Ops Companion</p>
+        <p style="margin:0 0 12px; font-size:12px; color:#475569;">Generated ${new Date().toLocaleString()} • CARs Part IX Cockpit</p>
         <h2>1. Mission &amp; Aircraft Details</h2>
         <table>
           <tr><th>Site / Location</th><td>${escapeHtml(siteName)} (${escapeHtml(coords)})</td></tr>
@@ -1964,7 +2322,7 @@
         <h2>3. Pre-Flight Checklist Verification</h2>
         <table>
           ${allItems
-            .map((item) => `<tr><th>${checkedIds.has(item.id) ? '[PASS]' : '[OPEN]'}</th><td><strong>${escapeHtml(item.label)}</strong> — ${escapeHtml(item.detail)}</td></tr>`)
+            .map((item) => `<tr><th>${checkedIds.has(item.id) ? '[PASS]' : '[OPEN]'}</th><td><strong>${escapeHtml(item.label)}</strong>${item.detail ? ` — ${escapeHtml(item.detail)}` : ''}</td></tr>`)
             .join('')}
         </table>
       `;
@@ -1999,9 +2357,7 @@
       applyTheme();
     });
 
-    document.querySelectorAll('.print-survey-btn').forEach((btn) => {
-      btn.addEventListener('click', buildAndPrintSurvey);
-    });
+    document.querySelectorAll('.print-survey-btn').forEach((btn) => btn.addEventListener('click', buildAndPrintSurvey));
 
     // Flight Timer Bridge
     document.getElementById('timer-toggle-btn').addEventListener('click', () => {
@@ -2020,10 +2376,7 @@
     });
 
     document.getElementById('timer-reset-btn').addEventListener('click', () => {
-      if (flightTimerId !== null) {
-        clearInterval(flightTimerId);
-        flightTimerId = null;
-      }
+      if (flightTimerId !== null) { clearInterval(flightTimerId); flightTimerId = null; }
       flightSeconds = 0;
       document.getElementById('flight-timer-display').textContent = '00:00';
       document.getElementById('timer-toggle-btn').textContent = 'Start Flight';
@@ -2035,22 +2388,89 @@
         flightTimerId = null;
         document.getElementById('timer-toggle-btn').textContent = 'Start Flight';
       }
-      const mins = Math.max(1, Math.ceil(flightSeconds / 60));
-      document.getElementById('log-duration').value = mins;
+      document.getElementById('log-duration').value = Math.max(1, Math.ceil(flightSeconds / 60));
       const siteVal = document.getElementById('site-name-input').value.trim();
       if (siteVal) document.getElementById('log-site').value = siteVal;
-      syncActiveProfileToForms();
+  
+    // v17 Advanced Aide-Mémoire Tab Switcher
+    document.getElementById('am-tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.am-tab-btn');
+      if (!btn) return;
+      const target = btn.getAttribute('data-am-tab');
+      document.querySelectorAll('.am-tab-btn').forEach((b) => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.am-panel').forEach((p) => p.classList.toggle('hidden', p.id !== 'am-panel-' + target));
+    });
+
+    syncActiveProfileToForms();
       activeTab = 'logbook';
       render();
       document.getElementById('log-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 
-    // GPS & Copy Coords
+    // Custom Checks
+    document.getElementById('custom-check-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('custom-check-label');
+      const label = input.value.trim();
+      if (!label) return;
+      customChecks.push({ id: 'custom-' + Date.now(), label, detail: '' });
+      input.value = '';
+      saveState();
+      renderChecklist();
+    });
+
+    document.getElementById('custom-checks-list').addEventListener('click', (e) => {
+      const del = e.target.closest('.del-custom-btn');
+      if (del) {
+        const id = del.getAttribute('data-del-custom');
+        customChecks = customChecks.filter((c) => c.id !== id);
+        checkedIds.delete(id);
+        saveState();
+        renderChecklist();
+        return;
+      }
+      const item = e.target.closest('.checklist-item');
+      if (item) {
+        const id = item.getAttribute('data-item-id');
+        if (checkedIds.has(id)) checkedIds.delete(id);
+        else checkedIds.add(id);
+        saveState();
+        renderChecklist();
+      }
+    });
+
+    // GPS & Live Weather Fetch (Open-Meteo HTTPS)
+    function fetchLiveWeatherForCoords(lat, lng) {
+      const status = document.getElementById('gps-status');
+      status.classList.remove('hidden');
+      status.textContent = 'Fetching live surface wind from Open-Meteo...';
+      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lng)}&current=temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m&wind_speed_unit=kmh`)
+        .then((r) => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then((data) => {
+          const cur = data && data.current;
+          if (!cur) throw new Error('No weather data');
+          const steady = Math.round(Number(cur.wind_speed_10m) || 0);
+          const gusts = Math.max(steady, Math.round(Number(cur.wind_gusts_10m) || steady));
+          const temp = cur.temperature_2m;
+          const dir = cur.wind_direction_10m;
+          document.getElementById('calc-steady-wind').value = steady;
+          document.getElementById('calc-gust-wind').value = gusts;
+          renderSiteCalculator();
+          status.textContent = `Live weather applied: ${steady} km/h (gusts ${gusts} km/h) from ${dir}°, ${temp} °C.`;
+        })
+        .catch(() => {
+          status.textContent = 'Offline or live weather unavailable — enter wind manually or paste a METAR below.';
+        });
+    }
+
     document.getElementById('gps-btn').addEventListener('click', () => {
       const status = document.getElementById('gps-status');
       status.classList.remove('hidden');
       if (!navigator.geolocation) {
-        status.textContent = 'Geolocation is not supported in this browser; enter coordinates manually.';
+        status.textContent = 'Geolocation not supported; enter coordinates manually.';
         return;
       }
       status.textContent = 'Fetching GPS coordinates...';
@@ -2068,17 +2488,41 @@
       );
     });
 
+    document.getElementById('live-wx-btn').addEventListener('click', () => {
+      const raw = document.getElementById('site-coords-input').value.trim();
+      const parts = raw.split(',').map((s) => Number(s.trim()));
+      if (parts.length === 2 && !Number.isNaN(parts[0]) && !Number.isNaN(parts[1])) {
+        fetchLiveWeatherForCoords(parts[0], parts[1]);
+        return;
+      }
+      const status = document.getElementById('gps-status');
+      status.classList.remove('hidden');
+      if (!navigator.geolocation) {
+        status.textContent = 'Enter Lat, Lng coordinates first (e.g., 49.1747, -123.1516) to fetch live wind.';
+        return;
+      }
+      status.textContent = 'Getting GPS for live wind...';
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(5);
+          const lng = pos.coords.longitude.toFixed(5);
+          document.getElementById('site-coords-input').value = `${lat}, ${lng}`;
+          fetchLiveWeatherForCoords(lat, lng);
+        },
+        () => {
+          status.textContent = 'Enter Lat, Lng coordinates (e.g., 49.1747, -123.1516) and tap Fetch Live Wind again.';
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    });
+
     document.getElementById('copy-coords-btn').addEventListener('click', () => {
       const val = document.getElementById('site-coords-input').value.trim();
       if (!val) return;
       const status = document.getElementById('gps-status');
       status.classList.remove('hidden');
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(val).then(() => {
-          status.textContent = 'Coordinates copied to clipboard.';
-        }).catch(() => {
-          status.textContent = 'Copy ready — select and copy from the field.';
-        });
+        navigator.clipboard.writeText(val).then(() => { status.textContent = 'Coordinates copied to clipboard.'; }).catch(() => { status.textContent = 'Copy ready — select from field.'; });
       } else {
         const input = document.getElementById('site-coords-input');
         input.select();
@@ -2091,10 +2535,7 @@
     function runMetarDecode() {
       const res = decodeMetar(document.getElementById('metar-input').value);
       const out = document.getElementById('metar-output');
-      if (!res) {
-        out.classList.add('hidden');
-        return;
-      }
+      if (!res) { out.classList.add('hidden'); return; }
       out.classList.remove('hidden');
       out.innerHTML = `
         <div class="subcard"><span class="label-caps" style="display:block;">Station / UTC</span><strong>${escapeHtml(res.station)} • ${escapeHtml(res.timeTok)}</strong></div>
@@ -2172,9 +2613,27 @@
       render();
     });
 
+    // Exam & Flight Review Prep Events
     document.getElementById('quiz-mode-quick').addEventListener('click', () => startQuizSession('quick'));
     document.getElementById('quiz-mode-exam').addEventListener('click', () => startQuizSession('exam'));
+    document.getElementById('quiz-mode-review').addEventListener('click', () => startQuizSession('review'));
     document.getElementById('quiz-reset-btn').addEventListener('click', () => startQuizSession(quizFormat));
+
+    document.getElementById('review-prep-list').addEventListener('click', (e) => {
+      const btn = e.target.closest('.review-item');
+      if (!btn) return;
+      const id = btn.getAttribute('data-review-id');
+      if (reviewCheckedIds.has(id)) reviewCheckedIds.delete(id);
+      else reviewCheckedIds.add(id);
+      saveState();
+      renderFlightReviewPrep();
+    });
+
+    document.getElementById('review-prep-reset').addEventListener('click', () => {
+      reviewCheckedIds.clear();
+      saveState();
+      renderFlightReviewPrep();
+    });
 
     document.getElementById('exam-nav-grid').addEventListener('click', (e) => {
       const cell = e.target.closest('.q-cell');
@@ -2208,26 +2667,10 @@
         renderQuiz();
         return;
       }
-      if (e.target.id === 'exam-prev-btn' && quizIndex > 0) {
-        quizIndex -= 1;
-        renderQuiz();
-        return;
-      }
-      if (e.target.id === 'exam-next-btn' && quizIndex + 1 < activeQuestionList.length) {
-        quizIndex += 1;
-        renderQuiz();
-        return;
-      }
-      if (e.target.id === 'exam-submit-btn') {
-        gradePracticeExam();
-        return;
-      }
-      if (e.target.id === 'quiz-next-btn') {
-        quizIndex += 1;
-        selectedOption = null;
-        renderQuiz();
-        return;
-      }
+      if (e.target.id === 'exam-prev-btn' && quizIndex > 0) { quizIndex -= 1; renderQuiz(); return; }
+      if (e.target.id === 'exam-next-btn' && quizIndex + 1 < activeQuestionList.length) { quizIndex += 1; renderQuiz(); return; }
+      if (e.target.id === 'exam-submit-btn') { gradePracticeExam(); return; }
+      if (e.target.id === 'quiz-next-btn') { quizIndex += 1; selectedOption = null; if (quizIndex >= activeQuestionList.length && !isReviewMode) recordExamAttempt('Quick 10', quizScore, activeQuestionList.length); renderQuiz(); return; }
       if (e.target.id === 'quiz-review-missed') {
         stopExamTimer();
         activeQuestionList = [...missedIndices];
@@ -2239,9 +2682,17 @@
         renderQuiz();
         return;
       }
-      if (e.target.id === 'quiz-finish-restart') {
-        startQuizSession(quizFormat);
-      }
+      if (e.target.id === 'quiz-finish-restart') startQuizSession(quizFormat);
+    });
+
+    // Logbook & Filters
+    document.getElementById('log-filter-aircraft').addEventListener('change', (e) => {
+      logFilterAircraft = e.target.value;
+      renderLogbook();
+    });
+    document.getElementById('log-filter-mode').addEventListener('change', (e) => {
+      logFilterMode = e.target.value;
+      renderLogbook();
     });
 
     document.getElementById('log-form').addEventListener('submit', (e) => {
@@ -2297,12 +2748,14 @@
     // JSON Backup / Restore / Clear
     document.getElementById('export-json-btn').addEventListener('click', () => {
       const payload = {
-        version: 12,
+        version: 13,
         exportedAt: new Date().toISOString(),
         theme: currentTheme,
         weightClass: selectedWeightClass,
         mode: selectedMode,
         checked: Array.from(checkedIds),
+        customChecks,
+        reviewChecked: Array.from(reviewCheckedIds),
         logs: flightLogs,
         atcPhone,
         recencyDate,
@@ -2321,10 +2774,7 @@
       showBackupStatus('JSON backup downloaded.', false);
     });
 
-    document.getElementById('import-json-btn').addEventListener('click', () => {
-      document.getElementById('import-json-input').click();
-    });
-
+    document.getElementById('import-json-btn').addEventListener('click', () => document.getElementById('import-json-input').click());
     document.getElementById('import-json-input').addEventListener('change', (e) => {
       const file = e.target.files && e.target.files[0];
       if (!file) return;
@@ -2337,6 +2787,8 @@
           if (WEIGHT_CLASSES[parsed.weightClass]) selectedWeightClass = parsed.weightClass;
           if (OPERATION_MODES[parsed.mode]) selectedMode = parsed.mode;
           checkedIds = new Set(Array.isArray(parsed.checked) ? parsed.checked : []);
+          if (Array.isArray(parsed.customChecks)) customChecks = parsed.customChecks;
+          if (Array.isArray(parsed.reviewChecked)) reviewCheckedIds = new Set(parsed.reviewChecked);
           if (Array.isArray(parsed.logs)) flightLogs = parsed.logs;
           if (typeof parsed.atcPhone === 'string') atcPhone = parsed.atcPhone;
           if (typeof parsed.recencyDate === 'string') recencyDate = parsed.recencyDate;
@@ -2354,12 +2806,8 @@
       reader.readAsText(file);
     });
 
-    document.getElementById('clear-data-btn').addEventListener('click', () => {
-      document.getElementById('clear-confirm-box').classList.remove('hidden');
-    });
-    document.getElementById('clear-confirm-no').addEventListener('click', () => {
-      document.getElementById('clear-confirm-box').classList.add('hidden');
-    });
+    document.getElementById('clear-data-btn').addEventListener('click', () => document.getElementById('clear-confirm-box').classList.remove('hidden'));
+    document.getElementById('clear-confirm-no').addEventListener('click', () => document.getElementById('clear-confirm-box').classList.add('hidden'));
     document.getElementById('clear-confirm-yes').addEventListener('click', () => {
       try { localStorage.removeItem(STORAGE_KEY); } catch {}
       const fresh = defaultState();
@@ -2367,6 +2815,8 @@
       selectedWeightClass = fresh.weightClass;
       selectedMode = fresh.mode;
       checkedIds = new Set();
+      customChecks = [];
+      reviewCheckedIds = new Set();
       flightLogs = [];
       atcPhone = '';
       recencyDate = '';
@@ -2381,7 +2831,6 @@
     // Modals
     const emergencyModal = document.getElementById('emergency-modal');
     const profilesModal = document.getElementById('profiles-modal');
-
     document.getElementById('emergency-open-btn').addEventListener('click', () => emergencyModal.classList.remove('hidden'));
     document.getElementById('emergency-close-btn').addEventListener('click', () => emergencyModal.classList.add('hidden'));
     emergencyModal.addEventListener('click', (e) => { if (e.target === emergencyModal) emergencyModal.classList.add('hidden'); });
@@ -2397,16 +2846,8 @@
       }
     });
 
-    document.getElementById('atc-phone-input').addEventListener('input', (e) => {
-      atcPhone = e.target.value;
-      saveState();
-    });
-
-    document.getElementById('recency-date-input').addEventListener('change', (e) => {
-      recencyDate = e.target.value;
-      saveState();
-      renderRecency();
-    });
+    document.getElementById('atc-phone-input').addEventListener('input', (e) => { atcPhone = e.target.value; saveState(); });
+    document.getElementById('recency-date-input').addEventListener('change', (e) => { recencyDate = e.target.value; saveState(); renderRecency(); });
 
     document.getElementById('preset-buttons').addEventListener('click', (e) => {
       const btn = e.target.closest('.preset-btn');
@@ -2443,13 +2884,8 @@
     document.getElementById('profiles-list').addEventListener('click', (e) => {
       const cycBtn = e.target.closest('.cycle-prof-btn');
       if (cycBtn) {
-        const id = cycBtn.getAttribute('data-cycle-prof');
-        const target = aircraftProfiles.find((p) => p.id === id);
-        if (target) {
-          target.cycles = (Number(target.cycles) || 0) + 1;
-          saveState();
-          renderProfilesModal();
-        }
+        const target = aircraftProfiles.find((p) => p.id === cycBtn.getAttribute('data-cycle-prof'));
+        if (target) { target.cycles = (Number(target.cycles) || 0) + 1; saveState(); renderProfilesModal(); }
         return;
       }
       const selBtn = e.target.closest('.select-prof-btn');
@@ -2471,11 +2907,346 @@
       }
     });
 
+    // v14 Helpers: Exam History, Solar/Civil Twilight, Kp Index, Batteries, Cheat Sheet
+    function recordExamAttempt(label, score, total) {
+      if (!total) return;
+      examHistory.push({ date: new Date().toISOString().slice(0, 10), label, score, total, pct: Math.round((score / total) * 100) });
+      if (examHistory.length > 12) examHistory = examHistory.slice(-12);
+      saveState();
+    }
+
+    function renderExamHistory() {
+      const avgEl = document.getElementById('exam-avg-pill');
+      const chart = document.getElementById('exam-history-chart');
+      if (!avgEl || !chart) return;
+      if (examHistory.length === 0) {
+        avgEl.textContent = 'No attempts yet';
+        chart.innerHTML = '<div style="font-size:12px; color:var(--text-faint);">Complete a Quick 10 or 50-Q Exam to track your readiness trend.</div>';
+        return;
+      }
+      const avg = Math.round(examHistory.reduce((s, x) => s + x.pct, 0) / examHistory.length);
+      avgEl.textContent = `Avg: ${avg}% (${examHistory.length} runs)`;
+      chart.innerHTML = examHistory
+        .map((h) => {
+          const color = h.pct >= 80 ? 'var(--ok)' : h.pct >= 65 ? 'var(--warn)' : 'var(--danger)';
+          return `
+            <div style="flex:1; min-width:24px; text-align:center;">
+              <div style="font-size:10px; color:var(--text-muted); margin-bottom:3px;">${h.pct}%</div>
+              <div style="height:${Math.max(8, Math.round(h.pct * 0.48))}px; background:${color}; border-radius:5px 5px 2px 2px;" title="${escapeHtml(h.label)}: ${h.score}/${h.total} (${h.date})"></div>
+              <div style="font-size:9px; color:var(--text-faint); margin-top:3px;">${h.label === 'Full 50' ? '50Q' : '10Q'}</div>
+            </div>
+          `;
+        })
+        .join('');
+    }
+
+    function calcSunTimes(lat, lng, date) {
+      const rad = Math.PI / 180;
+      const dayOfYear = Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
+      const decl = -23.44 * Math.cos(rad * (360 / 365) * (dayOfYear + 10));
+      const tzOffset = -date.getTimezoneOffset() / 60;
+      const lstm = 15 * tzOffset;
+      const b = rad * (360 / 365) * (dayOfYear - 81);
+      const eot = 9.87 * Math.sin(2 * b) - 7.53 * Math.cos(b) - 1.5 * Math.sin(b);
+      const tc = 4 * (lng - lstm) + eot;
+      const solarNoon = 12 - tc / 60;
+      function hourAngle(zenithDeg) {
+        const cosH = (Math.cos(rad * zenithDeg) - Math.sin(rad * lat) * Math.sin(rad * decl)) / (Math.cos(rad * lat) * Math.cos(rad * decl));
+        if (cosH > 1 || cosH < -1) return null;
+        return Math.acos(cosH) / rad / 15;
+      }
+      function fmt(h) {
+        if (h === null) return 'N/A';
+        let mins = Math.round(((h % 24) + 24) % 24 * 60);
+        const hh = Math.floor(mins / 60) % 24;
+        const mm = mins % 60;
+        return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+      }
+      const haSun = hourAngle(90.833);
+      const haCiv = hourAngle(96);
+      return {
+        sunrise: haSun !== null ? fmt(solarNoon - haSun) : 'N/A',
+        sunset: haSun !== null ? fmt(solarNoon + haSun) : 'N/A',
+        twilightEnd: haCiv !== null ? fmt(solarNoon + haCiv) : 'N/A'
+      };
+    }
+
+    function renderSolar() {
+      const raw = document.getElementById('site-coords-input').value.trim();
+      const parts = raw.split(',').map((s) => Number(s.trim()));
+      const lat = parts.length === 2 && !Number.isNaN(parts[0]) ? parts[0] : 49.1747;
+      const lng = parts.length === 2 && !Number.isNaN(parts[1]) ? parts[1] : -123.1516;
+      const res = calcSunTimes(lat, lng, new Date());
+      document.getElementById('solar-sun-times').textContent = `${res.sunrise} / ${res.sunset}`;
+      document.getElementById('solar-twilight').textContent = `Ends ${res.twilightEnd} local`;
+    }
+
+    function renderBatteries() {
+      const list = document.getElementById('battery-list');
+      if (!list) return;
+      if (batteries.length === 0) {
+        list.innerHTML = '<div style="font-size:11.5px; color:var(--text-faint);">No individual batteries tracked yet.</div>';
+        return;
+      }
+      list.innerHTML = batteries
+        .map((b) => `
+          <div class="row" style="padding:7px 9px; border-radius:9px; border:1px solid var(--border); background:var(--surface);">
+            <div style="font-size:12px;">
+              <strong>${escapeHtml(b.label)}</strong> • <span class="mono">${b.cycles} cyc</span>
+              <span style="font-size:11px; color:${b.stored ? 'var(--ok)' : 'var(--warn)'}; margin-left:6px;">${b.stored ? 'Storage OK' : 'Charged'}</span>
+            </div>
+            <div style="display:flex; gap:4px;">
+              <button type="button" data-bat-cyc="${b.id}" class="bat-cyc-btn btn" style="padding:3px 7px; font-size:11px;">+1</button>
+              <button type="button" data-bat-store="${b.id}" class="bat-store-btn btn" style="padding:3px 7px; font-size:11px;">${b.stored ? 'Mark Charged' : 'Mark Stored'}</button>
+              <button type="button" data-bat-del="${b.id}" class="bat-del-btn btn btn-danger" style="padding:3px 7px; font-size:11px;">✕</button>
+            </div>
+          </div>
+        `)
+        .join('');
+    }
+
+    document.getElementById('solar-calc-btn').addEventListener('click', renderSolar);
+    document.getElementById('kp-fetch-btn').addEventListener('click', () => {
+      const el = document.getElementById('kp-value');
+      el.textContent = 'Checking...';
+      fetch('https://services.swpc.noaa.gov/products/noaa-planetary-k-index.json')
+        .then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+        .then((rows) => {
+          const last = Array.isArray(rows) && rows.length > 1 ? rows[rows.length - 1] : null;
+          const kp = last ? Number(last[1]) : NaN;
+          if (Number.isNaN(kp)) throw new Error('Bad Kp');
+          const status = kp >= 5 ? 'Storm (GPS Risk)' : kp >= 4 ? 'Active' : 'Nominal';
+          el.textContent = `Kp ${kp.toFixed(1)} • ${status}`;
+          el.style.color = kp >= 5 ? 'var(--danger)' : kp >= 4 ? 'var(--warn)' : 'var(--ok)';
+        })
+        .catch(() => {
+          el.textContent = 'Offline (Check NOAA)';
+          el.style.color = 'var(--text-muted)';
+        });
+    });
+
+    document.getElementById('battery-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const label = document.getElementById('bat-label').value.trim();
+      const cycles = Math.max(0, Number(document.getElementById('bat-cycles').value) || 0);
+      if (!label) return;
+      batteries.push({ id: 'bat-' + Date.now(), label, cycles, stored: true });
+      saveState();
+      e.target.reset();
+      renderBatteries();
+    });
+
+    document.getElementById('battery-list').addEventListener('click', (e) => {
+      const cyc = e.target.closest('.bat-cyc-btn');
+      if (cyc) {
+        const b = batteries.find((x) => x.id === cyc.getAttribute('data-bat-cyc'));
+        if (b) { b.cycles += 1; saveState(); renderBatteries(); }
+        return;
+      }
+      const st = e.target.closest('.bat-store-btn');
+      if (st) {
+        const b = batteries.find((x) => x.id === st.getAttribute('data-bat-store'));
+        if (b) { b.stored = !b.stored; saveState(); renderBatteries(); }
+        return;
+      }
+      const del = e.target.closest('.bat-del-btn');
+      if (del) {
+        batteries = batteries.filter((x) => x.id !== del.getAttribute('data-bat-del'));
+        saveState();
+        renderBatteries();
+      }
+    });
+
+    const refModal = document.getElementById('ref-modal');
+    document.getElementById('ref-open-btn').addEventListener('click', () => refModal.classList.remove('hidden'));
+    document.getElementById('ref-close-btn').addEventListener('click', () => refModal.classList.add('hidden'));
+    refModal.addEventListener('click', (e) => { if (e.target === refModal) refModal.classList.add('hidden'); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') refModal.classList.add('hidden'); });
+
+    const origRenderQuiz = renderQuiz;
+    renderQuiz = function () {
+      origRenderQuiz();
+      renderExamHistory();
+    };
+    const origRender = render;
+    render = function () {
+      origRender();
+      renderSolar();
+      renderBatteries();
+      renderExamHistory();
+    };
+
+    // v15 Clearance & Authority Router
+    const CLEARANCE_ROUTES = {
+      controlled: {
+        label: 'Controlled Airspace',
+        authority: 'NAV CANADA (via NAV Drone)',
+        rule: 'CAR 901.71 • Class C, D, or E Controlled Airspace (Small/Medium RPAS ≥ 250 g)',
+        steps: [
+          'Confirm your aircraft holds an active 922.04 safety assurance declaration.',
+          'Submit an RPAS Flight Authorization request in NAV Drone (automatic or up to 48h for complex requests).',
+          'Keep ATC phone number saved in your Emergency modal for active flights.'
+        ],
+        linkText: 'Open NAV Drone Portal',
+        linkUrl: 'https://portal.navdrone.ca/'
+      },
+      aerodrome: {
+        label: 'Airport / Heliport',
+        authority: 'Aerodrome Operator (via CFS / NRC Tool)',
+        rule: 'CAR 901.73 • Within 5.6 km (3 NM) of Certified Airport or 1.9 km (1 NM) of Heliport',
+        steps: [
+          'Check the NRC Drone Site Selection Tool or Canada Flight Supplement (CFS) for the site’s established procedure.',
+          'Contact the airport or heliport manager directly to coordinate your flight window and altitude.',
+          'Monitor local ATF/MF traffic if equipped with a ROC-A certified VHF radio.'
+        ],
+        linkText: 'Open NRC Airspace Map',
+        linkUrl: 'https://nrc.canada.ca/en/drone-tool/'
+      },
+      military: {
+        label: 'Military (< 5.6 km)',
+        authority: 'Department of National Defence (DND) + SFOC-RPAS',
+        rule: 'CAR 901.47(3) • Within 5.6 km (3 NM) of a Military Aerodrome',
+        steps: [
+          'Contact the base Wing Operations / Air Traffic Services unit listed in the CFS.',
+          'Obtain written DND permission and an SFOC-RPAS before operating within 3 NM.'
+        ],
+        linkText: 'Transport Canada SFOC Info',
+        linkUrl: 'https://tc.canada.ca/en/aviation/drone-safety/drone-pilot-licensing/get-permission-special-drone-operations'
+      },
+      sfoc: {
+        label: 'Advertised Event / SFOC',
+        authority: 'Transport Canada RPAS Centre',
+        rule: 'CAR 903.01 • Advertised Events (incl. Microdrones < 250 g), > 400 ft AGL, > 150 kg, or Complex BVLOS',
+        steps: [
+          'Obtain written permission from the event organizer and landowner (if applicable).',
+          'Complete the SFOC-RPAS application form (AC 903-002) and email TC.RPASCentre-CentreSATP.TC@tc.gc.ca.',
+          'Apply early — processing fees and working-day service standards apply.'
+        ],
+        linkText: 'Apply for SFOC-RPAS (TC)',
+        linkUrl: 'https://tc.canada.ca/en/aviation/drone-safety/drone-pilot-licensing/get-permission-special-drone-operations'
+      },
+      parks: {
+        label: 'National Park',
+        authority: 'Parks Canada Field Unit Superintendent',
+        rule: 'National Parks Aircraft Access Regulations • Applies to ALL drones (incl. Microdrones)',
+        steps: [
+          'Recreational drone flights are strictly prohibited in all Parks Canada places (fines up to $25,000).',
+          'For commercial filming, research, or public safety, request a Restricted Activity / Film Permit from the specific park superintendent.'
+        ],
+        linkText: 'Parks Canada Drone Rules',
+        linkUrl: 'https://parks.canada.ca/voyage-travel/regles-rules/drones'
+      },
+      incident: {
+        label: 'Incident / Unsafe Flight',
+        authority: 'Transport Canada / TSB Canada',
+        rule: 'Mandatory reporting for serious injury, fatality, or manned-aircraft collision',
+        steps: [
+          'If a flyaway enters controlled airspace, call local ATC immediately.',
+          'For serious injuries or collisions with manned aircraft, notify the Transportation Safety Board (TSB).',
+          'Report unsafe operations or airspace occurrences via Transport Canada.'
+        ],
+        linkText: 'Report Drone Incident (TC)',
+        linkUrl: 'https://tc.canada.ca/en/aviation/drone-safety/report-drone-incident'
+      }
+    };
+
+    let activeClearanceKey = 'controlled';
+
+    function buildClearanceTemplate(route) {
+      const prof = getActiveProfile();
+      const site = document.getElementById('site-name-input').value.trim() || '[Site Name]';
+      const coords = document.getElementById('site-coords-input').value.trim() || '[Lat, Lng]';
+      const alt = document.getElementById('calc-altitude').value || '250';
+      const today = new Date().toISOString().slice(0, 10);
+      return [
+        `Subject: RPAS Flight Authorization / Coordination Request — ${site} (${today})`,
+        `Authority: ${route.authority}`,
+        `Aircraft: ${prof ? `${prof.name} (Reg: ${prof.reg || 'Micro'}, Decl: ${prof.decl || 'N/A'})` : 'RPAS'}`,
+        `Location: ${site} | Coordinates: ${coords}`,
+        `Planned Altitude: Up to ${alt} ft AGL | Mode: ${selectedWeightClass === 'micro' ? 'Microdrone (<250 g)' : OPERATION_MODES[selectedMode].name}`,
+        `Pilot Contact: [Your Name / Phone / TC Certificate #]`
+      ].join('\n');
+    }
+
+    function renderClearanceModal() {
+      const tabsEl = document.getElementById('clearance-tabs');
+      const bodyEl = document.getElementById('clearance-body');
+      if (!tabsEl || !bodyEl) return;
+
+      tabsEl.innerHTML = Object.entries(CLEARANCE_ROUTES)
+        .map(([k, r]) => `<button type="button" data-clr-key="${k}" class="clr-tab-btn mode-pill ${k === activeClearanceKey ? 'active' : ''}">${r.label}</button>`)
+        .join('');
+
+      const route = CLEARANCE_ROUTES[activeClearanceKey];
+      const templateText = buildClearanceTemplate(route);
+
+      bodyEl.innerHTML = `
+        <div class="subcard">
+          <div class="label-caps" style="color:var(--ok);">Contact Authority</div>
+          <div style="font-size:15px; font-weight:700; margin-top:2px;">${route.authority}</div>
+          <div style="font-size:11.5px; color:var(--text-muted); margin-top:3px;">${route.rule}</div>
+        </div>
+        <div class="subcard">
+          <div class="label-caps" style="margin-bottom:6px;">Required Steps</div>
+          <ol style="margin:0; padding-left:18px; font-size:12.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;">
+            ${route.steps.map((s) => `<li>${s}</li>`).join('')}
+          </ol>
+          <div style="margin-top:10px;">
+            <a href="${route.linkUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">${route.linkText}</a>
+          </div>
+        </div>
+        <div class="subcard stack-sm">
+          <div class="row">
+            <span class="label-caps">Pre-Filled Request Template</span>
+            <button id="copy-clearance-btn" type="button" class="btn" style="padding:4px 9px; font-size:11px;">Copy Template</button>
+          </div>
+          <textarea id="clearance-template-box" rows="6" readonly style="font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11.5px; resize:vertical;">${escapeHtml(templateText)}</textarea>
+          <span id="clearance-copy-status" class="hidden" style="font-size:11.5px; color:var(--ok);">Template copied to clipboard.</span>
+        </div>
+      `;
+    }
+
+    const clearanceModal = document.getElementById('clearance-modal');
+    function openClearanceModal() {
+      renderClearanceModal();
+      clearanceModal.classList.remove('hidden');
+    }
+    document.getElementById('clearance-open-btn').addEventListener('click', openClearanceModal);
+    document.getElementById('site-clearance-btn').addEventListener('click', openClearanceModal);
+    document.getElementById('clearance-close-btn').addEventListener('click', () => clearanceModal.classList.add('hidden'));
+    clearanceModal.addEventListener('click', (e) => { if (e.target === clearanceModal) clearanceModal.classList.add('hidden'); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') clearanceModal.classList.add('hidden'); });
+
+    document.getElementById('clearance-tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.clr-tab-btn');
+      if (!btn) return;
+      activeClearanceKey = btn.getAttribute('data-clr-key');
+      renderClearanceModal();
+    });
+
+    document.getElementById('clearance-body').addEventListener('click', (e) => {
+      if (e.target.id !== 'copy-clearance-btn') return;
+      const box = document.getElementById('clearance-template-box');
+      const status = document.getElementById('clearance-copy-status');
+      if (!box) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(box.value).then(() => status.classList.remove('hidden')).catch(() => {
+          box.select(); document.execCommand('copy'); status.classList.remove('hidden');
+        });
+      } else {
+        box.select(); document.execCommand('copy'); status.classList.remove('hidden');
+      }
+    });
+
     syncActiveProfileToForms();
     startQuizSession('quick');
     render();
-  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+      });
     }
   </script>
 </body>
