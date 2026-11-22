@@ -10,13 +10,3 @@ A 100% offline-first, zero-dependency Progressive Web App (PWA) built for Canadi
 
 ## Disclaimer
 Educational and pre-flight aid only. Always verify official airspace, NOTAMs, and current regulations with Transport Canada and NAV CANADA before launch.
-
-
-### What's New in v16
-- **"Who Do I Contact?" Clearance & Authority Router**: Quick-access modal covering 6 Canadian scenarios (Controlled Airspace via NAV Drone, Airports/Heliports, Military < 5.6 km, Advertised Events/SFOC, National Parks, and Incident Reporting) with a one-tap pre-filled clearance request template.
-- **Cleaner Mobile Layout**: Collapsible Solar/Kp and METAR Decoder cards, streamlined `☀`/`☾` theme toggle in the header, and deduplicated cycle tracking (kept in Battery Inventory).
-
-
-### What's New in v16 (AERO·IX)
-- **Rebranded as AERO·IX**: Clean Canadian aviation identity nodding to CARs Part IX.
-- **Minimalist Cockpit Overhaul**: Razor-thin top bar, unified Go/No-Go + Active Aircraft cockpit strip, auto-derived collapsible Weight Class override, and a frosted-glass bottom thumb-bar on mobile.
